@@ -25,3 +25,15 @@ jobs:
         with:
           name: validation-${{ matrix.os }}
           path: validation-output/
+
+  ios-simulator:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: xcodebuild -version
+      - name: Build Phase 1.5 iPhone harness
+        run: >-
+          xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj
+          -scheme RoadStationApp -configuration Debug
+          -sdk iphonesimulator -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO build

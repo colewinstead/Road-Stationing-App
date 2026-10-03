@@ -11,9 +11,12 @@ coordinate transformations or use GNSS/GPS.** Results still require independent
 validation against known Bentley OpenRoads Designer and Autodesk Civil 3D
 station/offset results before field use or Phase 2.
 
-The user explicitly narrowed this Windows phase to the core package. No iOS UI,
-Xcode project, backend, accounts, cloud storage, maps, photos, reports, analytics,
-payments, or Phase 2 functionality is included.
+Phase 1 remains the portable, authoritative core package. A separate
+[RoadStationApp Phase 1.5 developer harness](RoadStationApp/README.md) now provides
+SwiftUI import, an engineering canvas and manual queries for iPhone Simulator.
+It links the core without copying or changing its sources. This is not a
+production field app; independent ORD validation remains pending, and Phase 2
+GPS/CRS functionality remains blocked.
 
 ## Architecture
 
@@ -337,7 +340,7 @@ fixture licensing are documented in Tests/Fixtures/References/README.md.
   OpenRoads/Civil 3D numerical validation remains a
   release gate for a future native application.
 
-Next: independently validate this engine, then consider RoadStationApp on macOS
-against these APIs. Phase 2 may subsequently add a dedicated CRS adapter,
+Next: use the Phase 1.5 harness to inspect these APIs and independently validate
+the engine before production field workflows. Phase 2 may subsequently add a dedicated CRS adapter,
 CoreLocation/GNSS integration and MapKit after the engine passes that external
 validation gate. **No Phase 2 work is implemented here.**
