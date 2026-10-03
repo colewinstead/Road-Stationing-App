@@ -1,37 +1,55 @@
-# RoadStationCore — Phase 1
+# RoadStation
 
-RoadStationCore is a dependency-free, platform-independent Swift package for
-LandXML horizontal alignments and planar station/offset calculations. It runs
-on Windows without Xcode. The library contains no SwiftUI, UIKit, MapKit,
-CoreLocation, AVFoundation, or Apple-only frameworks. Foundation and its
-cross-platform FoundationXML parser are the only library imports.
+RoadStation is a native iPhone roadway-stationing project built around a
+platform-independent Swift core. The current implementation imports LandXML
+horizontal alignments and performs planar station/offset calculations for lines,
+circular curves, clothoid spirals and station equations.
 
-**RoadStation Phase 1 is not surveying software. It does not perform geographic
-coordinate transformations or use GNSS/GPS.** Results still require independent
-validation against known Bentley OpenRoads Designer and Autodesk Civil 3D
-station/offset results before field use or Phase 2.
+The repository currently has two completed development milestones:
 
-Phase 1 remains the portable, authoritative core package. A separate
-[RoadStationApp Phase 1.5 developer harness](RoadStationApp/README.md) now provides
-SwiftUI import, an engineering canvas and manual queries for iPhone Simulator.
-It links the core without copying or changing its sources. This is not a
-production field app; independent ORD validation remains pending, and Phase 2
-GPS/CRS functionality remains blocked.
+- **Phase 1 — RoadStationCore:** portable calculation engine, LandXML parser,
+  validation CLI and core test suite.
+- **Phase 1.5 — RoadStationApp developer harness:** native SwiftUI app for
+  LandXML import, alignment selection, engineering-canvas inspection, tap
+  queries and manual forward/inverse station-offset queries.
 
+The Phase 1.5 app has been built and tested in the iPhone Simulator and has also
+been installed and launched successfully on a physical iPhone using Xcode
+automatic signing.
+
+**RoadStation is not surveying software.** CoreLocation/GNSS, MapKit and CRS
+transformations are not implemented yet, so the app does not currently convert
+phone latitude/longitude into project coordinates or provide live field
+stationing.
+
+A real OpenRoads Designer validation dataset is checked in under
+[Validation/RealORD/CROSSGATES](Validation/RealORD/CROSSGATES/README.md). It
+contains a direct ORD LandXML export, horizontal/vertical reports, station-offset
+reference data and independent validation cases covering real tangents, CW/CCW
+curves, clothoid spirals, LT/RT offsets and a station equation. The comparison
+still needs to be run and reviewed before Phase 2 GPS/CRS work begins.
 ## Architecture
 
 ```text
-Package.swift                     RoadStationCore library + validation executable
+Package.swift                         RoadStationCore + harness-support package
 RoadStation/Core/
-  Models/                         Project, alignment, segments, coordinates, results
-  LandXML/                        XML boundary, typed alignment builder, import errors
-  Geometry/                       Lines, arcs, clothoids, stationing, offsets, bounds
-  Validation/                     JSON cases, runner, JSON/CSV results
-RoadStation/CLI/                  roadstation-validate command
-Tests/                            XCTest suites and small XML/JSON resources
-tools/Test-Windows.ps1             Loads native Windows build environment, runs tests
-tools/Generate-SpiralFixture.py    Independent reference-number provenance
-.github/workflows/core-tests.yml  macOS/Linux package checks (no iOS SDK build)
+  Models/                             Project, alignment, segments, coordinates, results
+  LandXML/                            XML boundary, typed alignment builder, import errors
+  Geometry/                           Lines, arcs, clothoids, stationing, offsets, bounds
+  Validation/                         JSON cases, runner, JSON/CSV results
+RoadStation/CLI/                      roadstation-validate command
+RoadStationApp/
+  RoadStationApp.xcodeproj/           Native iPhone Xcode project
+  RoadStationApp/                     SwiftUI developer harness
+  HarnessSupport/                     Viewport/manual-query helpers
+  HarnessSupportTests/                Helper tests
+  RoadStationAppUITests/              Simulator UI tests
+Tests/                                Core XCTest suites and fixtures
+Validation/
+  RealORD/CROSSGATES/                 Real ORD source data and validation cases
+tools/Test-Windows.ps1                Windows build/test helper
+tools/Test-iOS-Harness.sh             Simulator UI-test helper
+.github/workflows/core-tests.yml      Core checks + iOS Simulator build
 ```
 
 Parse once, then query immutable, validated, `Sendable` models. Segment start/end
@@ -43,8 +61,8 @@ length. Project metadata retains units and a CRS description without interpretin
 or transforming the CRS. Disconnected neighbors produce warnings and keep their
 original geometry; gaps do not count as geometric length.
 
-A future Xcode project named **RoadStationApp** can add this repository as a
-local Swift package and link the **RoadStationCore** library product:
+The checked-in **RoadStationApp** Xcode project links this repository as a
+local Swift package and uses the **RoadStationCore** library product directly:
 
 ```swift
 import RoadStationCore
@@ -266,11 +284,13 @@ have the installer environment. The script does not alter machine settings.
 
 This implementation was originally compiled and tested on Windows with Swift 6.4.
 The macOS Phase 1 audit and local debug/release results are recorded in
-[PHASE1_MACOS_AUDIT.md](PHASE1_MACOS_AUDIT.md). The existing macOS/Linux CI matrix
-checks both configurations and the CLI. No iOS app was created or validated.
-Swift 6.4 Windows may emit an ignored root Info.plist for XCTest resources and a
-warning about its .build/debug convenience symlink; these are build-tool artifacts.
-
+[PHASE1_MACOS_AUDIT.md](PHASE1_MACOS_AUDIT.md). Phase 1.5 is documented in
+[PHASE15_REPORT.md](PHASE15_REPORT.md). CI covers the macOS/Linux core package
+matrix and an iOS Simulator build. The Phase 1.5 app has also been installed and
+launched on a physical iPhone; production/App Store distribution, GPS behavior
+and CRS transformations are not yet validated or implemented. Swift 6.4 Windows
+may emit an ignored root Info.plist for XCTest resources and a warning about its
+.build/debug convenience symlink; these are build-tool artifacts.
 ## Validation harness and adding cases
 
 Cases are stored as a JSON array of `AlignmentValidationCase`; numeric station,
@@ -312,17 +332,34 @@ station/offset and Euclidean coordinate errors. The
 [reference audit](Validation/REFERENCE-FIXTURE-AUDIT.md) distinguishes export-derived
 regressions, synthetic fixtures and independent mathematical benchmarks.
 
-**Real ORD spiral validation: MISSING**
+### Real ORD validation dataset
 
-**Real ORD station-equation validation: MISSING**
+A real OpenRoads Designer dataset is available at
+[Validation/RealORD/CROSSGATES](Validation/RealORD/CROSSGATES/README.md).
+CROSSGATES supplies independent ORD reference data for tangents, LT/RT offsets,
+clockwise and counterclockwise circular curves, clockwise and counterclockwise
+clothoid spirals, an exit spiral, and a real station equation with explicit
+BACK/AHEAD handling. A proposed vertical profile is also retained for future
+vertical work.
 
-For external validation, add surveyed/project points and stations from ORD/Civil
-3D **without calculating expected answers with this engine**. Retain source unit,
-alignment revision, equation branch, software version and coordinate convention.
-Include PC/PT, TS/SC/CS/ST, equation limits and nonzero LT/RT cases. Run the same
-JSON fixture set after every geometry change. Reference XML provenance and
-fixture licensing are documented in Tests/Fixtures/References/README.md.
+The expected values were collected from ORD rather than generated by
+RoadStationCore. The runnable case file is
+`Validation/RealORD/CROSSGATES/CROSSGATES-ord-cases.json`.
 
+Run it from the repository root in PowerShell:
+
+```powershell
+swift run roadstation-validate `
+  Validation\RealORD\CROSSGATES\CROSSGATES.xml `
+  Validation\RealORD\CROSSGATES\CROSSGATES-ord-cases.json `
+  validation-output\CROSSGATES
+```
+
+The current comparison tolerance is 0.001 US survey foot for station, offset
+and coordinate error. Preserve failed cases and investigate source revision,
+units, coordinate convention, equation branch and report rounding before
+changing tolerances. Phase 2 remains blocked until this comparison has been
+run and reviewed.
 ## Known limitations and next gate
 
 - Only explicit clothoids are supported. Bloss, cubic, cosine, sinusoid and
@@ -336,11 +373,10 @@ fixture licensing are documented in Tests/Fixtures/References/README.md.
   not supported. Extremely looping spirals can exceed numerical budgets.
 - The synthetic Civil 3D-labelled reference spiral has an inconsistent endpoint
   and is deliberately rejected. It is not an external accuracy benchmark.
-- No local persistence or iOS interaction is needed in the updated package scope.
-  OpenRoads/Civil 3D numerical validation remains a
-  release gate for a future native application.
+- RoadStationApp is currently a developer harness with session-only state. It does
+  not yet include production persistence, CoreLocation/GNSS, MapKit, CRS
+  transformation, camera/photo workflows, cloud sync or App Store distribution.
 
-Next: use the Phase 1.5 harness to inspect these APIs and independently validate
-the engine before production field workflows. Phase 2 may subsequently add a dedicated CRS adapter,
-CoreLocation/GNSS integration and MapKit after the engine passes that external
-validation gate. **No Phase 2 work is implemented here.**
+Next: run and review the checked-in CROSSGATES real-ORD comparison. After that
+gate passes, Phase 2 can add a dedicated CRS adapter, MapKit and CoreLocation/GNSS
+for live GPS station/offset. **No Phase 2 functionality is implemented yet.**
