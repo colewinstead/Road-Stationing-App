@@ -1,0 +1,452 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1C25D3719CB905525B1D275B /* RoadStationCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9416473BB73196B98F9D9179 /* RoadStationCore */; };
+		2C2DA6C7582597BE73DC2212 /* HarnessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02ED327C0C200E36EA3C127 /* HarnessModels.swift */; };
+		3807083D4CFF4C22BFB69624 /* RoadStationHarnessSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 6C87784D531E27D1B09F679F /* RoadStationHarnessSupport */; };
+		426BE2408D35EC963ACB3D92 /* multiple-alignments.xml in Resources */ = {isa = PBXBuildFile; fileRef = DED7559F11E60DC9919AA743 /* multiple-alignments.xml */; };
+		5313DC5FC69B0B3C0D5399ED /* RoadStationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B817370553D80DC7055C5FA /* RoadStationApp.swift */; };
+		57DBFF4AC376AF1A8889EEE8 /* AlignmentWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087258D24147E494D097E46B /* AlignmentWorkspace.swift */; };
+		58F21583C02AB75BCF4984EF /* RoadStationAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C81621AAE29089F81101CE /* RoadStationAppUITests.swift */; };
+		6BDDCE138579CC7B8102BE8E /* spiral-curve-spiral.xml in Resources */ = {isa = PBXBuildFile; fileRef = 39238F0D1E9386F047DC3389 /* spiral-curve-spiral.xml */; };
+		7D3F212ADBAB371F4A526D0A /* tangent-only.xml in Resources */ = {isa = PBXBuildFile; fileRef = 49F54C8292662431A6ED9B35 /* tangent-only.xml */; };
+		8A07B9645B1C5ABEF8BF608A /* ProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4336B936E428910889ED0DD /* ProjectView.swift */; };
+		AA373F5B7A0AD28037A4EE29 /* station-equations.xml in Resources */ = {isa = PBXBuildFile; fileRef = A8C667F5B3C95B783CB4E691 /* station-equations.xml */; };
+		CB49221565FAFE4F1D47DC7C /* EngineeringCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E86D079D7E81F7846792D30 /* EngineeringCanvas.swift */; };
+		D31E9D7DCF76E373E5D6B435 /* EntryTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C49508C66748391F1697D20 /* EntryTools.swift */; };
+		D3E352EE64A7E2BA7FDC1C07 /* References/sr82_synthetic.xml in Resources */ = {isa = PBXBuildFile; fileRef = 27C1550842DE5BEFE616C28B /* References/sr82_synthetic.xml */; };
+		EE4B1A857DC195CE4493CAB2 /* InspectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF2DDECD07C30D1C8C8C6AB /* InspectionViews.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D799BAE6088A90139B415FCC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 98F54143AB4E86B28C3AFEE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F6027D858B72CC70E5CC8E9;
+			remoteInfo = RoadStationApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0112DAE3F84CB4DF5179BE01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		087258D24147E494D097E46B /* AlignmentWorkspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentWorkspace.swift; sourceTree = "<group>"; };
+		27C1550842DE5BEFE616C28B /* References/sr82_synthetic.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = References/sr82_synthetic.xml; sourceTree = "<group>"; };
+		38A007151ABE87CC01A5B6E9 /* RoadStationApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = RoadStationApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		39238F0D1E9386F047DC3389 /* spiral-curve-spiral.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "spiral-curve-spiral.xml"; sourceTree = "<group>"; };
+		3B817370553D80DC7055C5FA /* RoadStationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadStationApp.swift; sourceTree = "<group>"; };
+		3C49508C66748391F1697D20 /* EntryTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryTools.swift; sourceTree = "<group>"; };
+		49F54C8292662431A6ED9B35 /* tangent-only.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "tangent-only.xml"; sourceTree = "<group>"; };
+		72C81621AAE29089F81101CE /* RoadStationAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadStationAppUITests.swift; sourceTree = "<group>"; };
+		81F9A9EC30C8C1B2E0812CD9 /* RoadStationAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = RoadStationAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E86D079D7E81F7846792D30 /* EngineeringCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineeringCanvas.swift; sourceTree = "<group>"; };
+		A8C667F5B3C95B783CB4E691 /* station-equations.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "station-equations.xml"; sourceTree = "<group>"; };
+		B4336B936E428910889ED0DD /* ProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectView.swift; sourceTree = "<group>"; };
+		D02ED327C0C200E36EA3C127 /* HarnessModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HarnessModels.swift; sourceTree = "<group>"; };
+		DED7559F11E60DC9919AA743 /* multiple-alignments.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "multiple-alignments.xml"; sourceTree = "<group>"; };
+		FAF2DDECD07C30D1C8C8C6AB /* InspectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectionViews.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0462E937CBCD8BD8E076D90C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		12384B5908BE5FE5B3301CEE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C25D3719CB905525B1D275B /* RoadStationCore in Frameworks */,
+				3807083D4CFF4C22BFB69624 /* RoadStationHarnessSupport in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2C86181283459818EDE44241 /* Existing synthetic fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				49F54C8292662431A6ED9B35 /* tangent-only.xml */,
+				39238F0D1E9386F047DC3389 /* spiral-curve-spiral.xml */,
+				A8C667F5B3C95B783CB4E691 /* station-equations.xml */,
+				DED7559F11E60DC9919AA743 /* multiple-alignments.xml */,
+				27C1550842DE5BEFE616C28B /* References/sr82_synthetic.xml */,
+			);
+			name = "Existing synthetic fixtures";
+			path = ../Tests/Fixtures;
+			sourceTree = "<group>";
+		};
+		3A2A88DEEFF3D1D23E496597 /* RoadStationApp */ = {
+			isa = PBXGroup;
+			children = (
+				087258D24147E494D097E46B /* AlignmentWorkspace.swift */,
+				9E86D079D7E81F7846792D30 /* EngineeringCanvas.swift */,
+				3C49508C66748391F1697D20 /* EntryTools.swift */,
+				D02ED327C0C200E36EA3C127 /* HarnessModels.swift */,
+				FAF2DDECD07C30D1C8C8C6AB /* InspectionViews.swift */,
+				B4336B936E428910889ED0DD /* ProjectView.swift */,
+				3B817370553D80DC7055C5FA /* RoadStationApp.swift */,
+				0112DAE3F84CB4DF5179BE01 /* Info.plist */,
+			);
+			path = RoadStationApp;
+			sourceTree = "<group>";
+		};
+		732DD74D4ACEA31527451D52 /* RoadStationAppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				72C81621AAE29089F81101CE /* RoadStationAppUITests.swift */,
+			);
+			path = RoadStationAppUITests;
+			sourceTree = "<group>";
+		};
+		B28B7AF69320201D1CF206EB = {
+			isa = PBXGroup;
+			children = (
+				3A2A88DEEFF3D1D23E496597 /* RoadStationApp */,
+				732DD74D4ACEA31527451D52 /* RoadStationAppUITests */,
+				2C86181283459818EDE44241 /* Existing synthetic fixtures */,
+				FBDC4F23F93125BBEEAE800C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FBDC4F23F93125BBEEAE800C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				38A007151ABE87CC01A5B6E9 /* RoadStationApp.app */,
+				81F9A9EC30C8C1B2E0812CD9 /* RoadStationAppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		04CCEB446C78AE06815CED74 /* RoadStationAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16229FB490A6BE52FDC09FDC /* Build configuration list for PBXNativeTarget "RoadStationAppUITests" */;
+			buildPhases = (
+				C009FA2C9CE130311E2D12D0 /* Sources */,
+				0462E937CBCD8BD8E076D90C /* Frameworks */,
+				0267DA67D63ACF3DC6A14A47 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B6EBBA31D46E8F71AE1B6924 /* PBXTargetDependency */,
+			);
+			name = RoadStationAppUITests;
+			productName = RoadStationAppUITests;
+			productReference = 81F9A9EC30C8C1B2E0812CD9 /* RoadStationAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		4F6027D858B72CC70E5CC8E9 /* RoadStationApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F37922C48DA5978D02C9E50E /* Build configuration list for PBXNativeTarget "RoadStationApp" */;
+			buildPhases = (
+				2D764CD838DB39F040AA7EC4 /* Sources */,
+				12384B5908BE5FE5B3301CEE /* Frameworks */,
+				06F5DC629BD46AAFD46564D1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RoadStationApp;
+			packageProductDependencies = (
+				9416473BB73196B98F9D9179 /* RoadStationCore */,
+				6C87784D531E27D1B09F679F /* RoadStationHarnessSupport */,
+			);
+			productName = RoadStationApp;
+			productReference = 38A007151ABE87CC01A5B6E9 /* RoadStationApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		98F54143AB4E86B28C3AFEE0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					04CCEB446C78AE06815CED74 = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = 4F6027D858B72CC70E5CC8E9;
+					};
+					4F6027D858B72CC70E5CC8E9 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+				};
+			};
+			buildConfigurationList = 862894B703A6DEDF96A9DD6C /* Build configuration list for PBXProject "RoadStationApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B28B7AF69320201D1CF206EB;
+			packageReferences = (
+				5896047EEAE44FC0E9857DDD /* XCLocalSwiftPackageReference ".." */,
+			);
+			productRefGroup = FBDC4F23F93125BBEEAE800C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4F6027D858B72CC70E5CC8E9 /* RoadStationApp */,
+				04CCEB446C78AE06815CED74 /* RoadStationAppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0267DA67D63ACF3DC6A14A47 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		06F5DC629BD46AAFD46564D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D3F212ADBAB371F4A526D0A /* tangent-only.xml in Resources */,
+				6BDDCE138579CC7B8102BE8E /* spiral-curve-spiral.xml in Resources */,
+				AA373F5B7A0AD28037A4EE29 /* station-equations.xml in Resources */,
+				426BE2408D35EC963ACB3D92 /* multiple-alignments.xml in Resources */,
+				D3E352EE64A7E2BA7FDC1C07 /* References/sr82_synthetic.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2D764CD838DB39F040AA7EC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57DBFF4AC376AF1A8889EEE8 /* AlignmentWorkspace.swift in Sources */,
+				CB49221565FAFE4F1D47DC7C /* EngineeringCanvas.swift in Sources */,
+				D31E9D7DCF76E373E5D6B435 /* EntryTools.swift in Sources */,
+				2C2DA6C7582597BE73DC2212 /* HarnessModels.swift in Sources */,
+				EE4B1A857DC195CE4493CAB2 /* InspectionViews.swift in Sources */,
+				8A07B9645B1C5ABEF8BF608A /* ProjectView.swift in Sources */,
+				5313DC5FC69B0B3C0D5399ED /* RoadStationApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C009FA2C9CE130311E2D12D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				58F21583C02AB75BCF4984EF /* RoadStationAppUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B6EBBA31D46E8F71AE1B6924 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F6027D858B72CC70E5CC8E9 /* RoadStationApp */;
+			targetProxy = D799BAE6088A90139B415FCC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1B7AD7D6325B0652C5A3BAAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colewinstead.RoadStationApp.UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = RoadStationApp;
+			};
+			name = Debug;
+		};
+		210EFE5668894B5A780EBC44 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colewinstead.RoadStationApp.UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = RoadStationApp;
+			};
+			name = Release;
+		};
+		5A8C91857F674E16E2724F47 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7YKM2M2YVP;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RoadStationApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colewinstead.RoadStationApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		89E1FD6268CC0F221A2BE178 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		E6DE6C99132752C914FEF632 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_TESTABILITY = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		E9B2E96ABC5F6856F2BE79CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7YKM2M2YVP;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RoadStationApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.colewinstead.RoadStationApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		16229FB490A6BE52FDC09FDC /* Build configuration list for PBXNativeTarget "RoadStationAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1B7AD7D6325B0652C5A3BAAC /* Debug */,
+				210EFE5668894B5A780EBC44 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		862894B703A6DEDF96A9DD6C /* Build configuration list for PBXProject "RoadStationApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89E1FD6268CC0F221A2BE178 /* Debug */,
+				E6DE6C99132752C914FEF632 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F37922C48DA5978D02C9E50E /* Build configuration list for PBXNativeTarget "RoadStationApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9B2E96ABC5F6856F2BE79CF /* Debug */,
+				5A8C91857F674E16E2724F47 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		5896047EEAE44FC0E9857DDD /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6C87784D531E27D1B09F679F /* RoadStationHarnessSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RoadStationHarnessSupport;
+		};
+		9416473BB73196B98F9D9179 /* RoadStationCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RoadStationCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 98F54143AB4E86B28C3AFEE0 /* Project object */;
+}
