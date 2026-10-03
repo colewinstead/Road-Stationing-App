@@ -1,0 +1,996 @@
+[
+  {
+    "actualCoordinate" : {
+      "x" : 2391540.942128425,
+      "y" : 1015854.3876279115,
+      "z" : 0
+    },
+    "actualOffset" : 49.99999996623886,
+    "actualSide" : "LT",
+    "actualStation" : 4400.000000074375,
+    "offsetDifference" : -3.376113966169214e-08,
+    "passed" : true,
+    "stationDifference" : 7.437483873218298e-08,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "curve",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_CURVE_CC_LT: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 50,
+      "expectedSide" : "LT",
+      "expectedStation" : 4400,
+      "id" : "rs_curve_cc_lt-forward",
+      "inputCoordinate" : {
+        "x" : 2391531.5838853,
+        "y" : 1015903.5040537
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391531.5838852157,
+      "y" : 1015903.5040537183
+    },
+    "actualOffset" : 50,
+    "actualSide" : "LT",
+    "actualStation" : 4400,
+    "coordinateDifference" : 8.624364160000122e-08,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "curve",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_CURVE_CC_LT: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2391531.5838853,
+        "y" : 1015903.5040537
+      },
+      "id" : "rs_curve_cc_lt-inverse",
+      "inputOffset" : 50,
+      "inputSide" : "LT",
+      "inputStation" : 4400,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391540.942128264,
+      "y" : 1015854.3876278808,
+      "z" : 0
+    },
+    "actualOffset" : -45.000000043843364,
+    "actualSide" : "RT",
+    "actualStation" : 4399.999999910394,
+    "offsetDifference" : -4.384336449447801e-08,
+    "passed" : true,
+    "stationDifference" : -8.960614650277421e-08,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "curve",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_CURVE_CC_RT: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 45,
+      "expectedSide" : "RT",
+      "expectedStation" : 4400,
+      "id" : "rs_curve_cc_rt-forward",
+      "inputCoordinate" : {
+        "x" : 2391549.3645471,
+        "y" : 1015810.1828446
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391549.3645471744,
+      "y" : 1015810.1828446588
+    },
+    "actualOffset" : -45,
+    "actualSide" : "RT",
+    "actualStation" : 4400,
+    "coordinateDifference" : 9.490705116640296e-08,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "curve",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_CURVE_CC_RT: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2391549.3645471,
+        "y" : 1015810.1828446
+      },
+      "id" : "rs_curve_cc_rt-inverse",
+      "inputOffset" : 45,
+      "inputSide" : "RT",
+      "inputStation" : 4400,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2389449.883526102,
+      "y" : 1014613.6151051916,
+      "z" : 0
+    },
+    "actualOffset" : 8.696302752497075e-09,
+    "actualSide" : "ON",
+    "actualStation" : 1956.618806082281,
+    "offsetDifference" : 8.696302752497075e-09,
+    "passed" : true,
+    "stationDifference" : -0.00019391771888876974,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "curve",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_CURVE_CCW: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 0,
+      "expectedSide" : "ON",
+      "expectedStation" : 1956.619,
+      "id" : "rs_curve_ccw-forward",
+      "inputCoordinate" : {
+        "x" : 2389449.8835261,
+        "y" : 1014613.6151052
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2389449.883711526,
+      "y" : 1014613.6151619551
+    },
+    "actualOffset" : 0,
+    "actualSide" : "ON",
+    "actualStation" : 1956.619,
+    "coordinateDifference" : 0.00019391768501452703,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "curve",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_CURVE_CCW: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2389449.8835261,
+        "y" : 1014613.6151052
+      },
+      "id" : "rs_curve_ccw-inverse",
+      "inputOffset" : 0,
+      "inputSide" : "ON",
+      "inputStation" : 1956.619,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391537.4229755932,
+      "y" : 1015853.7082212353,
+      "z" : 0
+    },
+    "actualOffset" : -3.5958670555049234e-08,
+    "actualSide" : "ON",
+    "actualStation" : 4396.415860632498,
+    "offsetDifference" : -3.5958670555049234e-08,
+    "passed" : true,
+    "stationDifference" : -0.00013936750201537507,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "curve",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_CURVE_CW: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 0,
+      "expectedSide" : "ON",
+      "expectedStation" : 4396.416,
+      "id" : "rs_curve_cw-forward",
+      "inputCoordinate" : {
+        "x" : 2391537.4229756,
+        "y" : 1015853.7082212
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391537.423112369,
+      "y" : 1015853.7082479873
+    },
+    "actualOffset" : 0,
+    "actualSide" : "ON",
+    "actualStation" : 4396.416,
+    "coordinateDifference" : 0.0001393674764807319,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "curve",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_CURVE_CW: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2391537.4229756,
+        "y" : 1015853.7082212
+      },
+      "id" : "rs_curve_cw-inverse",
+      "inputOffset" : 0,
+      "inputSide" : "ON",
+      "inputStation" : 4396.416,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391912.948618414,
+      "y" : 1015838.1211208793,
+      "z" : 0
+    },
+    "actualOffset" : -8.050016730590765e-08,
+    "actualSide" : "ON",
+    "actualStation" : 5000.000000021548,
+    "offsetDifference" : -8.050016730590765e-08,
+    "passed" : true,
+    "stationDifference" : 2.1547748474404216e-08,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "stationEquation",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_EQ: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "equationSide" : "ahead",
+      "expectedOffset" : 0,
+      "expectedSide" : "ON",
+      "expectedStation" : 5000,
+      "id" : "rs_eq-forward",
+      "inputCoordinate" : {
+        "x" : 2391912.9486184,
+        "y" : 1015838.1211208
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391912.9486183925,
+      "y" : 1015838.121120883
+    },
+    "actualOffset" : 0,
+    "actualSide" : "ON",
+    "actualStation" : 5000,
+    "coordinateDifference" : 8.333784151893305e-08,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "branchIndex" : 1,
+      "category" : "stationEquation",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_EQ: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2391912.9486184,
+        "y" : 1015838.1211208
+      },
+      "id" : "rs_eq-inverse",
+      "inputOffset" : 0,
+      "inputSide" : "ON",
+      "inputStation" : 5000,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391937.575418982,
+      "y" : 1015833.8175527985,
+      "z" : 0
+    },
+    "actualOffset" : 1.0293016938706078e-07,
+    "actualSide" : "ON",
+    "actualStation" : 5025.000000110778,
+    "offsetDifference" : 1.0293016938706078e-07,
+    "passed" : true,
+    "stationDifference" : 1.107782736653462e-07,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "stationEquation",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_EQ_AFTER: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 0,
+      "expectedSide" : "ON",
+      "expectedStation" : 5025,
+      "id" : "rs_eq_after-forward",
+      "inputCoordinate" : {
+        "x" : 2391937.575419,
+        "y" : 1015833.8175529
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391937.575418873,
+      "y" : 1015833.8175528176
+    },
+    "actualOffset" : 0,
+    "actualSide" : "ON",
+    "actualStation" : 5025,
+    "coordinateDifference" : 1.5105277174639115e-07,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "stationEquation",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_EQ_AFTER: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2391937.575419,
+        "y" : 1015833.8175529
+      },
+      "id" : "rs_eq_after-inverse",
+      "inputOffset" : 0,
+      "inputSide" : "ON",
+      "inputStation" : 5025,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2388917.433940224,
+      "y" : 1014533.6040318271,
+      "z" : 0
+    },
+    "actualOffset" : 7.305601346622451e-08,
+    "actualSide" : "ON",
+    "actualStation" : 1416.2330599601491,
+    "offsetDifference" : 7.305601346622451e-08,
+    "passed" : true,
+    "stationDifference" : 5.9960149201288004e-05,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_CCW: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 0,
+      "expectedSide" : "ON",
+      "expectedStation" : 1416.233,
+      "id" : "rs_spi_ccw-forward",
+      "inputCoordinate" : {
+        "x" : 2388917.4339402,
+        "y" : 1014533.6040319
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2388917.4338802653,
+      "y" : 1014533.6040313672
+    },
+    "actualOffset" : 0,
+    "actualSide" : "ON",
+    "actualStation" : 1416.233,
+    "coordinateDifference" : 5.9937166044723854e-05,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_CCW: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2388917.4339402,
+        "y" : 1014533.6040319
+      },
+      "id" : "rs_spi_ccw-inverse",
+      "inputOffset" : 0,
+      "inputSide" : "ON",
+      "inputStation" : 1416.233,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391267.217991481,
+      "y" : 1015742.2962722685,
+      "z" : 0
+    },
+    "actualOffset" : -6.807635587955746e-08,
+    "actualSide" : "ON",
+    "actualStation" : 4102.291170770235,
+    "offsetDifference" : -6.807635587955746e-08,
+    "passed" : true,
+    "stationDifference" : 0.00017077023494493915,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_CW: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 0,
+      "expectedSide" : "ON",
+      "expectedStation" : 4102.291,
+      "id" : "rs_spi_cw-forward",
+      "inputCoordinate" : {
+        "x" : 2391267.2179915,
+        "y" : 1015742.2962722
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391267.217847508,
+      "y" : 1015742.2961804303
+    },
+    "actualOffset" : 0,
+    "actualSide" : "ON",
+    "actualStation" : 4102.291,
+    "coordinateDifference" : 0.0001707496125691539,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_CW: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2391267.2179915,
+        "y" : 1015742.2962722
+      },
+      "id" : "rs_spi_cw-inverse",
+      "inputOffset" : 0,
+      "inputSide" : "ON",
+      "inputStation" : 4102.291,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391267.2179913926,
+      "y" : 1015742.2962722122,
+      "z" : 0
+    },
+    "actualOffset" : 49.99999996696708,
+    "actualSide" : "LT",
+    "actualStation" : 4102.291170665461,
+    "offsetDifference" : -3.303291862266633e-08,
+    "passed" : true,
+    "stationDifference" : 0.0001706654611552949,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_CW_LT: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 50,
+      "expectedSide" : "LT",
+      "expectedStation" : 4102.291,
+      "id" : "rs_spi_cw_lt-forward",
+      "inputCoordinate" : {
+        "x" : 2391240.3285984,
+        "y" : 1015784.450282
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391240.328449498,
+      "y" : 1015784.4501870567
+    },
+    "actualOffset" : 50,
+    "actualSide" : "LT",
+    "actualStation" : 4102.291,
+    "coordinateDifference" : 0.00017659585413025932,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_CW_LT: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2391240.3285984,
+        "y" : 1015784.450282
+      },
+      "id" : "rs_spi_cw_lt-inverse",
+      "inputOffset" : 50,
+      "inputSide" : "LT",
+      "inputStation" : 4102.291,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391267.218016214,
+      "y" : 1015742.2962880455,
+      "z" : 0
+    },
+    "actualOffset" : -50.00000005694522,
+    "actualSide" : "RT",
+    "actualStation" : 4102.291200106896,
+    "offsetDifference" : -5.6945218318560364e-08,
+    "passed" : true,
+    "stationDifference" : 0.00020010689604532672,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_CW_RT: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 50,
+      "expectedSide" : "RT",
+      "expectedStation" : 4102.291,
+      "id" : "rs_spi_cw_rt-forward",
+      "inputCoordinate" : {
+        "x" : 2391294.1074085,
+        "y" : 1015700.1422777
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391294.107245518,
+      "y" : 1015700.142173804
+    },
+    "actualOffset" : -50,
+    "actualSide" : "RT",
+    "actualStation" : 4102.291,
+    "coordinateDifference" : 0.00019328085159974403,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_CW_RT: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2391294.1074085,
+        "y" : 1015700.1422777
+      },
+      "id" : "rs_spi_cw_rt-inverse",
+      "inputOffset" : 50,
+      "inputSide" : "RT",
+      "inputStation" : 4102.291,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2389935.8774668416,
+      "y" : 1014845.378395302,
+      "z" : 0
+    },
+    "actualOffset" : 1.0457828953754054e-07,
+    "actualSide" : "ON",
+    "actualStation" : 2497.0045519365476,
+    "offsetDifference" : 1.0457828953754054e-07,
+    "passed" : true,
+    "stationDifference" : -0.000448063452495262,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_EXIT: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 0,
+      "expectedSide" : "ON",
+      "expectedStation" : 2497.005,
+      "id" : "rs_spi_exit-forward",
+      "inputCoordinate" : {
+        "x" : 2389935.8774668,
+        "y" : 1014845.3783954
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2389935.8778400337,
+      "y" : 1014845.3786432707
+    },
+    "actualOffset" : 0,
+    "actualSide" : "ON",
+    "actualStation" : 2497.005,
+    "coordinateDifference" : 0.00044804372545311513,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "spiral",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_SPI_EXIT: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2389935.8774668,
+        "y" : 1014845.3783954
+      },
+      "id" : "rs_spi_exit-inverse",
+      "inputOffset" : 0,
+      "inputSide" : "ON",
+      "inputStation" : 2497.005,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2388684.3178164,
+      "y" : 1014533.2991652001,
+      "z" : 0
+    },
+    "actualOffset" : -1.1641528289313351e-10,
+    "actualSide" : "ON",
+    "actualStation" : 1183.1165299618774,
+    "offsetDifference" : -1.1641528289313351e-10,
+    "passed" : true,
+    "stationDifference" : -0.00047003812255752564,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "line",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_TAN: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 0,
+      "expectedSide" : "ON",
+      "expectedStation" : 1183.117,
+      "id" : "rs_tan-forward",
+      "inputCoordinate" : {
+        "x" : 2388684.3178164,
+        "y" : 1014533.2991652
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2388684.318286438,
+      "y" : 1014533.2991655845
+    },
+    "actualOffset" : 0,
+    "actualSide" : "ON",
+    "actualStation" : 1183.117,
+    "coordinateDifference" : 0.0004700381950274562,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "line",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_TAN: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2388684.3178164,
+        "y" : 1014533.2991652
+      },
+      "id" : "rs_tan-inverse",
+      "inputOffset" : 0,
+      "inputSide" : "ON",
+      "inputStation" : 1183.117,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2388684.317816333,
+      "y" : 1014533.2991652,
+      "z" : 0
+    },
+    "actualOffset" : 25.000000061023464,
+    "actualSide" : "LT",
+    "actualStation" : 1183.1165298947542,
+    "offsetDifference" : 6.102346361558375e-08,
+    "passed" : true,
+    "stationDifference" : -0.0004701052457676269,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "line",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_TAN_LT: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 25,
+      "expectedSide" : "LT",
+      "expectedStation" : 1183.117,
+      "id" : "rs_tan_lt-forward",
+      "inputCoordinate" : {
+        "x" : 2388684.2973701,
+        "y" : 1014558.2991569
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2388684.297840205,
+      "y" : 1014558.2991572235
+    },
+    "actualOffset" : 25,
+    "actualSide" : "LT",
+    "actualStation" : 1183.117,
+    "coordinateDifference" : 0.0004701052042923065,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "line",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_TAN_LT: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2388684.2973701,
+        "y" : 1014558.2991569
+      },
+      "id" : "rs_tan_lt-inverse",
+      "inputOffset" : 25,
+      "inputSide" : "LT",
+      "inputStation" : 1183.117,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2388684.317816467,
+      "y" : 1014533.2991652001,
+      "z" : 0
+    },
+    "actualOffset" : -24.999999961022734,
+    "actualSide" : "RT",
+    "actualStation" : 1183.1165300290827,
+    "offsetDifference" : 3.8977265859330146e-08,
+    "passed" : true,
+    "stationDifference" : -0.00046997091726552753,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "line",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_TAN_RT: ORD coordinate to station\/offset",
+      "direction" : "forward",
+      "expectedOffset" : 25,
+      "expectedSide" : "RT",
+      "expectedStation" : 1183.117,
+      "id" : "rs_tan_rt-forward",
+      "inputCoordinate" : {
+        "x" : 2388684.3382627,
+        "y" : 1014508.2991736
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2388684.338732671,
+      "y" : 1014508.2991739454
+    },
+    "actualOffset" : -25,
+    "actualSide" : "RT",
+    "actualStation" : 1183.117,
+    "coordinateDifference" : 0.00046997110944884985,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "line",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_TAN_RT: ORD station\/offset to coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2388684.3382627,
+        "y" : 1014508.2991736
+      },
+      "id" : "rs_tan_rt-inverse",
+      "inputOffset" : 25,
+      "inputSide" : "RT",
+      "inputStation" : 1183.117,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391912.948618414,
+      "y" : 1015838.1211208793,
+      "z" : 0
+    },
+    "actualOffset" : -8.050016730590765e-08,
+    "actualSide" : "ON",
+    "actualStation" : 4775.000000021548,
+    "offsetDifference" : -8.050016730590765e-08,
+    "passed" : true,
+    "stationDifference" : 2.1547748474404216e-08,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "category" : "stationEquation",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_EQ same physical point, explicit BACK station 47+75.000",
+      "direction" : "forward",
+      "equationSide" : "back",
+      "expectedOffset" : 0,
+      "expectedSide" : "ON",
+      "expectedStation" : 4775,
+      "id" : "rs_eq_back-forward",
+      "inputCoordinate" : {
+        "x" : 2391912.9486184,
+        "y" : 1015838.1211208
+      },
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx; BACK and AHEAD labels refer to the same physical equation point",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  },
+  {
+    "actualCoordinate" : {
+      "x" : 2391912.9486183925,
+      "y" : 1015838.121120883
+    },
+    "actualOffset" : 0,
+    "actualSide" : "ON",
+    "actualStation" : 4775,
+    "coordinateDifference" : 8.333784151893305e-08,
+    "passed" : true,
+    "validationCase" : {
+      "alignmentName" : "CROSSGATES",
+      "branchIndex" : 0,
+      "category" : "stationEquation",
+      "coordinateTolerance" : 0.001,
+      "description" : "RS_EQ explicit BACK station 47+75.000 to same physical equation coordinate",
+      "direction" : "inverse",
+      "expectedCoordinate" : {
+        "x" : 2391912.9486184,
+        "y" : 1015838.1211208
+      },
+      "id" : "rs_eq_back-inverse",
+      "inputOffset" : 0,
+      "inputSide" : "ON",
+      "inputStation" : 4775,
+      "offsetTolerance" : 0.001,
+      "referenceSoftware" : "OpenRoads Designer",
+      "referenceSoftwareVersion" : "2026 \/ LandXML Application 26.00.00.154",
+      "referenceSource" : "CROSSGATES DGN \/ ORD-collected validation points, collected 2026-10-03; coordinates and station\/offset values transcribed from ORD into CROSSGATES_TEST_POINTS.xlsx; BACK and AHEAD labels refer to the same physical equation point",
+      "sourceLandXML" : "CROSSGATES.xml",
+      "stationTolerance" : 0.001
+    }
+  }
+]
