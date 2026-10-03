@@ -117,14 +117,24 @@ The helper tests cover large-coordinate transform roundtrips with pan/zoom,
 north-up isotropic scale, horizontal/vertical/degenerate bounds, finite input,
 station/offset sign conventions and explicit equation ambiguity.
 
-All five simulator scenarios have passed in completed targeted runs: canvas
-pan/pinch/fit and exact forward/inverse input; real Files import of both
-extensions plus malformed XML; second-alignment selection; explicit equation
-branch selection; and spiral metadata/large-coordinate drawing. Earlier UI
-iterations exposed picker-loading and
-scroll-selector issues and a shared focus binding. The form now uses a distinct
-focused field; canvas drag gestures keep pan within the canvas. No original
-core test or numerical threshold changed.
+The final full simulator UI suite passed: **5 tests, 0 failures, 0 skipped**
+(231.682 seconds; `TEST SUCCEEDED`). It covers canvas pan/pinch/fit and exact
+forward/inverse input; real Files import of both extensions plus malformed XML;
+second-alignment selection; explicit equation branch selection; and spiral
+metadata/large-coordinate drawing. The result bundle is
+`validation-output/phase15/UI-Final.xcresult`, with log
+`validation-output/phase15/logs/ios-ui-final.log`.
+
+Earlier UI iterations exposed asynchronous picker loading, remembered Files
+navigation, scroll selectors and a shared focus binding. The final picker test
+uses actual folder cells/back navigation, and the form uses a distinct focused
+field. Canvas drag gestures keep pan within the canvas. All five cases passed in
+one final run; no original core test or numerical threshold changed.
+
+GitHub Actions verified the package debug/release tests and validation CLI on
+macOS 14 and Ubuntu 24.04, plus the new macOS 15 iOS Simulator build. The app/core
+implementation was verified in [run 37103003943](https://github.com/colewinstead/Road-Stationing-App/actions/runs/37103003943),
+with the final UI-test navigation adjustment verified locally as described above.
 
 Screenshots from actual simulator execution are in
 `validation-output/phase15/screenshots/`:
@@ -173,8 +183,8 @@ release distribution, physical-device validation or large-file performance
 certification is included. The managed environment supports headless simulator
 execution/capture, but does not contain the normal Simulator desktop app. Its
 iOS 27 automation occasionally stalls or cannot obtain an accessibility window;
-failed initial attempts are not counted as successful tests. Passing targeted
-runs provide actual UI evidence for all five scenarios. Keyboard presentation
+failed initial attempts are not counted as successful tests. The final complete
+five-test run passed after the picker test handled remembered navigation. Keyboard presentation
 also emitted a SwiftUI frame-dimension runtime warning; input calculations and
 UI assertions passed, but this warning has not been independently resolved.
 

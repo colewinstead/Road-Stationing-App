@@ -111,20 +111,23 @@ final class RoadStationAppUITests: XCTestCase {
         importButton.tap()
         let browse = app.tabBars["DOC.browsingModeTabBar"].buttons["Browse"]
         XCTAssertTrue(browse.waitForExistence(timeout: 30)); browse.tap()
-        func item(_ text: String) -> XCUIElement {
-            app.collectionViews.descendants(matching: .any).matching(NSPredicate(format: "label == %@", text)).firstMatch
+        func cell(_ label: String) -> XCUIElement {
+            app.cells.matching(NSPredicate(format: "label BEGINSWITH %@", label)).firstMatch
         }
-        func file() -> XCUIElement {
-            app.collectionViews.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", name)).firstMatch
+        // Files remembers the last browsed location between presentations.
+        // Navigate actual picker cells; app titles must never match a folder.
+        let file = cell(name)
+        for _ in 0..<6 {
+            if file.waitForExistence(timeout: 3) { break }
+            let folder = cell("RoadStation")
+            let local = cell("On My iPhone")
+            let back = app.buttons["DOC.navBarButton.backInHistory"]
+            if folder.exists, folder.isHittable { folder.tap() }
+            else if local.exists, local.isHittable { local.tap() }
+            else if back.exists, back.isEnabled { back.tap() }
+            else { browse.tap() }
         }
-        if !file().waitForExistence(timeout: 3) {
-            let local = item("On My iPhone")
-            if !local.exists, app.navigationBars.buttons["Browse"].exists { app.navigationBars.buttons["Browse"].tap() }
-            if local.waitForExistence(timeout: 5) { local.tap() }
-            let folder = item("RoadStation")
-            if folder.waitForExistence(timeout: 5) { folder.tap() }
-        }
-        XCTAssertTrue(file().waitForExistence(timeout: 10)); file().tap()
+        XCTAssertTrue(file.waitForExistence(timeout: 10)); file.tap()
     }
 
     @MainActor
