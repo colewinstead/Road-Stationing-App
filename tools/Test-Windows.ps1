@@ -1,6 +1,16 @@
 param([switch]$Release)
 $ErrorActionPreference = 'Stop'
 $repoTaskRoot = Split-Path -Parent $PSScriptRoot
+if (-not $env:SDKROOT) {
+    $env:SDKROOT = [Environment]::GetEnvironmentVariable('SDKROOT', 'User')
+}
+$swiftTaskRuntime = Join-Path $env:LOCALAPPDATA 'Programs\Swift\Runtimes'
+if (Test-Path -LiteralPath $swiftTaskRuntime) {
+    $swiftTaskRuntimeBin = Get-ChildItem -LiteralPath $swiftTaskRuntime -Filter swiftCore.dll -Recurse |
+        Where-Object { $_.FullName -notmatch 'arm64' } | Sort-Object FullName -Descending |
+        Select-Object -First 1 -ExpandProperty DirectoryName
+    if ($swiftTaskRuntimeBin) { $env:Path = $swiftTaskRuntimeBin + ';' + $env:Path }
+}
 $swiftTaskCommand = Get-Command swift -ErrorAction SilentlyContinue
 if (-not $swiftTaskCommand) {
     $swiftTaskBase = Join-Path $env:LOCALAPPDATA 'Programs\Swift\Toolchains'

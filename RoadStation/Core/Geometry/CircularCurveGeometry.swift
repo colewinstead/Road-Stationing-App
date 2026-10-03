@@ -14,10 +14,23 @@ public struct CircularCurveSegment: Sendable {
     public let sweep: Double
     public let startAngle: Double
     public var length: Double { radius * sweep }
+    public var bounds: SegmentBounds {
+        let endAngle = startAngle + rotation.sign * sweep
+        var points = [start, end,
+            ProjectCoordinate(x: center.x + radius * cos(startAngle), y: center.y + radius * sin(startAngle)),
+            ProjectCoordinate(x: center.x + radius * cos(endAngle), y: center.y + radius * sin(endAngle))]
+        for angle in [0.0, Double.pi / 2, Double.pi, 3 * Double.pi / 2] {
+            if GeometryUtilities.normalizedAngle(rotation.sign * (angle - startAngle)) <= sweep {
+                points.append(ProjectCoordinate(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle)))
+            }
+        }
+        return SegmentBounds(points: points, padding: GeometryTolerances.standard.coordinate)
+    }
 
     public init(start: ProjectCoordinate, end: ProjectCoordinate, center: ProjectCoordinate,
                 rotation: Rotation, radius: Double? = nil, declaredLength: Double? = nil,
                 tolerances: GeometryTolerances = .standard) throws {
+        try tolerances.validate()
         let r = radius ?? start.distance(to: center)
         guard start.isFinite, end.isFinite, center.isFinite, r.isFinite, r > tolerances.coordinate,
               abs(start.distance(to: center) - r) <= tolerances.importConsistency,

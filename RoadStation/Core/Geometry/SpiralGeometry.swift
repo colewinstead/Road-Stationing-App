@@ -12,6 +12,11 @@ public struct SpiralSegment: Sendable {
     private let panelLength: Double
     private let checkpoints: [ProjectCoordinate]
     private let tolerances: GeometryTolerances
+    public var bounds: SegmentBounds {
+        // Every phase-panel chord is within K*h²/8 of the exact curve.
+        let padding = max(abs(startCurvature), abs(endCurvature)) * panelLength * panelLength / 8 + tolerances.coordinate
+        return SegmentBounds(points: checkpoints, padding: padding)
+    }
     private static let maxPanelTurn = 0.2 // radians; prevents quadrature aliasing
     private static let maxPanels = 100_000
     private static let searchBudget = 100_000
@@ -19,6 +24,7 @@ public struct SpiralSegment: Sendable {
     public init(start: ProjectCoordinate, length: Double, startHeading: Double,
                 startCurvature: Double, endCurvature: Double, declaredEnd: ProjectCoordinate? = nil,
                 tolerances: GeometryTolerances = .standard) throws {
+        try tolerances.validate()
         guard start.isFinite, length.isFinite, length > tolerances.coordinate,
               startHeading.isFinite, startCurvature.isFinite, endCurvature.isFinite else {
             throw GeometryError.invalidGeometry("Clothoid parameters must be finite with positive length.")
@@ -126,7 +132,7 @@ public struct SpiralSegment: Sendable {
         func gradient(_ s: Double) throws -> Double {
             GeometryUtilities.displacement(from: query, to: try point(at: s)).dot(tangent(at: s))
         }
-        if try gradient(low) <= 0, gradient(high) >= 0 {
+        if try gradient(low) <= 0, try gradient(high) >= 0 {
             for _ in 0..<80 {
                 let m = (low + high) / 2
                 if try gradient(m) < 0 { low = m } else { high = m }

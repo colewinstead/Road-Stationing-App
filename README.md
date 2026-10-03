@@ -1,0 +1,325 @@
+# RoadStationCore — Phase 1
+
+RoadStationCore is a dependency-free, platform-independent Swift package for
+LandXML horizontal alignments and planar station/offset calculations. It runs
+on Windows without Xcode. The library contains no SwiftUI, UIKit, MapKit,
+CoreLocation, AVFoundation, or Apple-only frameworks. Foundation and its
+cross-platform FoundationXML parser are the only library imports.
+
+**RoadStation Phase 1 is not surveying software. It does not perform geographic
+coordinate transformations or use GNSS/GPS.** Results still require independent
+validation against known Bentley OpenRoads Designer and Autodesk Civil 3D
+station/offset results before field use or Phase 2.
+
+The user explicitly narrowed this Windows phase to the core package. No iOS UI,
+Xcode project, backend, accounts, cloud storage, maps, photos, reports, analytics,
+payments, or Phase 2 functionality is included.
+
+## Architecture
+
+```text
+Package.swift                     RoadStationCore library + validation executable
+RoadStation/Core/
+  Models/                         Project, alignment, segments, coordinates, results
+  LandXML/                        XML boundary, typed alignment builder, import errors
+  Geometry/                       Lines, arcs, clothoids, stationing, offsets, bounds
+  Validation/                     JSON cases, runner, JSON/CSV results
+RoadStation/CLI/                  roadstation-validate command
+Tests/                            XCTest suites and small XML/JSON resources
+tools/Test-Windows.ps1             Loads native Windows build environment, runs tests
+tools/Generate-SpiralFixture.py    Independent reference-number provenance
+.github/workflows/core-tests.yml  macOS/Linux package checks (no iOS SDK build)
+```
+
+Parse once, then query immutable, validated, `Sendable` models. Segment start/end
+distances are cumulative **horizontal geometric length**, independent of station
+equations. Typed `SegmentGeometry` cases contain validated lines, circular arcs,
+or clothoids. Raw XML attribute dictionaries remain inside the import boundary.
+Alignment metadata preserves name, source identifier, description and declared
+length. Project metadata retains units and a CRS description without interpreting
+or transforming the CRS. Disconnected neighbors produce warnings and keep their
+original geometry; gaps do not count as geometric length.
+
+A future Xcode project named **RoadStationApp** can add this repository as a
+local Swift package and link the **RoadStationCore** library product:
+
+```swift
+import RoadStationCore
+import Foundation
+
+let project = try LandXMLParser().parse(url: xmlURL)
+let alignment = project.alignments[0] // App should offer alignment selection.
+let engine = AlignmentEngine(alignment: alignment)
+let result = try engine.stationOffset(
+    point: ProjectCoordinate(x: 2456789.123, y: 987654.321)
+)
+let text = result.formattedStation
+let coordinate = try engine.coordinate(
+    station: result.displayedStation, offset: result.signedOffset
+).coordinate
+```
+
+The app owns file access, project persistence, screens and interaction. Public
+`AlignmentSampling.polylines` and segment bounds support a future engineering
+canvas without introducing a UI dependency. Samples are for display only and
+keep disconnected segments separate. Forward/inverse math never uses them.
+`ProjectCoordinateTransformer` is only a future adapter interface; no projection
+implementation is supplied.
+
+## Supported LandXML
+
+- LandXML 1.0/1.1/1.2, namespace-aware parsing (default or prefixed namespace).
+- `Units/Metric`, `Units/Imperial`, `Project`, `CoordinateSystem` metadata.
+- Multiple `Alignments/Alignment` elements; `name`, `length`, `staStart`,
+  `desc`/`description`, `oID`/`id` metadata.
+- One ordered `CoordGeom` per alignment, with `Line`, `Curve`, `Spiral`.
+- Inline `Start`, `End`, `Center`, `PI` as N E or N E Z.
+- Circular `Curve`: explicit `rot=cw|ccw`, radius or derivation from Center;
+  center can be derived from endpoints + radius + length when unique.
+  Minor/major arcs, angular-zero crossing and declared full circles are supported.
+- Explicitly declared `spiType=clothoid`; positive `length`, `radiusStart` and
+  `radiusEnd` (positive radius or `INF`), `rot`, and `PI` or `dirStart`.
+  Optional `dirEnd` is checked against the curvature law.
+- `StaEquation`: `staInternal`, `staAhead`, optional `staBack`, increasing
+  stationing. Missing back station is derived from the preceding branch.
+
+Line lengths are checked against horizontal coordinate distance. Arc lengths are
+checked against radius and directional sweep. A contradictory curve orientation
+or clothoid endpoint is an import error. Declared alignment length differences
+produce warnings. File size, XML nesting, node and expanded-text limits are
+enforced; external resolution is disabled and entity declarations are rejected.
+This is targeted horizontal parsing, not complete XSD validation.
+
+### Coordinate and direction conventions
+
+Internal coordinates are **X=Easting, Y=Northing, optional Z=Elevation**.
+`LandXMLParser.coordinate(from:)` explicitly converts LandXML's **Northing
+Easting [Elevation]** order at import. Tests use unequal coordinates to catch
+accidental reversal. No implicit scaling, translation, or unit conversion occurs.
+
+Internal mathematical heading is counterclockwise from east. Internal clockwise
+curvature is negative; counterclockwise curvature is positive. Swapping the NE
+axes reverses angle handedness, so reference code written in NE coordinates
+cannot have its rotation sign copied directly into XY calculations.
+
+The supplied ORD examples have `dir=0` on eastbound lines. Accordingly, the
+default **direction attribute interpretation is east/counterclockwise**. LandXML
+exchange conventions vary (the buildingSMART profile documents north-origin
+directions). Set `LandXMLParserOptions.directionConvention` explicitly to
+`.northCounterclockwise` or `.northClockwise` for those files. Direction units
+support radians (default), decimal degrees and grads/gon; encoded DMS is not
+supported. PI coordinates define the initial spiral tangent when supplied, and
+conflicting direction data is rejected. Line tangents come from endpoints and
+arc tangents from geometry, not optional direction attributes. The returned
+`bearing` is always **clockwise from north in radians [0, 2π)**.
+
+Reference: [buildingSMART LandXML alignment profile](https://buildingsmart.fi/infra/bSI_LandXML12_MVD/pages/3_Alignments.html).
+Source-file exporter labels alone are not proof of external numerical validation.
+
+### Units and elevation
+
+`ProjectUnit` distinguishes meter, international foot, US survey foot and unknown.
+`foot` is retained as international foot; `USSurveyFoot` is distinct. Unknown or
+other units produce a warning and retain numeric values. All lengths, stations,
+offsets, tolerances and coordinates must share the source project's linear unit.
+All calculations are **2D**. Z is retained/interpolated between supplied endpoint
+elevations as metadata; it is not a vertical-profile or slope-distance solution.
+Offset coordinates intentionally have no computed elevation.
+
+## Exact station/offset approach
+
+1. Sort cached segment boxes by their lower distance bound to the query; skip
+   boxes that cannot improve or tie the best result. No spatial index is needed.
+2. A line uses the exact unit-tangent projection, clamped to its finite extent.
+3. An arc uses the radial projection if its directed angle is within the arc,
+   otherwise compares finite endpoints. Centers and equal-distance candidates
+   carry ambiguity flags. Circular math is analytic, not polyline based.
+4. A clothoid uses the bounded numerical nearest-point search below.
+5. Compare candidates globally. Add the winning local distance to the segment's
+   cumulative start distance, then apply the station-equation mapping.
+
+For a unit tangent `t` and vector `v = query - nearestPoint`, signed offset is
+`cross(t, v) = t.x*v.y - t.y*v.x`. **Positive = LT; negative = RT**. The inverse
+adds `offset * (-t.y, t.x)` to the centerline point. East/west/north/south/NE/SW
+tests verify orientation independently of any screen view.
+
+The forward result includes numeric/formatted station, geometric distance,
+signed offset, side, nearest point, zero-based segment index/type, tangent,
+bearing, Euclidean query distance, longitudinal residual and ambiguity flag.
+Ties at different geometric locations or incompatible tangents are explicitly
+marked. A deterministic representative is returned for inspection; callers
+must heed `nearestLocationIsAmbiguous` before assuming a unique solution.
+
+Inverse station/offset returns a coordinate and its resolved equation branch.
+At a smooth shared boundary it uses the incoming segment. A sharp corner or
+disconnected boundary has no unique offset normal; forward queries flag tied
+incompatible candidates. Large offsets can cross a curve's center of curvature
+or reach a different alignment segment. Such coordinates need not project back
+to the requested station. Tests use offsets within a uniquely defined normal
+neighborhood.
+
+Endpoint-clamped projections can contain a **longitudinal residual**. Station
+plus perpendicular offset has only two parameters tied to a fixed endpoint
+normal and cannot reconstruct a point beyond that normal. Round-trip guarantees
+apply to unique normal projections, not endpoint extensions, overlaps, corners
+or self-intersections. This limit is explicitly tested.
+
+## Station equations and formatting
+
+Geometric distance begins at zero and is continuous. Displayed station can jump.
+For import, `geometricDistance = staInternal - alignment.staStart` (unequated
+station). Equations are sorted, validated within alignment limits, and their
+back station is checked against the preceding branch. Decreasing `staIncrement`
+and specialized railway KM-post semantics are unsupported.
+
+On each branch displayed station is `distance + branchShift`. An equation
+changes that shift to `stationAhead - equationDistance`. Exactly at the equation
+the default is **ahead**; `station(at:equationSide: .back)` exposes the back label.
+Values immediately before/after remain on their respective branches.
+
+`resolve(station:)` returns `.unique`, `.ambiguous([StationLocation])`, or
+`.outsideAlignment`. Ahead jumps create station gaps; back jumps create overlaps.
+Both back/ahead endpoint labels are recognized. `coordinate(station:offset:)`
+throws on ambiguity unless an explicit zero-based `branchIndex` is supplied.
+ULP-sized rounding bounds handle subtraction at branch endpoints without
+swallowing engineering-scale gaps.
+
+`StationFormatter` keeps the underlying station numeric. Examples: 42738.42 →
+427+38.42, 125 → 1+25.00, 0 → 0+00.00. Precision is configurable from 0 to 6
+decimal places, with rounding/carry and negative station handling. `parse` accepts
+numeric station or major+minor text; major intervals are 100 project units.
+
+## Spiral methodology
+
+Euler/clothoid signed curvature is linear in arc length:
+
+```text
+k(s) = k0 + (k1-k0)*s/L
+theta(s) = theta0 + k0*s + (k1-k0)*s²/(2L)
+p(s) = p0 + integral_0^s (cos(theta(u)), sin(theta(u))) du
+```
+
+This handles entry, exit, finite-to-finite curvature, either rotation, and the
+constant/zero-curvature limits. Spiral positions are integrated using adaptive
+Gauss-Legendre 4-versus-8-point quadrature. Initial panels limit tangent change
+to at most 0.2 radians to prevent oscillatory aliasing. Cached panel integrals
+avoid reintegrating from the beginning for each query. Tangents use the exact
+curvature integral. There is **no endpoint warp or positional correction**.
+
+Nearest-point search begins with phase-aware bracketing (at least 16 intervals).
+For each interval of arc length h with |curvature| ≤ K, curve deviation from its
+chord is bounded by K*h²/8. Chord distance minus this deviation is a lower bound
+on distance to the interval. Intervals that could improve/tie the best candidate
+are subdivided. Safeguarded bisection refines stationary perpendicular candidates
+using `(p(s)-query)·t(s)=0`; endpoints are always considered. Search stops on the
+distance bound or interval convergence tolerance. Quadrature and search budgets
+throw meaningful errors rather than silently returning an unconverged answer.
+Near-degenerate/equal minima are flagged where detected; there is no claim that
+station/normal uniqueness holds at evolutes or pathological looping spirals.
+
+Independent benchmarks use a Fresnel power series and the exit-spiral reversal
+identity. Constant-curvature results are compared with analytic circles. Dense
+evaluation cross-checks the nearest-point search, and a full segment search
+cross-checks bounds pruning.
+
+## Numerical tolerances
+
+`GeometryTolerances` centralizes positive finite tolerances. Defaults are in
+project units: coordinate/station/tie/closest-point 1e-7, integration 1e-10,
+continuity/import consistency 0.001. Angle comparison is 1e-10 radians; approximate
+nearest-solution tangent ambiguity uses 1e-8 radians. Import tolerances can be
+configured in parser options. Quadrature also has a floating-point roundoff floor.
+Round-trip tests require 2e-6 project units (1e-5 for supplied large projected
+examples). Independent position benchmarks require 1e-10 project units.
+Tolerance defaults are engineering assumptions, not external certification.
+
+## Running builds and tests
+
+Requires Swift 6.0 or later. No package dependencies or backend are needed.
+
+```sh
+swift build
+swift test
+swift test -c release
+```
+
+On Windows, install the [official Swift toolchain and its C++/Windows SDK prerequisites](https://www.swift.org/install/windows/).
+Run from PowerShell:
+
+```powershell
+.\tools\Test-Windows.ps1
+.\tools\Test-Windows.ps1 -Release
+```
+
+The script locates Swift, reads the installer-provided user SDKROOT, loads the
+Microsoft native x64 build environment, and adds Swift runtime DLLs to this
+process's PATH. It also leaves that environment available for `swift build` and
+`swift run` in the same PowerShell session. A newly opened terminal may already
+have the installer environment. The script does not alter machine settings.
+
+This implementation was compiled and tested on Windows with Swift 6.4. See
+PHASE1_REPORT.md for exact counts and timings. macOS/Linux CI is configured but
+has not been run from this local checkout. No iOS app was created or validated.
+Swift 6.4 Windows may emit an ignored root Info.plist for XCTest resources and a
+warning about its .build/debug convenience symlink; these are build-tool artifacts.
+
+## Validation harness and adding cases
+
+Cases are stored as a JSON array of `AlignmentValidationCase`; numeric station,
+positive-left signed offset, coordinates and explicit tolerances are required.
+`referenceSource` identifies the external application/version or independent
+calculation. Use unique alignment names for matching. Case errors are FAIL
+results, so a malformed case cannot pass silently. Forward cases with ambiguous
+nearest locations fail. Inverse cases can specify `branchIndex` for overlaps.
+
+The checked-in example `Tests/Fixtures/validation-cases.json` contains hand
+calculations, **not independently verified ORD/Civil 3D values**. For a right
+offset of 24.61, enter `expectedOffset: -24.61` (or `inputOffset` for inverse).
+Convert station 425+37.28 to numeric 42537.28, or use `StationFormatter.parse`.
+
+```sh
+swift run roadstation-validate Tests/Fixtures/tangent-only.xml \
+  Tests/Fixtures/validation-cases.json validation-output/analytic
+```
+
+PowerShell equivalent after the test script prepares the environment:
+
+```powershell
+swift run roadstation-validate Tests/Fixtures/tangent-only.xml Tests/Fixtures/validation-cases.json validation-output/analytic
+```
+
+Optional final arguments: `--directions east-ccw|north-ccw|north-cw`. The command
+writes `.json` and `.csv`, prints a summary, and exits 0 for all PASS, 1 for failed
+cases, or 2 for usage/import/IO errors. CSV contains input/expected/actual values,
+numeric signed differences, Euclidean coordinate difference, tolerances,
+reference source and PASS/FAIL. Cases load from JSON; CSV is an **output** format.
+Public runner/exporter APIs can later be used by RoadStationApp.
+
+For external validation, add surveyed/project points and stations from ORD/Civil
+3D **without calculating expected answers with this engine**. Retain source unit,
+alignment revision, equation branch, software version and coordinate convention.
+Include PC/PT, TS/SC/CS/ST, equation limits and nonzero LT/RT cases. Run the same
+JSON fixture set after every geometry change. Reference XML provenance and
+fixture licensing are documented in Tests/Fixtures/References/README.md.
+
+## Known limitations and next gate
+
+- Only explicit clothoids are supported. Bloss, cubic, cosine, sinusoid and
+  other transition definitions are rejected, as are undeclared spiral types.
+- pntRef, IrregularLine, multiple CoordGeom containers, decreasing station
+  branches and unsupported horizontal elements are rejected. No partial geometry
+  is silently substituted. Profiles, surfaces, CgPoints, cross sections,
+  superelevation and other unrelated datasets are not computed.
+- Real exporter direction conventions must be selected explicitly; DMS units,
+  survey rotations/translations and nonhorizontal length interpretations are
+  not supported. Extremely looping spirals can exceed numerical budgets.
+- The synthetic Civil 3D-labelled reference spiral has an inconsistent endpoint
+  and is deliberately rejected. It is not an external accuracy benchmark.
+- No local persistence or iOS interaction is needed in the updated package scope.
+  OpenRoads/Civil 3D numerical validation and Apple-platform package checks remain
+  release gates for a future native application.
+
+Next: independently validate this engine, then build RoadStationApp on macOS
+against these APIs. Phase 2 may subsequently add a dedicated CRS adapter,
+CoreLocation/GNSS integration and MapKit after the engine passes that external
+validation gate. **No Phase 2 work is implemented here.**

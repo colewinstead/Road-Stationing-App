@@ -1,0 +1,26 @@
+[
+  {
+    "id": "east-left",
+    "alignmentName": "TANGENT",
+    "referenceSource": "Analytic hand calculation; not ORD/Civil 3D verified",
+    "direction": "forward",
+    "inputCoordinate": { "x": 1250, "y": 2025 },
+    "expectedStation": 10250,
+    "expectedOffset": 25,
+    "stationTolerance": 0.000001,
+    "offsetTolerance": 0.000001,
+    "coordinateTolerance": 0.000001
+  },
+  {
+    "id": "east-right-inverse",
+    "alignmentName": "TANGENT",
+    "referenceSource": "Analytic hand calculation; not ORD/Civil 3D verified",
+    "direction": "inverse",
+    "inputStation": 10250,
+    "inputOffset": -10,
+    "expectedCoordinate": { "x": 1250, "y": 1990 },
+    "stationTolerance": 0.000001,
+    "offsetTolerance": 0.000001,
+    "coordinateTolerance": 0.000001
+  }
+]

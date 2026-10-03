@@ -35,8 +35,12 @@ public struct StationingEngine: Sendable {
         let equations = alignment.stationEquations
         for branch in 0...equations.count {
             let end = branch < equations.count ? equations[branch].geometricDistance : alignment.totalGeometricLength
-            let d = station - shift
-            if d >= start, d <= end {
+            let rawDistance = station - shift
+            // Floating-point cancellation at an endpoint is bounded in ULPs,
+            // not by engineering station tolerance (which could swallow gaps).
+            let rounding = 4 * max(station.ulp, shift.ulp, start.ulp, end.ulp)
+            let d = GeometryUtilities.clamp(rawDistance, start, end)
+            if rawDistance >= start - rounding, rawDistance <= end + rounding {
                 let side: EquationSide? = branch > 0 && d == start ? .ahead : (branch < equations.count && d == end ? .back : nil)
                 let location = StationLocation(geometricDistance: d, branchIndex: branch, equationSide: side)
                 if !locations.contains(where: { abs($0.geometricDistance - d) <= GeometryTolerances.standard.station }) { locations.append(location) }

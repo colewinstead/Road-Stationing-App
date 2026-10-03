@@ -23,6 +23,7 @@ public struct Alignment: Identifiable, Sendable {
                 geometries: [SegmentGeometry], stationEquations: [StationEquation] = [],
                 metadata: AlignmentMetadata = AlignmentMetadata(), warnings: [String] = [],
                 tolerances: GeometryTolerances = .standard) throws {
+        try tolerances.validate()
         guard startStation.isFinite, !geometries.isEmpty else {
             throw GeometryError.invalidGeometry("Alignment must have geometry and finite start station.")
         }
@@ -31,7 +32,7 @@ public struct Alignment: Identifiable, Sendable {
             if let previous = segments.last, previous.end.distance(to: geometry.start) > tolerances.continuity {
                 notes.append("Disconnected geometry at segment \(segments.count + 1): gap \(previous.end.distance(to: geometry.start)) project units.")
             }
-            segments.append(AlignmentSegment(geometry: geometry, geometricStartDistance: distance))
+            segments.append(AlignmentSegment(geometry: geometry, geometricStartDistance: distance, bounds: geometry.bounds))
             distance += geometry.length
         }
         guard distance.isFinite else { throw GeometryError.invalidGeometry("Total length overflow.") }

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- LandXML coordinates are Northing Easting Elevation. -->
+<LandXML xmlns="http://www.landxml.org/schema/LandXML-1.2" version="1.2">
+  <Units><Imperial linearUnit="USSurveyFoot" directionUnit="radians"/></Units>
+  <Project name="Tangent test"/>
+  <Alignments><Alignment name="TANGENT" staStart="10000" length="1000" oID="A1" desc="Eastbound tangent">
+    <CoordGeom><Line length="1000"><Start>2000 1000 10</Start><End>2000 2000 20</End></Line></CoordGeom>
+  </Alignment></Alignments>
+</LandXML>

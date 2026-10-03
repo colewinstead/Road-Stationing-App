@@ -1,0 +1,7 @@
+<lx:LandXML xmlns:lx="http://www.landxml.org/schema/LandXML-1.2" version="1.2">
+  <lx:Units><lx:Metric linearUnit="meter"/></lx:Units>
+  <lx:Alignments>
+    <lx:Alignment name="EAST" staStart="0"><lx:CoordGeom><lx:Line><lx:Start>0 0</lx:Start><lx:End>0 100</lx:End></lx:Line></lx:CoordGeom></lx:Alignment>
+    <lx:Alignment name="NORTH" staStart="500"><lx:CoordGeom><lx:Line><lx:Start>0 0</lx:Start><lx:End>100 0</lx:End></lx:Line></lx:CoordGeom></lx:Alignment>
+  </lx:Alignments>
+</lx:LandXML>

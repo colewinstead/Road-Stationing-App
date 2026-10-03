@@ -12,6 +12,9 @@ struct LandXMLAlignmentParser {
         return value
     }
     private func coordinate(_ node: XMLNode, _ name: String) throws -> ProjectCoordinate {
+        guard node.children.filter({ $0.name == name }).count == 1 else {
+            throw LandXMLParsingError.missingCoordinates("\(node.name)/\(name) must appear exactly once")
+        }
         guard let child = node.child(name) else { throw LandXMLParsingError.missingCoordinates("\(node.name)/\(name)") }
         if child.attributes["pntRef"] != nil { throw LandXMLParsingError.unsupportedGeometry("Referenced coordinates (pntRef)") }
         return try LandXMLParser.coordinate(from: child.text)
@@ -48,6 +51,9 @@ struct LandXMLAlignmentParser {
         var warnings: [String] = []
         for element in coordGeom.children {
             if element.name == "Feature" { continue }
+            guard ["Line", "Curve", "Spiral"].contains(element.name) else {
+                throw LandXMLParsingError.unsupportedGeometry(element.name)
+            }
             do {
                 let start = try coordinate(element, "Start"); let end = try coordinate(element, "End")
                 switch element.name {
@@ -78,14 +84,16 @@ struct LandXMLAlignmentParser {
                     let k1 = try curvature(element, "radiusEnd", rotation: rotation)
                     let declaredHeading = try heading(element, "dirStart")
                     let piHeading: Double?
+                    var headingTolerance = options.tolerances.angle
                     if element.child("PI") != nil {
                         let pi = try coordinate(element, "PI")
                         guard start.distance(to: pi) > options.tolerances.coordinate else { throw GeometryError.invalidGeometry("Spiral PI equals Start.") }
                         piHeading = atan2(pi.y - start.y, pi.x - start.x)
+                        headingTolerance = max(headingTolerance, options.tolerances.importConsistency / start.distance(to: pi))
                     } else { piHeading = nil }
                     guard let theta = piHeading ?? declaredHeading else { throw GeometryError.invalidGeometry("Clothoid needs PI or dirStart.") }
                     if let declaredHeading, let piHeading,
-                       abs(atan2(sin(declaredHeading - piHeading), cos(declaredHeading - piHeading))) > options.tolerances.angle {
+                       abs(atan2(sin(declaredHeading - piHeading), cos(declaredHeading - piHeading))) > headingTolerance {
                         throw GeometryError.invalidGeometry("PI and dirStart disagree; check explicit direction convention.")
                     }
                     let spiral = try SpiralSegment(start: start, length: length, startHeading: theta,

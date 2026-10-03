@@ -5,6 +5,7 @@ public struct LineSegment: Sendable {
     public let end: ProjectCoordinate
     public let length: Double
     public let tangent: Vector2
+    public var bounds: SegmentBounds { SegmentBounds(points: [start, end]) }
     public init(start: ProjectCoordinate, end: ProjectCoordinate) throws {
         let length = start.distance(to: end)
         guard start.isFinite, end.isFinite, length.isFinite, length > GeometryTolerances.standard.coordinate else {

@@ -1,0 +1,16 @@
+<LandXML xmlns="http://www.landxml.org/schema/LandXML-1.2" version="1.2">
+  <Units><Metric linearUnit="meter" directionUnit="radians"/></Units>
+  <Alignments><Alignment name="LSCSL" staStart="1000" length="500">
+    <CoordGeom>
+      <Line length="100"><Start>0 -100</Start><End>0 0</End></Line>
+      <Spiral spiType="clothoid" length="100" radiusStart="INF" radiusEnd="200" rot="ccw" dirStart="0" dirEnd="0.25">
+        <Start>0.00000000000000 0.00000000000000</Start><End>8.29620485370950 99.37680584295894</End>
+      </Spiral>
+      <Curve rot="ccw" radius="200" length="100"><Start>8.29620485370950 99.37680584295894</Start><Center>202.07868919583845 49.89601399205436</Center><End>55.74091542107428 186.22376599672120</End></Curve>
+      <Spiral spiType="clothoid" length="100" radiusStart="200" radiusEnd="INF" rot="ccw" dirStart="0.75" dirEnd="1">
+        <Start>55.74091542107428 186.22376599672120</Start><End>134.88115548839835 246.89829901190132</End>
+      </Spiral>
+      <Line length="100"><Start>134.88115548839835 246.89829901190132</Start><End>219.02825396918800 300.92852959871527</End></Line>
+    </CoordGeom>
+  </Alignment></Alignments>
+</LandXML>

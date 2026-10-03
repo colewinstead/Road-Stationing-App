@@ -1,0 +1,8 @@
+<LandXML xmlns="http://www.landxml.org/schema/LandXML-1.2" version="1.2">
+  <Units><Metric linearUnit="meter"/></Units>
+  <Alignments><Alignment name="QUARTER" staStart="0">
+    <CoordGeom><Curve rot="ccw" radius="100" length="157.07963267948966">
+      <Start>0 100</Start><Center>0 0</Center><End>100 0</End>
+    </Curve></CoordGeom>
+  </Alignment></Alignments>
+</LandXML>

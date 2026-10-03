@@ -1,0 +1,8 @@
+<LandXML xmlns="http://www.landxml.org/schema/LandXML-1.2" version="1.2">
+  <Units><Imperial linearUnit="foot"/></Units>
+  <Alignments><Alignment name="EQUATIONS" staStart="10000">
+    <StaEquation staInternal="10100" staBack="10100" staAhead="10200"/>
+    <StaEquation staInternal="10300" staBack="10400" staAhead="10300"/>
+    <CoordGeom><Line><Start>0 0</Start><End>0 1000</End></Line></CoordGeom>
+  </Alignment></Alignments>
+</LandXML>

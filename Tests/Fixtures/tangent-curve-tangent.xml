@@ -1,0 +1,10 @@
+<LandXML xmlns="http://www.landxml.org/schema/LandXML-1.2" version="1.2">
+  <Units><Metric linearUnit="meter"/></Units>
+  <Alignments><Alignment name="LCL" staStart="5000">
+    <CoordGeom>
+      <Line><Start>0 0</Start><End>0 100</End></Line>
+      <Curve rot="ccw" radius="100" length="157.07963267948966"><Start>0 100</Start><Center>100 100</Center><End>100 200</End></Curve>
+      <Line><Start>100 200</Start><End>200 200</End></Line>
+    </CoordGeom>
+  </Alignment></Alignments>
+</LandXML>

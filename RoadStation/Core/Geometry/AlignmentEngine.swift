@@ -6,11 +6,23 @@ public struct AlignmentEngine: Sendable {
     public func stationOffset(point: ProjectCoordinate) throws -> StationOffsetResult {
         guard point.isFinite else { throw GeometryError.invalidGeometry("Query point must be finite.") }
         var candidates: [(Int, SegmentProjection)] = []
-        for (i, segment) in alignment.segments.enumerated() {
-            candidates.append((i, try segment.geometry.closestPoint(to: point)))
+        let bounds: [(index: Int, lowerBound: Double)] = alignment.segments.indices.map { index in
+            (index: index, lowerBound: alignment.segments[index].bounds.distance(to: point))
+        }
+        let ordered = bounds.sorted { a, b in
+            if a.lowerBound == b.lowerBound { return a.index < b.index }
+            return a.lowerBound < b.lowerBound
+        }
+        var bestDistance = Double.infinity
+        for (i, lowerBound) in ordered {
+            if lowerBound > bestDistance + GeometryTolerances.standard.tieDistance { break }
+            let projection = try alignment.segments[i].geometry.closestPoint(to: point)
+            candidates.append((i, projection)); bestDistance = min(bestDistance, projection.queryDistance)
         }
         // Ties have deterministic segment order, with ambiguity retained.
-        let best = candidates.min { $0.1.queryDistance < $1.1.queryDistance }!
+        let best = candidates.min {
+            $0.1.queryDistance == $1.1.queryDistance ? $0.0 < $1.0 : $0.1.queryDistance < $1.1.queryDistance
+        }!
         let segment = alignment.segments[best.0]; let projection = best.1
         let d = segment.geometricStartDistance + projection.distanceAlong
         let offset = OffsetEngine.signedOffset(tangent: projection.tangent, from: projection.point, to: point)
@@ -19,7 +31,7 @@ public struct AlignmentEngine: Sendable {
             let otherTangent = candidate.1.tangent
             return abs(candidate.1.queryDistance - projection.queryDistance) <= GeometryTolerances.standard.tieDistance &&
                 (abs(otherD - d) > GeometryTolerances.standard.station ||
-                 abs(otherTangent.cross(projection.tangent)) > GeometryTolerances.standard.angle ||
+                 abs(otherTangent.cross(projection.tangent)) > GeometryTolerances.standard.tangentAmbiguity ||
                  otherTangent.dot(projection.tangent) < 0)
         }
         return StationOffsetResult(geometricDistance: d, displayedStation: try StationingEngine(alignment: alignment).station(at: d),

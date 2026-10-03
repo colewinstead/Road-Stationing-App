@@ -30,6 +30,7 @@ public struct LandXMLParser: Sendable {
     }
     public func parse(url: URL) throws -> Project { try parse(data: Data(contentsOf: url), sourceName: url.deletingPathExtension().lastPathComponent) }
     public func parse(data: Data, sourceName: String = "Imported project") throws -> Project {
+        try options.tolerances.validate()
         let root = try XMLDocument.parse(data)
         guard root.name == "LandXML" else { throw LandXMLParsingError.invalidXML("Root must be LandXML.") }
         let version = root.attributes["version"]

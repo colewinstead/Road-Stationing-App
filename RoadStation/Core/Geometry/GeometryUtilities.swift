@@ -10,8 +10,16 @@ public struct GeometryTolerances: Sendable {
     public var continuity: Double = 0.001
     public var importConsistency: Double = 0.001
     public var tieDistance: Double = 1e-7
+    /// Resolvable tangent difference for approximate nearest-point solutions.
+    public var tangentAmbiguity: Double = 1e-8
     public init() {}
     public static let standard = Self()
+    func validate() throws {
+        guard [coordinate, angle, station, closestPoint, integration, continuity, importConsistency, tieDistance, tangentAmbiguity]
+            .allSatisfy({ $0.isFinite && $0 > 0 }) else {
+            throw GeometryError.invalidGeometry("Numerical tolerances must be positive and finite.")
+        }
+    }
 }
 
 public enum GeometryUtilities {

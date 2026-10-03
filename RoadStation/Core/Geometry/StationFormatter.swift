@@ -7,8 +7,9 @@ public enum StationFormatter {
         let rounded = (abs(station) * factor).rounded() / factor
         guard rounded.isFinite, rounded / 100 < Double(Int64.max) else { return "Invalid station" }
         let major = Int64(floor(rounded / 100)); let minor = rounded - Double(major) * 100
-        let width = digits == 0 ? 2 : digits + 3
-        let tail = String(format: "%0*.*f", locale: Locale(identifier: "en_US_POSIX"), width, digits, minor)
+        // Explicit padding avoids Foundation/CRT differences in dynamic %0* width.
+        let raw = String(format: "%.*f", locale: Locale(identifier: "en_US_POSIX"), digits, minor)
+        let tail = (minor < 10 ? "0" : "") + raw
         return "\(station < 0 && rounded > 0 ? "-" : "")\(major)+\(tail)"
     }
     public static func parse(_ text: String) throws -> Double {

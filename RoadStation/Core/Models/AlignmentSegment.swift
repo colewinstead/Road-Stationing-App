@@ -16,6 +16,9 @@ public enum SegmentGeometry: Sendable {
     public var typeName: String {
         switch self { case .line: "Line"; case .circularCurve: "Circular curve"; case .spiral: "Clothoid" }
     }
+    public var bounds: SegmentBounds {
+        switch self { case .line(let g): g.bounds; case .circularCurve(let g): g.bounds; case .spiral(let g): g.bounds }
+    }
     public func point(at distance: Double) throws -> ProjectCoordinate {
         switch self { case .line(let g): try g.point(at: distance); case .circularCurve(let g): try g.point(at: distance); case .spiral(let g): try g.point(at: distance) }
     }
@@ -30,6 +33,7 @@ public enum SegmentGeometry: Sendable {
 public struct AlignmentSegment: Sendable {
     public let geometry: SegmentGeometry
     public let geometricStartDistance: Double
+    public let bounds: SegmentBounds
     public var geometricEndDistance: Double { geometricStartDistance + length }
     public var start: ProjectCoordinate { geometry.start }
     public var end: ProjectCoordinate { geometry.end }

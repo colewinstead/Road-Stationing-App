@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Regression geometry translated to a local origin; project styling and identifying metadata removed. -->
+<LandXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.landxml.org/schema/LandXML-1.2 http://www.landxml.org/schema/landxml-1.2/LandXML-1.2.xsd" version="1.2" date="2026-07-21" time="16:13:31" xmlns="http://www.landxml.org/schema/LandXML-1.2">
+  <Units>
+    <Imperial areaUnit="squareFoot" linearUnit="USSurveyFoot" volumeUnit="cubicYard" temperatureUnit="fahrenheit" pressureUnit="inHG" directionUnit="radians" />
+  </Units>
+  <Application name="OpenRoads Designer" version="24.00.02.25" manufacturer="Bentley Systems, Inc." manufacturerURL="http://www.bentley.com" />
+  <CgPoints />
+  <Alignments>
+    <Alignment name="ML" length="3692.2578422137349" state="proposed" staStart="148264.149">
+      <CoordGeom name="ML" state="proposed">
+        <Line dir="0.57886799488641405" length="1113.7999889581783">
+          <Start>0 0 0</Start>
+          <End>609.3340289553 932.34245669714 0</End>
+        </Line>
+        <Curve crvType="arc" rot="ccw" radius="9720" length="1198.652082090774" chord="1197.892712669945">
+          <Start>609.3340289558 932.34245669725 0</Start>
+          <Center>8745.7757320779 -4385.24312434381 0</Center>
+          <End>1325.2164019635 1892.78994567541 0</End>
+        </Curve>
+        <Line dir="0.70218611032760769" length="123.00000000395055">
+          <Start>1325.2164019633 1892.78994567541 0</Start>
+          <End>1404.6606476049 1986.69208534958 0</End>
+        </Line>
+        <Curve crvType="arc" rot="cw" radius="8039.9999999999991" length="991.47764825149147" chord="990.84952786616668">
+          <Start>1404.6606476049 1986.69208534958 0</Start>
+          <Center>-4733.3328723661 7179.63301980984 0</Center>
+          <End>1996.8102648403 2781.13630471343 0</End>
+        </Curve>
+        <Line dir="0.57886799487301699" length="265.32812290934027">
+          <Start>1996.8102648403 2781.13630471343 0</Start>
+          <End>2141.9651002928 3003.23782778636 0</End>
+        </Line>
+      </CoordGeom>
+    </Alignment>
+  </Alignments>
+</LandXML>
