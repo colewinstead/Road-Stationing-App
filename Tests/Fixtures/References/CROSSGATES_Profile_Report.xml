@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<InRoads productName="OpenRoads Designer 2026" productVersion="26.00.00.373" outputGridScaleFactor="1.0" linearUnits="Imperial" angularUnits="Degrees" isInternationalFoot="false" commandName="Geometry Report" speedUnits="mph" reportStyle="VerticalGeometry">
+  <GeometryProject name="Default" file="c:\pw_working\infra03\cwinstead\d0467837\CW.dgn" lastRevisedDate="10/3/2026 14:12:09">
+    <HorizontalAlignment name="CROSSGATES" style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" lastRevisedDate="10/3/2026 19:03:35" area="422573.488882709" perimeter="5798.974792982" closingDistance="5529.712158782" closingDirection="-2.861908157878" closingPrecision="1.042760451" northingClosingError="1526.490410629" eastingClosingError="5314.841821282" fromFeature="false">
+      <HorizontalElements>
+        <HorizontalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="366.233060193" direction="0.000817849406" elementNumber="1">
+          <Start northing="1014533.149403470" easting="2388501.201347680" elevation="357.909056119" pointType="POB" type="START" name="START">
+            <station internalStation="1000.000000000" externalStation="1000.000000000" externalStationName="R1" />
+          </Start>
+          <End northing="1014533.448926930" easting="2388867.434285390" elevation="368.881275609" pointType="TS" type="TS" name="TS">
+            <station internalStation="1366.233060193" externalStation="1366.233060000" externalStationName="R1" />
+          </End>
+        </HorizontalLine>
+        <HorizontalSpiral style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" type="Clothoid" rotationDirection="ccw" compound="false" startRadius="0.000000000" endRadius="1824.076481981" length="100.000000000" thetaAngle="0.027411131328" aConstant="427.092083980" longTangent="66.669290682" shortTangent="33.335718826" longChord="99.996660617" xs="99.992486560" ys="0.913655341" p="0.228419965" ks="49.998747743" elementNumber="2" tangentialDirectionStart="0.000817849407" radialDirectionStart="4.713206829792" chordDirection="0.009954835063" radialDirectionEnd="4.740617961115" tangentialDirectionEnd="0.028228980730">
+          <Start northing="1014533.448926930" easting="2388867.434285390" elevation="368.881275609" pointType="TS" type="TS" name="TS">
+            <station internalStation="1366.233060193" externalStation="1366.233060000" externalStationName="R1" />
+          </Start>
+          <PI northing="1014533.503452360" easting="2388934.103553780" elevation="0.000000000" pointType="HPI_SPIRAL" type="HPI" name="HPI">
+            <station internalStation="1432.902350875" externalStation="1432.902350682" externalStationName="R1" />
+          </PI>
+          <End northing="1014534.444360750" easting="2388967.425991280" elevation="371.716174100" pointType="SC" type="SC" name="SC">
+            <station internalStation="1466.233060193" externalStation="1466.233060000" externalStationName="R1" />
+          </End>
+        </HorizontalSpiral>
+        <HorizontalCircle style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" rotationDirection="ccw" radius="1824.076481981" delta="0.537681123132" curvatureDefinition="arc" degreeOfCurve="0.054822262656" length="980.771491510" chord="968.999861620" tangentLength="502.551840592" middleOrdinate="65.521726177" externalDistance="67.962990281" tangentialDirectionStart="0.028228980734" radialDirectionStart="4.740617961119" chordDirection="0.297069542300" radialDirectionEnd="5.278299084251" tangentialDirectionEnd="0.565910103866" deflectionAngle="0.268840561566" elementNumber="3">
+          <Start northing="1014534.444360750" easting="2388967.425991280" elevation="371.716174100" pointType="SC" type="SC" name="SC">
+            <station internalStation="1466.233060193" externalStation="1466.233060000" externalStationName="R1" />
+          </Start>
+          <PI northing="1014548.629002900" easting="2389469.777609580" elevation="0.000000000" pointType="HPI_ARC" type="HPI" name="HPI">
+            <station internalStation="1968.784900785" externalStation="1968.784900592" externalStationName="R1" />
+          </PI>
+          <Center northing="1016357.794110200" easting="2388915.941009900" elevation="0.000000000" pointType="CC" type="CC" name="CC" />
+          <End northing="1014818.089388410" easting="2389893.982104040" elevation="382.841817161" pointType="CS" type="CS" name="CS">
+            <station internalStation="2447.004551704" externalStation="2447.004552000" externalStationName="R1" />
+          </End>
+        </HorizontalCircle>
+        <HorizontalSpiral style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" type="Clothoid" rotationDirection="ccw" compound="false" startRadius="1824.076481981" endRadius="0.000000000" length="100.000000000" thetaAngle="0.027411131328" aConstant="427.092083980" longTangent="66.669290697" shortTangent="33.335718811" longChord="99.996660617" xs="99.992486560" ys="0.913655341" p="0.228419965" ks="49.998747743" elementNumber="4" tangentialDirectionStart="0.565910103850" radialDirectionStart="5.278299084234" chordDirection="0.584184249540" radialDirectionEnd="5.305710215585" tangentialDirectionEnd="0.593321235200">
+          <Start northing="1014818.089388410" easting="2389893.982104040" elevation="382.841817161" pointType="CS" type="CS" name="CS">
+            <station internalStation="2447.004551704" externalStation="2447.004552000" externalStationName="R1" />
+          </Start>
+          <PI northing="1014835.963476050" easting="2389922.120816510" elevation="0.000000000" pointType="HPI_SPIRAL" type="HPI" name="HPI">
+            <station internalStation="2480.340270514" externalStation="2480.340270810" externalStationName="R1" />
+          </PI>
+          <End northing="1014873.239456450" easting="2389977.395544990" elevation="379.744368823" pointType="ST" type="ST" name="ST">
+            <station internalStation="2547.004551702" externalStation="2547.004552000" externalStationName="R1" />
+          </End>
+        </HorizontalSpiral>
+        <HorizontalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="1480.286618962" direction="0.593321235196" elementNumber="5">
+          <Start northing="1014873.239456450" easting="2389977.395544990" elevation="379.744368823" pointType="ST" type="ST" name="ST">
+            <station internalStation="2547.004551704" externalStation="2547.004552000" externalStationName="R1" />
+          </Start>
+          <End northing="1015700.893904360" easting="2391204.683852240" elevation="360.774741600" pointType="TS" type="TS" name="TS">
+            <station internalStation="4027.291170666" externalStation="4027.291171000" externalStationName="R1" />
+          </End>
+        </HorizontalLine>
+        <HorizontalSpiral style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" type="Clothoid" rotationDirection="cw" compound="false" startRadius="0.000000000" endRadius="735.000000000" length="150.000000000" thetaAngle="0.102040816326" aConstant="332.039154317" longTangent="100.054595190" shortTangent="50.049635761" longChord="149.930595951" xs="149.843890348" ys="5.098247493" p="1.275035986" ks="74.973976707" elementNumber="6" tangentialDirectionStart="0.593321235195" radialDirectionStart="5.305710215580" chordDirection="0.559310628700" radialDirectionEnd="5.203669399258" tangentialDirectionEnd="0.491280418874">
+          <Start northing="1015700.893904360" easting="2391204.683852240" elevation="360.774741600" pointType="TS" type="TS" name="TS">
+            <station internalStation="4027.291170666" externalStation="4027.291171000" externalStationName="R1" />
+          </Start>
+          <PI northing="1015756.836199380" easting="2391287.637945860" elevation="0.000000000" pointType="HPI_SPIRAL" type="HPI" name="HPI">
+            <station internalStation="4127.345765855" externalStation="4127.345766190" externalStationName="R1" />
+          </PI>
+          <End northing="1015780.447378190" easting="2391331.768188030" elevation="365.882460100" pointType="SC" type="SC" name="SC">
+            <station internalStation="4177.291170665" externalStation="4177.291171000" externalStationName="R1" />
+          </End>
+        </HorizontalSpiral>
+        <HorizontalCircle style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" rotationDirection="cw" radius="735.000000000" delta="0.596257659437" curvatureDefinition="arc" degreeOfCurve="0.136054421769" length="438.249379686" chord="431.786176869" tangentLength="225.856101340" middleOrdinate="32.422478038" externalDistance="33.918707350" tangentialDirectionStart="0.491280418869" radialDirectionStart="5.203669399254" chordDirection="0.193151589151" radialDirectionEnd="4.607411739817" tangentialDirectionEnd="-0.104977240568" deflectionAngle="0.298128829719" elementNumber="7">
+          <Start northing="1015780.447378190" easting="2391331.768188030" elevation="365.882460100" pointType="SC" type="SC" name="SC">
+            <station internalStation="4177.291170665" externalStation="4177.291171000" externalStationName="R1" />
+          </Start>
+          <PI northing="1015886.996181490" easting="2391530.912183750" elevation="0.000000000" pointType="HPI_ARC" type="HPI" name="HPI">
+            <station internalStation="4403.147272005" externalStation="4403.147272340" externalStationName="R1" />
+          </PI>
+          <Center northing="1015132.376168330" easting="2391678.508302450" elevation="0.000000000" pointType="CC" type="CC" name="CC" />
+          <End northing="1015863.329955000" easting="2391755.524935470" elevation="361.768356482" pointType="CS" type="CS" name="CS">
+            <station internalStation="4615.540550352" externalStation="4615.540550000" externalStationName="R1" />
+          </End>
+        </HorizontalCircle>
+        <HorizontalSpiral style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" type="Clothoid" rotationDirection="cw" compound="false" startRadius="735.000000000" endRadius="0.000000000" length="100.000000000" thetaAngle="0.068027210884" aConstant="271.108834235" longTangent="66.682834057" shortTangent="33.348031456" longChord="99.979433949" xs="99.953732900" ys="2.266824260" p="0.566799740" ks="49.992288156" elementNumber="8" tangentialDirectionStart="-0.104977240575" radialDirectionStart="4.607411739810" chordDirection="-0.150329602944" radialDirectionEnd="4.539384528937" tangentialDirectionEnd="-0.173004451448">
+          <Start northing="1015863.329955000" easting="2391755.524935470" elevation="361.768356482" pointType="CS" type="CS" name="CS">
+            <station internalStation="4615.540550352" externalStation="4615.540550000" externalStationName="R1" />
+          </Start>
+          <PI northing="1015859.835597040" easting="2391788.689384270" elevation="0.000000000" pointType="HPI_SPIRAL" type="HPI" name="HPI">
+            <station internalStation="4648.888581806" externalStation="4648.888581454" externalStationName="R1" />
+          </PI>
+          <End northing="1015848.356632430" easting="2391854.376778270" elevation="360.561486704" pointType="ST" type="ST" name="ST">
+            <station internalStation="4715.540550352" externalStation="4715.540550000" externalStationName="R1" />
+          </End>
+        </HorizontalSpiral>
+        <HorizontalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="819.707404514" direction="-0.173004451453" elementNumber="9">
+          <Start northing="1015848.356632430" easting="2391854.376778270" elevation="360.561486704" pointType="ST" type="ST" name="ST">
+            <station internalStation="4715.540550352" externalStation="4715.540550000" externalStationName="R1" />
+          </Start>
+          <End northing="1015707.249968070" easting="2392661.847606400" elevation="361.504762678" pointType="TS" type="TS" name="TS">
+            <station internalStation="5535.247954866" externalStation="5760.247955000" externalStationName="R2" />
+          </End>
+          <StationEquation backEquation="R1" aheadEquation="R2" backStation="4774.999999917" aheadStation="5000.000000000" eqnahLabel="EQNAH" eqnbkLabel="EQNBK">
+            <GeometryPoint northing="1015838.121120320" easting="2391912.948621620" elevation="359.421102674" pointType="EQN" type="EQN" name="EQN">
+              <station internalStation="4775.000003281" externalStation="5000.000003000" externalStationName="R2" />
+            </GeometryPoint>
+          </StationEquation>
+        </HorizontalLine>
+        <HorizontalSpiral style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" type="Clothoid" rotationDirection="ccw" compound="false" startRadius="0.000000000" endRadius="432.505085866" length="50.000000000" thetaAngle="0.057802788492" aConstant="147.055276319" longTangent="33.339168975" shortTangent="16.671971926" longChord="49.992575589" xs="49.983296772" ys="0.963149918" p="0.240816215" ks="24.997215956" elementNumber="10" tangentialDirectionStart="-0.173004451440" radialDirectionStart="4.539384528945" chordDirection="-0.153737400316" radialDirectionEnd="4.597187317419" tangentialDirectionEnd="-0.115201662966">
+          <Start northing="1015707.249968070" easting="2392661.847606400" elevation="361.504762678" pointType="TS" type="TS" name="TS">
+            <station internalStation="5535.247954866" externalStation="5760.247955000" externalStationName="R2" />
+          </Start>
+          <PI northing="1015701.510872750" easting="2392694.689088910" elevation="0.000000000" pointType="HPI_SPIRAL" type="HPI" name="HPI">
+            <station internalStation="5568.587123846" externalStation="5793.587123981" externalStationName="R2" />
+          </PI>
+          <End northing="1015699.594479310" easting="2392711.250552730" elevation="363.986571031" pointType="SC" type="SC" name="SC">
+            <station internalStation="5585.247954866" externalStation="5810.247955000" externalStationName="R2" />
+          </End>
+        </HorizontalSpiral>
+        <HorizontalCircle style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" rotationDirection="ccw" radius="432.505085866" delta="0.831200588564" curvatureDefinition="arc" degreeOfCurve="0.231211153968" length="359.498481929" chord="349.238511960" tangentLength="190.866974578" middleOrdinate="36.817374734" externalDistance="40.243104278" tangentialDirectionStart="-0.115201662961" radialDirectionStart="4.597187317424" chordDirection="0.300398631321" radialDirectionEnd="5.428387905987" tangentialDirectionEnd="0.715998925603" deflectionAngle="0.415600294282" elementNumber="11">
+          <Start northing="1015699.594479310" easting="2392711.250552730" elevation="363.986571031" pointType="SC" type="SC" name="SC">
+            <station internalStation="5585.247954866" externalStation="5810.247955000" externalStationName="R2" />
+          </Start>
+          <PI northing="1015677.654889940" easting="2392900.852389220" elevation="0.000000000" pointType="HPI_ARC" type="HPI" name="HPI">
+            <station internalStation="5776.114929444" externalStation="6001.114929578" externalStationName="R2" />
+          </PI>
+          <Center northing="1016129.232758830" easting="2392760.965722180" elevation="0.000000000" pointType="CC" type="CC" name="CC" />
+          <End northing="1015802.934507810" easting="2393044.849678550" elevation="375.898970462" pointType="CS" type="CS" name="CS">
+            <station internalStation="5944.746436795" externalStation="6169.746437000" externalStationName="R2" />
+          </End>
+        </HorizontalCircle>
+        <HorizontalSpiral style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" type="Clothoid" rotationDirection="ccw" compound="false" startRadius="432.505085866" endRadius="0.000000000" length="50.000000000" thetaAngle="0.057802788492" aConstant="147.055276319" longTangent="33.339168973" shortTangent="16.671971927" longChord="49.992575589" xs="49.983296772" ys="0.963149918" p="0.240816215" ks="24.997215957" elementNumber="12" tangentialDirectionStart="0.715998925481" radialDirectionStart="5.428387905866" chordDirection="0.754534662954" radialDirectionEnd="5.486190694546" tangentialDirectionEnd="0.773801714161">
+          <Start northing="1015802.934507810" easting="2393044.849678550" elevation="375.898970462" pointType="CS" type="CS" name="CS">
+            <station internalStation="5944.746436795" externalStation="6169.746437000" externalStationName="R2" />
+          </Start>
+          <PI northing="1015813.877512890" easting="2393057.427646900" elevation="0.000000000" pointType="HPI_SPIRAL" type="HPI" name="HPI">
+            <station internalStation="5961.418408727" externalStation="6186.418408933" externalStationName="R2" />
+          </PI>
+          <End northing="1015837.176907600" easting="2393081.273786920" elevation="376.790940987" pointType="ST" type="ST" name="ST">
+            <station internalStation="5994.746436795" externalStation="6219.746437000" externalStationName="R2" />
+          </End>
+        </HorizontalSpiral>
+        <HorizontalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="85.070372420" direction="0.773801714095" elementNumber="13">
+          <Start northing="1015837.176907600" easting="2393081.273786920" elevation="376.790940987" pointType="ST" type="ST" name="ST">
+            <station internalStation="5994.746436795" externalStation="6219.746437000" externalStationName="R2" />
+          </Start>
+          <End northing="1015896.629144900" easting="2393142.121134800" elevation="378.308546282" pointType="TS" type="TS" name="TS">
+            <station internalStation="6079.816809215" externalStation="6304.816809000" externalStationName="R2" />
+          </End>
+        </HorizontalLine>
+        <HorizontalSpiral style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" type="Clothoid" rotationDirection="cw" compound="false" startRadius="0.000000000" endRadius="465.190198359" length="75.000000000" thetaAngle="0.080612188589" aConstant="186.786682815" longTangent="50.017030018" shortTangent="25.015482567" longChord="74.978341151" xs="74.951277223" ys="2.014369472" p="0.503709265" ks="37.491878560" elementNumber="14" tangentialDirectionStart="0.773801714099" radialDirectionStart="5.486190694484" chordDirection="0.746932463018" radialDirectionEnd="5.405578505875" tangentialDirectionEnd="0.693189525490">
+          <Start northing="1015896.629144900" easting="2393142.121134800" elevation="378.308546282" pointType="TS" type="TS" name="TS">
+            <station internalStation="6079.816809215" externalStation="6304.816809000" externalStationName="R2" />
+          </Start>
+          <PI northing="1015931.584021110" easting="2393177.896264710" elevation="0.000000000" pointType="HPI_SPIRAL" type="HPI" name="HPI">
+            <station internalStation="6129.833839234" externalStation="6354.833839019" externalStationName="R2" />
+          </PI>
+          <End northing="1015947.568760610" easting="2393197.138470180" elevation="379.646502070" pointType="SC" type="SC" name="SC">
+            <station internalStation="6154.816809215" externalStation="6379.816809000" externalStationName="R2" />
+          </End>
+        </HorizontalSpiral>
+        <HorizontalCircle style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" rotationDirection="cw" radius="465.190198359" delta="0.599620347344" curvatureDefinition="arc" degreeOfCurve="0.214965836238" length="278.937508321" chord="274.777479518" tangentLength="143.803441805" middleOrdinate="20.750939476" externalDistance="21.719804131" tangentialDirectionStart="0.693189525505" radialDirectionStart="5.405578505890" chordDirection="0.393379351833" radialDirectionEnd="4.805958158546" tangentialDirectionEnd="0.093569178161" deflectionAngle="0.299810173672" elementNumber="15">
+          <Start northing="1015947.568760610" easting="2393197.138470180" elevation="379.646502070" pointType="SC" type="SC" name="SC">
+            <station internalStation="6154.816809215" externalStation="6379.816809000" externalStationName="R2" />
+          </Start>
+          <PI northing="1016039.458275400" easting="2393307.753780810" elevation="0.000000000" pointType="HPI_ARC" type="HPI" name="HPI">
+            <station internalStation="6298.620251021" externalStation="6523.620250806" externalStationName="R2" />
+          </PI>
+          <Center northing="1015589.738950370" easting="2393494.392145610" elevation="0.000000000" pointType="CC" type="CC" name="CC" />
+          <End northing="1016052.894219510" easting="2393450.928168470" elevation="384.622582786" pointType="CS" type="CS" name="CS">
+            <station internalStation="6433.754317536" externalStation="6658.754318000" externalStationName="R2" />
+          </End>
+        </HorizontalCircle>
+        <HorizontalSpiral style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" type="Clothoid" rotationDirection="cw" compound="false" startRadius="465.190198359" endRadius="0.000000000" length="75.000000000" thetaAngle="0.080612188589" aConstant="186.786682815" longTangent="50.017030016" shortTangent="25.015482569" longChord="74.978341151" xs="74.951277223" ys="2.014369472" p="0.503709265" ks="37.491878560" elementNumber="16" tangentialDirectionStart="0.093569178161" radialDirectionStart="4.805958158546" chordDirection="0.039826240649" radialDirectionEnd="4.725345969957" tangentialDirectionEnd="0.012956989573">
+          <Start northing="1016052.894219510" easting="2393450.928168470" elevation="384.622582786" pointType="CS" type="CS" name="CS">
+            <station internalStation="6433.754317536" externalStation="6658.754318000" externalStationName="R2" />
+          </Start>
+          <PI northing="1016055.231483640" easting="2393475.834223250" elevation="0.000000000" pointType="HPI_SPIRAL" type="HPI" name="HPI">
+            <station internalStation="6458.769800104" externalStation="6683.769800568" externalStationName="R2" />
+          </PI>
+          <End northing="1016055.879535640" easting="2393525.847054800" elevation="385.960538574" pointType="ST" type="ST" name="ST">
+            <station internalStation="6508.754317536" externalStation="6733.754318000" externalStationName="R2" />
+          </End>
+        </HorizontalSpiral>
+        <HorizontalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="290.220475446" direction="0.012956989572" elementNumber="17">
+          <Start northing="1016055.879535640" easting="2393525.847054800" elevation="385.960538574" pointType="ST" type="ST" name="ST">
+            <station internalStation="6508.754317536" externalStation="6733.754318000" externalStationName="R2" />
+          </Start>
+          <End northing="1016059.639814100" easting="2393816.043168960" elevation="379.920472939" pointType="POE" type="END" name="END">
+            <station internalStation="6798.974792982" externalStation="7023.974793000" externalStationName="R2" />
+          </End>
+        </HorizontalLine>
+      </HorizontalElements>
+      <HorizontalCurveSets>
+        <CurvesetPoint curveSetID="0" tangentDirectionStart="0.000817849406" pointType="POB" type="START" curveSetStartElement="1">
+          <GeometryPoint northing="1014533.149403470" easting="2388501.201347680" elevation="357.909056119" pointType="POB" type="START" name="START">
+            <station internalStation="1000.000000000" externalStation="1000.000000000" externalStationName="R1" />
+          </GeometryPoint>
+        </CurvesetPoint>
+        <CurvesetPoint curveSetID="1" delta="0.592503385788" tangentLengthStart="606.838645408" tangentDirectionStart="0.000817849406" tangentLengthEnd="606.838645411" tangentDirectionEnd="0.593321235194" external="83.319399029" pointType="SPIRAL CIRCLE SPIRAL" curveSetStartElement="2" curveSetStopElement="4">
+          <GeometryPoint northing="1014533.945229500" easting="2389474.272727850" elevation="0.000000000" pointType="PI" type="HPI" name="HPI">
+            <station internalStation="1973.071705601" externalStation="1973.071705408" externalStationName="R1" />
+          </GeometryPoint>
+        </CurvesetPoint>
+        <CurvesetPoint curveSetID="2" delta="0.766325686648" tangentLengthStart="370.733982141" tangentDirectionStart="0.593321235198" tangentLengthEnd="347.509333974" tangentDirectionEnd="-0.173004451453" external="58.457566245" pointType="SPIRAL CIRCLE SPIRAL" curveSetStartElement="6" curveSetStopElement="8">
+          <GeometryPoint northing="1015908.177835320" easting="2391512.055056950" elevation="0.000000000" pointType="PI" type="HPI" name="HPI">
+            <station internalStation="4398.025152806" externalStation="4398.025153141" externalStationName="R1" />
+          </GeometryPoint>
+        </CurvesetPoint>
+        <CurvesetPoint curveSetID="3" delta="0.946806165547" tangentLengthStart="246.673253913" tangentDirectionStart="-0.173004451452" tangentLengthEnd="246.673253914" tangentDirectionEnd="0.773801714093" external="53.714290107" pointType="SPIRAL CIRCLE SPIRAL" curveSetStartElement="10" curveSetStopElement="12">
+          <GeometryPoint northing="1015664.786962540" easting="2392904.838526720" elevation="0.000000000" pointType="PI" type="HPI" name="HPI">
+            <station internalStation="5781.921208779" externalStation="6006.921208913" externalStationName="R2" />
+          </GeometryPoint>
+        </CurvesetPoint>
+        <CurvesetPoint curveSetID="4" delta="0.760844724523" tangentLengthStart="223.724057898" tangentDirectionStart="0.773801714094" tangentLengthEnd="223.724057897" tangentDirectionEnd="0.012956989571" external="36.360636770" pointType="SPIRAL CIRCLE SPIRAL" curveSetStartElement="14" curveSetStopElement="16">
+          <GeometryPoint northing="1016052.980826470" easting="2393302.141776440" elevation="0.000000000" pointType="PI" type="HPI" name="HPI">
+            <station internalStation="6303.540867113" externalStation="6528.540866898" externalStationName="R2" />
+          </GeometryPoint>
+        </CurvesetPoint>
+        <CurvesetPoint curveSetID="5" tangentDirectionEnd="0.012956989572" pointType="POE" type="END" curveSetStopElement="17">
+          <GeometryPoint northing="1016059.639814100" easting="2393816.043168960" elevation="379.920472939" pointType="POE" type="END" name="END">
+            <station internalStation="6798.974792982" externalStation="7023.974793000" externalStationName="R2" />
+          </GeometryPoint>
+        </CurvesetPoint>
+      </HorizontalCurveSets>
+      <HorizontalTraversePoints>
+        <HorizontalTraversePoint distanceAhead="366.233060193" directionAhead="0.000817849406">
+          <TraversePoint northing="1014533.149403470" easting="2388501.201347680" elevation="357.909056119" pointType="POB" type="START" name="START">
+            <station internalStation="1000.000000000" externalStation="1000.000000000" externalStationName="R1" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="366.233060193" directionBack="-3.140774804184" distanceAhead="99.996660617" directionAhead="0.009954835069" deflection="-0.009136985663" angleLeft="3.150729639253" angleRight="3.132455667927">
+          <TraversePoint northing="1014533.448926930" easting="2388867.434285390" elevation="368.881275609" pointType="TS" type="TS" name="TS">
+            <station internalStation="1366.233060193" externalStation="1366.233060000" externalStationName="R1" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="99.996660617" directionBack="-3.131637818521" distanceAhead="968.999861620" directionAhead="0.297069542299" deflection="-0.287114707231" angleLeft="3.428707360821" angleRight="2.854477946359">
+          <TraversePoint northing="1014534.444360750" easting="2388967.425991280" elevation="371.716174100" pointType="SC" type="SC" name="SC">
+            <station internalStation="1466.233060193" externalStation="1466.233060000" externalStationName="R1" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="968.999861620" directionBack="-2.844523111290" distanceAhead="99.996660616" directionAhead="0.584184249550" deflection="-0.287114707250" angleLeft="3.428707360840" angleRight="2.854477946340">
+          <TraversePoint northing="1014818.089388410" easting="2389893.982104040" elevation="382.841817161" pointType="CS" type="CS" name="CS">
+            <station internalStation="2447.004551704" externalStation="2447.004552000" externalStationName="R1" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="99.996660616" directionBack="-2.557408404040" distanceAhead="1480.286618964" directionAhead="0.593321235194" deflection="-0.009136985645" angleLeft="3.150729639235" angleRight="3.132455667945">
+          <TraversePoint northing="1014873.239456450" easting="2389977.395544990" elevation="379.744368823" pointType="ST" type="ST" name="ST">
+            <station internalStation="2547.004551702" externalStation="2547.004552000" externalStationName="R1" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="1480.286618964" directionBack="-2.548271418395" distanceAhead="149.930595951" directionAhead="0.559310628701" deflection="0.034010606493" angleLeft="3.107582047096" angleRight="3.175603260083">
+          <TraversePoint northing="1015700.893904360" easting="2391204.683852240" elevation="360.774741600" pointType="TS" type="TS" name="TS">
+            <station internalStation="4027.291170666" externalStation="4027.291171000" externalStationName="R1" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="149.930595951" directionBack="-2.582282024889" distanceAhead="431.786176869" directionAhead="0.193151589150" deflection="0.366159039551" angleLeft="2.775433614039" angleRight="3.507751693141">
+          <TraversePoint northing="1015780.447378190" easting="2391331.768188030" elevation="365.882460100" pointType="SC" type="SC" name="SC">
+            <station internalStation="4177.291170665" externalStation="4177.291171000" externalStationName="R1" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="431.786176869" directionBack="-2.948441064440" distanceAhead="99.979433949" directionAhead="-0.150329602944" deflection="0.343481192093" angleLeft="2.798111461496" angleRight="3.485073845683">
+          <TraversePoint northing="1015863.329955000" easting="2391755.524935470" elevation="361.768356482" pointType="CS" type="CS" name="CS">
+            <station internalStation="4615.540550352" externalStation="4615.540550000" externalStationName="R1" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="99.979433949" directionBack="-3.291922256533" distanceAhead="819.707404514" directionAhead="-0.173004451453" deflection="0.022674848510" angleLeft="3.118917805080" angleRight="3.164267502099">
+          <TraversePoint northing="1015848.356632430" easting="2391854.376778270" elevation="360.561486704" pointType="ST" type="ST" name="ST">
+            <station internalStation="4715.540550352" externalStation="4715.540550000" externalStationName="R1" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="819.707404514" directionBack="-3.314597105043" distanceAhead="49.992575588" directionAhead="-0.153737400308" deflection="-0.019267051145" angleLeft="3.160859704735" angleRight="3.122325602445">
+          <TraversePoint northing="1015707.249968070" easting="2392661.847606400" elevation="361.504762678" pointType="TS" type="TS" name="TS">
+            <station internalStation="5535.247954866" externalStation="5760.247955000" externalStationName="R2" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="49.992575588" directionBack="-3.295330053898" distanceAhead="349.238511960" directionAhead="0.300398631321" deflection="-0.454136031629" angleLeft="3.595728685219" angleRight="2.687456621961">
+          <TraversePoint northing="1015699.594479310" easting="2392711.250552730" elevation="363.986571031" pointType="SC" type="SC" name="SC">
+            <station internalStation="5585.247954866" externalStation="5810.247955000" externalStationName="R2" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="349.238511960" directionBack="-2.841194022269" distanceAhead="49.992575589" directionAhead="0.754534662959" deflection="-0.454136031639" angleLeft="3.595728685229" angleRight="2.687456621951">
+          <TraversePoint northing="1015802.934507810" easting="2393044.849678550" elevation="375.898970462" pointType="CS" type="CS" name="CS">
+            <station internalStation="5944.746436795" externalStation="6169.746437000" externalStationName="R2" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="49.992575589" directionBack="-2.387057990630" distanceAhead="85.070372421" directionAhead="0.773801714092" deflection="-0.019267051132" angleLeft="3.160859704722" angleRight="3.122325602458">
+          <TraversePoint northing="1015837.176907600" easting="2393081.273786920" elevation="376.790940987" pointType="ST" type="ST" name="ST">
+            <station internalStation="5994.746436795" externalStation="6219.746437000" externalStationName="R2" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="85.070372421" directionBack="-2.367790939498" distanceAhead="74.978341151" directionAhead="0.746932463018" deflection="0.026869251074" angleLeft="3.114723402516" angleRight="3.168461904664">
+          <TraversePoint northing="1015896.629144900" easting="2393142.121134800" elevation="378.308546282" pointType="TS" type="TS" name="TS">
+            <station internalStation="6079.816809215" externalStation="6304.816809000" externalStationName="R2" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="74.978341151" directionBack="-2.394660190572" distanceAhead="274.777479518" directionAhead="0.393379351833" deflection="0.353553111185" angleLeft="2.788039542405" angleRight="3.495145764774">
+          <TraversePoint northing="1015947.568760610" easting="2393197.138470180" elevation="379.646502070" pointType="SC" type="SC" name="SC">
+            <station internalStation="6154.816809215" externalStation="6379.816809000" externalStationName="R2" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="274.777479518" directionBack="-2.748213301756" distanceAhead="74.978341151" directionAhead="0.039826240649" deflection="0.353553111184" angleLeft="2.788039542406" angleRight="3.495145764774">
+          <TraversePoint northing="1016052.894219510" easting="2393450.928168470" elevation="384.622582786" pointType="CS" type="CS" name="CS">
+            <station internalStation="6433.754317536" externalStation="6658.754318000" externalStationName="R2" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="74.978341151" directionBack="-3.101766412941" distanceAhead="290.220475446" directionAhead="0.012956989572" deflection="0.026869251078" angleLeft="3.114723402512" angleRight="3.168461904667">
+          <TraversePoint northing="1016055.879535640" easting="2393525.847054800" elevation="385.960538574" pointType="ST" type="ST" name="ST">
+            <station internalStation="6508.754317536" externalStation="6733.754318000" externalStationName="R2" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+        <HorizontalTraversePoint distanceBack="290.220475446" directionBack="-3.128635664018">
+          <TraversePoint northing="1016059.639814100" easting="2393816.043168960" elevation="379.920472939" pointType="POE" type="END" name="END">
+            <station internalStation="6798.974792982" externalStation="7023.974793000" externalStationName="R2" />
+          </TraversePoint>
+        </HorizontalTraversePoint>
+      </HorizontalTraversePoints>
+      <HorizontalEventPoints />
+      <VerticalAlignment name="ML33" style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" lastRevisedDate="10/3/2026 19:11:57">
+        <VerticalElements>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="30.653325248" grade="0.00735953988301">
+            <VerticalStart northing="1014533.149403470" easting="2388501.201347680" elevation="357.909056119" pointType="POB" type="START" name="START" PVItoPVIVerticalAhead="1.102409557" PVItoPVIHorizontalAhead="491.446758976" PVItoPVISlopeAhead="491.447995433">
+              <station internalStation="1000.000000000" externalStation="1000.000000000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1014533.174473270" easting="2388531.854662680" elevation="358.134650488" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="1030.653325248" externalStation="1030.653325000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="1.139013003" startGrade="0.00735953988301" endGrade="0.04560071880728" verticalCurveLength="238.279892950" kValue="62.309766501" rateOfChange="1.604884846" eqvRadius="6230.976650108" externalDistance="1.139013003">
+            <VerticalStart northing="1014533.174473270" easting="2388531.854662680" elevation="358.134650488" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="1030.653325248" externalStation="1030.653325000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1014533.271911800" easting="2388650.994569310" elevation="359.011465676" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="-1.102409557" PVItoPVIHorizontalBack="-491.446758976" PVItoPVISlopeBack="491.447995433" PVItoPVIVerticalAhead="13.983906998" PVItoPVIHorizontalAhead="1006.099671433" PVItoPVISlopeAhead="1006.196848789">
+              <station internalStation="1149.793271723" externalStation="1149.793272000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1014533.369350320" easting="2388770.134475940" elevation="364.444332874" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="1268.933218197" externalStation="1268.933218000" externalStationName="R1" />
+            </VerticalEnd>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" headLightSightDistance="316.088686863" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="121.790578804" grade="0.04560071880728">
+            <VerticalStart northing="1014533.369350320" easting="2388770.134475940" elevation="364.444332874" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="1268.933218197" externalStation="1268.933218000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1014533.482378460" easting="2388891.924996410" elevation="369.998070812" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="1390.723797001" externalStation="1390.723797000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="-1.307223588" startGrade="0.04560071880728" endGrade="-0.03395127559861" verticalCurveLength="131.458535787" kValue="16.524857330" rateOfChange="-6.051489462" eqvRadius="1652.485732997" externalDistance="-1.307223588">
+            <VerticalStart northing="1014533.482378460" easting="2388891.924996410" elevation="369.998070812" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="1390.723797001" externalStation="1390.723797000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1014534.193672750" easting="2388957.649220020" elevation="372.995372674" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="-13.983906998" PVItoPVIHorizontalBack="-1006.099671433" PVItoPVISlopeBack="1006.196848789" PVItoPVIVerticalAhead="-7.690400359" PVItoPVIHorizontalAhead="743.150924348" PVItoPVISlopeAhead="743.190714835">
+              <station internalStation="1456.453064895" externalStation="1456.453065000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1014536.880941650" easting="2389023.319987060" elevation="370.763780185" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="1522.182332789" externalStation="1522.182333000" externalStationName="R1" />
+            </VerticalEnd>
+            <TurningPoint northing="1014534.440000130" easting="2388967.271326790" elevation="371.716181343" pointType="VHIGH" type="VHP" name="VHP">
+              <station internalStation="1466.078334245" externalStation="1466.078334000" externalStationName="R1" />
+            </TurningPoint>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" stoppingSightDistance="201.382719485" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="55.476307770" grade="-0.03395127559861">
+            <VerticalStart northing="1014536.880941650" easting="2389023.319987060" elevation="370.763780185" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="1522.182332789" externalStation="1522.182333000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1014540.988277240" easting="2389078.641893200" elevation="368.880288771" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="1577.658640558" externalStation="1577.658641000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="1.763458230" startGrade="-0.03395127559861" endGrade="0.03303206098372" verticalCurveLength="210.614558207" kValue="31.442828762" rateOfChange="3.180375429" eqvRadius="3144.282876212" externalDistance="1.763458230">
+            <VerticalStart northing="1014540.988277240" easting="2389078.641893200" elevation="368.880288771" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="1577.658640558" externalStation="1577.658641000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1014553.402914480" easting="2389183.200106880" elevation="365.304972315" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="7.690400359" PVItoPVIHorizontalBack="-743.150924348" PVItoPVISlopeBack="743.190714835" PVItoPVIVerticalAhead="21.263529388" PVItoPVIHorizontalAhead="2111.951053676" PVItoPVISlopeAhead="2112.058093615">
+              <station internalStation="1682.965919662" externalStation="1682.965920000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1014571.829853450" easting="2389286.867802830" elevation="368.783488781" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="1788.273198766" externalStation="1788.273199000" externalStationName="R1" />
+            </VerticalEnd>
+            <TurningPoint northing="1014553.615218340" easting="2389184.629562450" elevation="367.068098448" pointType="VLOW" type="VLP" name="VLP">
+              <station internalStation="1684.411055049" externalStation="1684.411055000" externalStationName="R1" />
+            </TurningPoint>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" headLightSightDistance="179.944431057" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="485.201758791" grade="0.03303206098372">
+            <VerticalStart northing="1014571.829853450" easting="2389286.867802830" elevation="368.783488781" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="1788.273198766" externalStation="1788.273199000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1014732.147943700" easting="2389743.304021800" elevation="384.810702867" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="2273.474957557" externalStation="2273.474958000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="-0.851525956" startGrade="0.03303206098372" endGrade="-0.03097448337504" verticalCurveLength="106.429861427" kValue="16.627965545" rateOfChange="-6.013964831" eqvRadius="1662.796554533" externalDistance="-0.851525956">
+            <VerticalStart northing="1014732.147943700" easting="2389743.304021800" elevation="384.810702867" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="2273.474957557" externalStation="2273.474958000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1014756.973446790" easting="2389790.371233380" elevation="386.568501703" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="-21.263529388" PVItoPVIHorizontalBack="-2111.951053676" PVItoPVISlopeBack="2112.058093615" PVItoPVIVerticalAhead="-19.166357807" PVItoPVIHorizontalAhead="2030.110552995" PVItoPVISlopeAhead="2030.201026168">
+              <station internalStation="2326.689888270" externalStation="2326.689888000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1014783.161312740" easting="2389836.694269610" elevation="384.920196716" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="2379.904818984" externalStation="2379.904819000" externalStationName="R1" />
+            </VerticalEnd>
+            <TurningPoint northing="1014757.794214110" easting="2389791.872139970" elevation="385.717855705" pointType="VHIGH" type="VHP" name="VHP">
+              <station internalStation="2328.400554750" externalStation="2328.400555000" externalStationName="R1" />
+            </TurningPoint>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" stoppingSightDistance="221.814918891" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="515.851784319" grade="-0.03097448337504">
+            <VerticalStart northing="1014783.161312740" easting="2389836.694269610" elevation="384.920196716" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="2379.904818984" externalStation="2379.904819000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1015068.232900980" easting="2390266.541788410" elevation="368.941954199" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="2895.756603303" externalStation="2895.756603000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="0.182980846" startGrade="-0.03097448337504" endGrade="-0.01625127449385" verticalCurveLength="99.424438156" kValue="67.529054949" rateOfChange="1.480844062" eqvRadius="6752.905494890" externalDistance="0.182980846">
+            <VerticalStart northing="1015068.232900980" easting="2390266.541788410" elevation="368.941954199" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="2895.756603303" externalStation="2895.756603000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1015096.027882510" easting="2390307.757607310" elevation="367.402143896" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="19.166357807" PVItoPVIHorizontalBack="-2030.110552995" PVItoPVISlopeBack="2030.201026168" PVItoPVIVerticalAhead="-2.784624963" PVItoPVIHorizontalAhead="562.164549093" PVItoPVISlopeAhead="562.171445729">
+              <station internalStation="2945.468822381" externalStation="2945.468822000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1015123.822864040" easting="2390348.973426200" elevation="366.594256978" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="2995.181041459" externalStation="2995.181041000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="71.960815743" grade="-0.01625127449385">
+            <VerticalStart northing="1015123.822864040" easting="2390348.973426200" elevation="366.594256978" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="2995.181041459" externalStation="2995.181041000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1015164.057429740" easting="2390408.635296150" elevation="365.424802008" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="3067.141857203" externalStation="3067.141857000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="-0.146089045" startGrade="-0.01625127449385" endGrade="-0.02801484662072" verticalCurveLength="99.350124876" kValue="84.455745079" rateOfChange="-1.184052073" eqvRadius="8445.574507889" externalDistance="-0.146089045">
+            <VerticalStart northing="1015164.057429740" easting="2390408.635296150" elevation="365.424802008" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="3067.141857203" externalStation="3067.141857000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1015191.831636340" easting="2390449.820308910" elevation="364.617518933" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="2.784624963" PVItoPVIHorizontalBack="-562.164549093" PVItoPVISlopeBack="562.171445729" PVItoPVIVerticalAhead="-6.661953939" PVItoPVIHorizontalAhead="780.184908571" PVItoPVISlopeAhead="780.213351073">
+              <station internalStation="3116.816919641" externalStation="3116.816920000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1015219.605842940" easting="2390491.005321670" elevation="363.225879678" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="3166.491982079" externalStation="3166.491982000" externalStationName="R1" />
+            </VerticalEnd>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" stoppingSightDistance="967.041191174" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="108.886078926" grade="-0.02801484662072">
+            <VerticalStart northing="1015219.605842940" easting="2390491.005321670" elevation="363.225879678" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="3166.491982079" externalStation="3166.491982000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1015280.485976810" easting="2390581.281495070" elevation="360.175452878" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="3275.378061005" externalStation="3275.378061000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="0.464338205" startGrade="-0.02801484662072" endGrade="-0.00457516987786" verticalCurveLength="158.479388740" kValue="67.611593145" rateOfChange="1.479036292" eqvRadius="6761.159314549" externalDistance="0.464338205">
+            <VerticalStart northing="1015280.485976810" easting="2390581.281495070" elevation="360.175452878" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="3275.378061005" externalStation="3275.378061000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1015324.790292380" easting="2390646.978198070" elevation="357.955564994" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="6.661953939" PVItoPVIHorizontalBack="-780.184908571" PVItoPVISlopeBack="780.213351073" PVItoPVIVerticalAhead="-2.379146049" PVItoPVIHorizontalAhead="1706.074718373" PVItoPVISlopeAhead="1706.076377249">
+              <station internalStation="3354.617755375" externalStation="3354.617755000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1015369.094607950" easting="2390712.674901080" elevation="357.593029931" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="3433.857449745" externalStation="3433.857450000" externalStationName="R1" />
+            </VerticalEnd>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" headLightSightDistance="649.421338607" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="331.260741373" grade="-0.00457516987786">
+            <VerticalStart northing="1015369.094607950" easting="2390712.674901080" elevation="357.593029931" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="3433.857449745" externalStation="3433.857450000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1015554.308351360" easting="2390987.319303950" elevation="356.077455765" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="3765.118191117" externalStation="3765.118191000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="1.057521505" startGrade="-0.00457516987786" endGrade="0.03405145667186" verticalCurveLength="219.024356885" kValue="56.702947280" rateOfChange="1.763576759" eqvRadius="5670.294728002" externalDistance="1.057521505">
+            <VerticalStart northing="1015554.308351360" easting="2390987.319303950" elevation="356.077455765" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="3765.118191117" externalStation="3765.118191000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1015615.538548560" easting="2391078.114569120" elevation="355.576418945" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="2.379146049" PVItoPVIHorizontalBack="-1706.074718373" PVItoPVISlopeBack="1706.076377249" PVItoPVIVerticalAhead="15.937939777" PVItoPVIHorizontalAhead="1535.609022262" PVItoPVISlopeAhead="1535.691729214">
+              <station internalStation="3874.630369560" externalStation="3874.630370000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1015676.768745750" easting="2391168.909834300" elevation="359.305468145" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="3984.142548003" externalStation="3984.142548000" externalStationName="R1" />
+            </VerticalEnd>
+            <TurningPoint northing="1015568.813296720" easting="2391008.827978110" elevation="356.018109952" pointType="VLOW" type="VLP" name="VLP">
+              <station internalStation="3791.060752756" externalStation="3791.060753000" externalStationName="R1" />
+            </TurningPoint>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" headLightSightDistance="294.892608846" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="286.805983467" grade="0.03405145667186">
+            <VerticalStart northing="1015676.768745750" easting="2391168.909834300" elevation="359.305468145" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="3984.142548003" externalStation="3984.142548000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1015819.256967650" easting="2391416.936577040" elevation="369.071629664" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="4270.948531469" externalStation="4270.948531000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="-1.436525347" startGrade="0.03405145667186" endGrade="-0.04604875816480" verticalCurveLength="143.472808371" kValue="17.911663366" rateOfChange="-5.582954411" eqvRadius="1791.166336611" externalDistance="-1.436525347">
+            <VerticalStart northing="1015819.256967650" easting="2391416.936577040" elevation="369.071629664" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="4270.948531469" externalStation="4270.948531000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1015841.477027880" easting="2391485.114995970" elevation="371.514358723" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="-15.937939777" PVItoPVIHorizontalBack="-1535.609022262" PVItoPVISlopeBack="1535.691729214" PVItoPVIVerticalAhead="-8.745272497" PVItoPVIHorizontalAhead="623.073947284" PVItoPVISlopeAhead="623.135317227">
+              <station internalStation="4342.684935655" externalStation="4342.684936000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1015856.947647800" easting="2391555.134191940" elevation="368.210986395" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="4414.421339840" externalStation="4414.421340000" externalStationName="R1" />
+            </VerticalEnd>
+            <TurningPoint northing="1015838.574246750" easting="2391474.770053600" elevation="370.110059871" pointType="VHIGH" type="VHP" name="VHP">
+              <station internalStation="4331.940354373" externalStation="4331.940354000" externalStationName="R1" />
+            </TurningPoint>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" stoppingSightDistance="206.461418895" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="34.012598956" grade="-0.04604875816480">
+            <VerticalStart northing="1015856.947647800" easting="2391555.134191940" elevation="368.210986395" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="4414.421339840" externalStation="4414.421340000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1015861.879153850" easting="2391588.784313870" elevation="366.644748451" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="4448.433938796" externalStation="4448.433939000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="0.715008850" startGrade="-0.04604875816480" endGrade="-0.01206719043648" verticalCurveLength="168.328631635" kValue="49.535275412" rateOfChange="2.018763380" eqvRadius="4953.527541185" externalDistance="0.715008850">
+            <VerticalStart northing="1015861.879153850" easting="2391588.784313870" elevation="366.644748451" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="4448.433938796" externalStation="4448.433939000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1015867.353409990" easting="2391672.724338230" elevation="362.769086226" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="8.745272497" PVItoPVIHorizontalBack="-623.073947284" PVItoPVISlopeBack="623.135317227" PVItoPVIVerticalAhead="-2.660988430" PVItoPVIHorizontalAhead="723.470768603" PVItoPVISlopeAhead="723.475662260">
+              <station internalStation="4532.598254614" externalStation="4532.598255000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1015863.200900090" easting="2391756.740121700" elevation="361.753459399" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="4616.762570431" externalStation="4616.762570000" externalStationName="R1" />
+            </VerticalEnd>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" headLightSightDistance="294.877009176" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="103.507291929" grade="-0.01206719043648">
+            <VerticalStart northing="1015863.200900090" easting="2391756.740121700" elevation="361.753459399" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="4616.762570431" externalStation="4616.762570000" externalStationName="R1" />
+            </VerticalStart>
+            <VerticalEnd northing="1015847.542515790" easting="2391859.035491200" elevation="360.504417195" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="4720.269862360" externalStation="4720.269862000" externalStationName="R1" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="-0.152278191" startGrade="-0.01206719043648" endGrade="-0.03061354401367" verticalCurveLength="65.685447105" kValue="35.416906526" rateOfChange="-2.823510290" eqvRadius="3541.690652638" externalDistance="-0.152278191">
+            <StationEquation backEquation="R1" aheadEquation="R2" backStation="4774.999999917" aheadStation="5000.000000000" eqnahLabel="EQNAH" eqnbkLabel="EQNBK">
+              <GeometryPoint northing="1015838.121120320" easting="2391912.948621620" elevation="359.421102674" pointType="EQN" type="EQN" name="EQN">
+                <station internalStation="4775.000003281" externalStation="5000.000003000" externalStationName="R2" />
+              </GeometryPoint>
+            </StationEquation>
+            <VerticalStart northing="1015847.542515790" easting="2391859.035491200" elevation="360.504417195" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="4720.269862360" externalStation="4720.269862000" externalStationName="R1" />
+            </VerticalStart>
+            <PVI northing="1015841.888879930" easting="2391891.387939200" elevation="360.108097796" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="2.660988430" PVItoPVIHorizontalBack="-723.470768603" PVItoPVISlopeBack="723.475662260" PVItoPVIVerticalAhead="-4.288556821" PVItoPVIHorizontalAhead="459.601807730" PVItoPVISlopeAhead="459.621815614">
+              <station internalStation="4753.112585913" externalStation="4753.112586000" externalStationName="R1" />
+            </PVI>
+            <VerticalEnd northing="1015836.235244080" easting="2391923.740387210" elevation="359.102665633" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="4785.955309465" externalStation="5010.955309000" externalStationName="R2" />
+            </VerticalEnd>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" stoppingSightDistance="614.709265523" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="47.243419407" grade="-0.03061354401367">
+            <VerticalStart northing="1015836.235244080" easting="2391923.740387210" elevation="359.102665633" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="4785.955309465" externalStation="5010.955309000" externalStationName="R2" />
+            </VerticalStart>
+            <VerticalEnd northing="1015828.102633240" easting="2391970.278557760" elevation="357.656377134" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="4833.198728872" externalStation="5058.198729000" externalStationName="R2" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="0.425863019" startGrade="-0.03061354401368" endGrade="-0.00222303957274" verticalCurveLength="120.001536421" kValue="42.268194519" rateOfChange="2.365845079" eqvRadius="4226.819451930" externalDistance="0.425863019">
+            <VerticalStart northing="1015828.102633240" easting="2391970.278557760" elevation="357.656377134" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="4833.198728872" externalStation="5058.198729000" externalStationName="R2" />
+            </VerticalStart>
+            <PVI northing="1015817.773937640" easting="2392029.383635660" elevation="355.819540975" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="4.288556821" PVItoPVIHorizontalBack="-459.601807730" PVItoPVISlopeBack="459.621815614" PVItoPVIVerticalAhead="-0.358191713" PVItoPVIHorizontalAhead="528.630856149" PVItoPVISlopeAhead="528.630977502">
+              <station internalStation="4893.199497083" externalStation="5118.199497000" externalStationName="R2" />
+            </PVI>
+            <VerticalEnd northing="1015807.445242040" easting="2392088.488713550" elevation="355.686156893" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="4953.200265293" externalStation="5178.200265000" externalStationName="R2" />
+            </VerticalEnd>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" headLightSightDistance="340.062491726" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="79.418496938" grade="-0.00222303957274">
+            <VerticalStart northing="1015807.445242040" easting="2392088.488713550" elevation="355.686156893" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="4953.200265293" externalStation="5178.200265000" externalStationName="R2" />
+            </VerticalStart>
+            <VerticalEnd northing="1015793.773925760" easting="2392166.721652690" elevation="355.509606431" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="5032.618762231" externalStation="5257.618762000" externalStationName="R2" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="-0.063413503" startGrade="-0.00222303957274" endGrade="-0.01390799566518" verticalCurveLength="43.415484120" kValue="37.155025468" rateOfChange="-2.691425958" eqvRadius="3715.502546783" externalDistance="-0.063413503">
+            <VerticalStart northing="1015793.773925760" easting="2392166.721652690" elevation="355.509606431" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="5032.618762231" externalStation="5257.618762000" externalStationName="R2" />
+            </VerticalStart>
+            <PVI northing="1015790.037095940" easting="2392188.105342000" elevation="355.461349262" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="0.358191713" PVItoPVIHorizontalBack="-528.630856149" PVItoPVISlopeBack="528.630977502" PVItoPVIVerticalAhead="-3.952116831" PVItoPVIHorizontalAhead="932.286502602" PVItoPVISlopeAhead="932.294879403">
+              <station internalStation="5054.326504291" externalStation="5279.326504000" externalStationName="R2" />
+            </PVI>
+            <VerticalEnd northing="1015786.300266120" easting="2392209.489031300" elevation="355.159438079" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="5076.034246351" externalStation="5301.034246000" externalStationName="R2" />
+            </VerticalEnd>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" stoppingSightDistance="945.245882620" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="40.403919751" grade="-0.01390799566518">
+            <VerticalStart northing="1015786.300266120" easting="2392209.489031300" elevation="355.159438079" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="5076.034246351" externalStation="5301.034246000" externalStationName="R2" />
+            </VerticalStart>
+            <VerticalEnd northing="1015779.345025370" easting="2392249.289802110" elevation="354.597500539" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="5116.438166102" externalStation="5341.438166000" externalStationName="R2" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="3.579036793" startGrade="-0.01390799566518" endGrade="0.05056468152288" verticalCurveLength="444.099665010" kValue="68.881840243" rateOfChange="1.451761446" eqvRadius="6888.184024284" externalDistance="3.579036793">
+            <VerticalStart northing="1015779.345025370" easting="2392249.289802110" elevation="354.597500539" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="5116.438166102" externalStation="5341.438166000" externalStationName="R2" />
+            </VerticalStart>
+            <PVI northing="1015741.120762640" easting="2392468.024878990" elevation="351.509232431" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="3.952116831" PVItoPVIHorizontalBack="-932.286502602" PVItoPVISlopeBack="932.294879403" PVItoPVIVerticalAhead="20.974233700" PVItoPVIHorizontalAhead="1360.889913507" PVItoPVISlopeAhead="1361.051532884">
+              <station internalStation="5338.487998607" externalStation="5563.487999000" externalStationName="R2" />
+            </PVI>
+            <VerticalEnd northing="1015703.019392420" easting="2392686.780870090" elevation="362.737111493" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="5560.537831112" externalStation="5785.537831000" externalStationName="R2" />
+            </VerticalEnd>
+            <TurningPoint northing="1015762.853609050" easting="2392343.660522660" elevation="353.931301750" pointType="VLOW" type="VLP" name="VLP">
+              <station internalStation="5212.238999653" externalStation="5437.239000000" externalStationName="R2" />
+            </TurningPoint>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" headLightSightDistance="325.685619961" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="127.857511785" grade="0.05056468152288">
+            <VerticalStart northing="1015703.019392420" easting="2392686.780870090" elevation="362.737111493" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="5560.537831112" externalStation="5785.537831000" externalStationName="R2" />
+            </VerticalStart>
+            <VerticalEnd northing="1015700.010460950" easting="2392814.152828770" elevation="369.202185857" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="5688.395342897" externalStation="5913.395343000" externalStationName="R2" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="-0.530908052" startGrade="0.05056468152288" endGrade="0.01783941050391" verticalCurveLength="129.785461895" kValue="39.659094594" rateOfChange="-2.521489737" eqvRadius="3965.909459391" externalDistance="-0.530908052">
+            <VerticalStart northing="1015700.010460950" easting="2392814.152828770" elevation="369.202185857" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="5688.395342897" externalStation="5913.395343000" externalStationName="R2" />
+            </VerticalStart>
+            <PVI northing="1015712.782926520" easting="2392877.714111780" elevation="372.483466131" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="-20.974233700" PVItoPVIHorizontalBack="-1360.889913507" PVItoPVISlopeBack="1361.051532884" PVItoPVIVerticalAhead="15.541663911" PVItoPVIHorizontalAhead="2858.256387016" PVItoPVISlopeAhead="2858.298640316">
+              <station internalStation="5753.288073844" externalStation="5978.288074000" externalStationName="R2" />
+            </PVI>
+            <VerticalEnd northing="1015734.912841250" easting="2392938.652108540" elevation="373.641114197" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="5818.180804792" externalStation="6043.180805000" externalStationName="R2" />
+            </VerticalEnd>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" stoppingSightDistance="394.653258091" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="717.257426936" grade="0.01783941050391">
+            <VerticalStart northing="1015734.912841250" easting="2392938.652108540" elevation="373.641114197" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="5818.180804792" externalStation="6043.180805000" externalStationName="R2" />
+            </VerticalStart>
+            <VerticalEnd northing="1016056.225269170" easting="2393552.528729130" elevation="386.436563873" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="6535.438231728" externalStation="6760.438232000" externalStationName="R2" />
+            </VerticalEnd>
+          </VerticalLine>
+          <VerticalSymmetricalParabola style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" midOrdinate="-1.431170804" startGrade="0.01783941050391" endGrade="-0.04644810606266" verticalCurveLength="178.096262550" kValue="27.703086394" rateOfChange="-3.609706102" eqvRadius="2770.308639405" externalDistance="-1.431170804">
+            <VerticalStart northing="1016056.225269170" easting="2393552.528729130" elevation="386.436563873" pointType="PVC" type="VPC" name="VPC">
+              <station internalStation="6535.438231728" externalStation="6760.438232000" externalStationName="R2" />
+            </VerticalStart>
+            <PVI northing="1016057.379032590" easting="2393641.569385650" elevation="388.025130041" pointType="VPI_PARABOLA" type="VPI" name="VPI" PVItoPVIVerticalBack="-15.541663911" PVItoPVIHorizontalBack="-2858.256387016" PVItoPVISlopeBack="2858.298640316" PVItoPVIVerticalAhead="-8.104657102" PVItoPVIHorizontalAhead="572.467457355" PVItoPVISlopeAhead="572.524824961">
+              <station internalStation="6624.486363003" externalStation="6849.486363000" externalStationName="R2" />
+            </PVI>
+            <VerticalEnd northing="1016058.532796020" easting="2393730.610042170" elevation="383.889012995" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="6713.534494278" externalStation="6938.534494000" externalStationName="R2" />
+            </VerticalEnd>
+            <TurningPoint northing="1016056.865594400" easting="2393601.945253770" elevation="386.877381710" pointType="VHIGH" type="VHP" name="VHP">
+              <station internalStation="6584.858904769" externalStation="6809.858905000" externalStationName="R2" />
+            </TurningPoint>
+            <SightDistance eyeHeight="3.500000000" stoppingObjectHeight="2.000000000" stoppingSightDistance="256.911243719" />
+          </VerticalSymmetricalParabola>
+          <VerticalLine style="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" length="85.440298703" grade="-0.04644810606266">
+            <VerticalStart northing="1016058.532796020" easting="2393730.610042170" elevation="383.889012995" pointType="PVT" type="VPT" name="VPT">
+              <station internalStation="6713.534494278" externalStation="6938.534494000" externalStationName="R2" />
+            </VerticalStart>
+            <VerticalEnd northing="1016059.639814100" easting="2393816.043168960" elevation="379.920472939" pointType="POE" type="END" name="END" PVItoPVIVerticalBack="8.104657102" PVItoPVIHorizontalBack="-572.467457355" PVItoPVISlopeBack="572.524824961">
+              <station internalStation="6798.974792982" externalStation="7023.974793000" externalStationName="R2" />
+            </VerticalEnd>
+          </VerticalLine>
+        </VerticalElements>
+        <VerticalEventPoints />
+      </VerticalAlignment>
+      <HorizontalProfileEventPoints profileName="ML33" />
+    </HorizontalAlignment>
+  </GeometryProject>
+</InRoads>
