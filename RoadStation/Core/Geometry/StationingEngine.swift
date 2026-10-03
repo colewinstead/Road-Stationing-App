@@ -19,7 +19,7 @@ public struct StationingEngine: Sendable {
     }
     /// Right-continuous stationing: at an equation return ahead unless back requested.
     public func station(at geometricDistance: Double, equationSide: EquationSide = .ahead) throws -> Double {
-        let d = try GeometryUtilities.checkedDistance(geometricDistance, length: alignment.totalGeometricLength)
+        let d = try GeometryUtilities.checkedDistance(geometricDistance, length: alignment.totalGeometricLength, tolerance: alignment.tolerances.station)
         var shift = alignment.startStation
         for e in alignment.stationEquations {
             if d == e.geometricDistance { return equationSide == .ahead ? e.stationAhead : e.stationBack }
@@ -30,7 +30,18 @@ public struct StationingEngine: Sendable {
     }
     /// Both equation endpoint labels are recognized; no station ambiguity is hidden.
     public func resolve(station: Double) -> StationResolution {
-        guard station.isFinite else { return .outsideAlignment }
+        let candidates = locations(station: station)
+        var locations: [StationLocation] = []
+        for candidate in candidates {
+            if !locations.contains(where: { abs($0.geometricDistance - candidate.geometricDistance) <= alignment.tolerances.station }) {
+                locations.append(candidate)
+            }
+        }
+        if locations.count == 1 { return .unique(locations[0]) }
+        return locations.isEmpty ? .outsideAlignment : .ambiguous(locations)
+    }
+    private func locations(station: Double) -> [StationLocation] {
+        guard station.isFinite else { return [] }
         var locations: [StationLocation] = []; var start = 0.0; var shift = alignment.startStation
         let equations = alignment.stationEquations
         for branch in 0...equations.count {
@@ -43,21 +54,26 @@ public struct StationingEngine: Sendable {
             if rawDistance >= start - rounding, rawDistance <= end + rounding {
                 let side: EquationSide? = branch > 0 && d == start ? .ahead : (branch < equations.count && d == end ? .back : nil)
                 let location = StationLocation(geometricDistance: d, branchIndex: branch, equationSide: side)
-                if !locations.contains(where: { abs($0.geometricDistance - d) <= GeometryTolerances.standard.station }) { locations.append(location) }
+                locations.append(location)
             }
             if branch < equations.count { start = end; shift = equations[branch].stationAhead - end }
         }
-        if locations.count == 1 { return .unique(locations[0]) }
-        return locations.isEmpty ? .outsideAlignment : .ambiguous(locations)
+        return locations
     }
     public func location(station: Double, branchIndex: Int? = nil) throws -> StationLocation {
+        // Branch selection must happen before distance deduplication: equivalent
+        // positions can still belong to different equation branches.
+        if let branchIndex {
+            guard let location = locations(station: station).first(where: { $0.branchIndex == branchIndex }) else {
+                throw GeometryError.stationOutsideAlignment(station)
+            }
+            return location
+        }
         switch resolve(station: station) {
         case .outsideAlignment: throw GeometryError.stationOutsideAlignment(station)
         case .unique(let location):
-            if let branchIndex, branchIndex != location.branchIndex { throw GeometryError.stationOutsideAlignment(station) }
             return location
         case .ambiguous(let locations):
-            if let branchIndex, let location = locations.first(where: { $0.branchIndex == branchIndex }) { return location }
             throw GeometryError.ambiguousStation(station, candidates: locations.map(\.geometricDistance))
         }
     }

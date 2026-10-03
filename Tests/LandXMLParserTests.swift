@@ -124,6 +124,24 @@ final class LandXMLParserTests: XCTestCase {
         guard case .circularCurve(let c) = a.segments[1].geometry else { return XCTFail("Expected curve") }
         XCTAssertEqual(c.rotation, .counterclockwise); XCTAssertEqual(c.length, 1198.652082090774, accuracy: 1e-6)
     }
+    func testORDDirectionMatchesEndpointAndPCTangentsNumerically() throws {
+        let data = try TestSupport.fixture("References/cw_reverse_curve.xml")
+        let root = try XMLDocument.parse(data)
+        let first = root.child("Alignments")!.child("Alignment")!.child("CoordGeom")!.child("Line")!
+        let direction = try XCTUnwrap(Double(first.attributes["dir"]!))
+        let heading = LandXMLParserOptions().directionConvention.heading(direction)
+        let start = try LandXMLParser.coordinate(from: first.child("Start")!.text)
+        let end = try LandXMLParser.coordinate(from: first.child("End")!.text)
+        let endpointHeading = atan2(end.y - start.y, end.x - start.x)
+        let a = try LandXMLParser().parse(data: data).alignments[0]
+        let pcTangent = a.segments[1].geometry.tangent(at: 0)
+        XCTAssertEqual(direction, 0.57886799488641405, accuracy: 1e-14)
+        XCTAssertEqual(heading, direction, accuracy: 1e-14)
+        XCTAssertEqual(endpointHeading, heading, accuracy: 1e-11)
+        XCTAssertEqual(pcTangent.x, cos(heading), accuracy: 1e-11)
+        XCTAssertEqual(pcTangent.y, sin(heading), accuracy: 1e-11)
+        XCTAssertEqual(atan2(pcTangent.y, pcTangent.x), endpointHeading, accuracy: 1e-11)
+    }
     func testLargeProjectedSampleMetadata() throws {
         let p = try LandXMLParser().parse(data: TestSupport.fixture("References/sr82_synthetic.xml"))
         XCTAssertEqual(p.unit, .usSurveyFoot); XCTAssertEqual(p.coordinateSystemDescription, "NAD83(2011) / Mississippi East (ftUS)")

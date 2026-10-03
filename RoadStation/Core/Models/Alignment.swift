@@ -18,17 +18,23 @@ public struct Alignment: Identifiable, Sendable {
     public let totalGeometricLength: Double
     public let metadata: AlignmentMetadata
     public let warnings: [String]
+    public let tolerances: GeometryTolerances
 
     public init(id: UUID = UUID(), name: String, startStation: Double = 0,
                 geometries: [SegmentGeometry], stationEquations: [StationEquation] = [],
                 metadata: AlignmentMetadata = AlignmentMetadata(), warnings: [String] = [],
-                tolerances: GeometryTolerances = .standard) throws {
+                tolerances suppliedTolerances: GeometryTolerances? = nil) throws {
+        let tolerances = suppliedTolerances ?? geometries.first?.tolerances ?? .standard
         try tolerances.validate()
+        if suppliedTolerances == nil, geometries.contains(where: { $0.tolerances != tolerances }) {
+            throw GeometryError.invalidGeometry("Mixed geometry tolerances require an explicit alignment tolerance context.")
+        }
         guard startStation.isFinite, !geometries.isEmpty else {
             throw GeometryError.invalidGeometry("Alignment must have geometry and finite start station.")
         }
         var segments: [AlignmentSegment] = []; var distance = 0.0; var notes = warnings
-        for geometry in geometries {
+        for sourceGeometry in geometries {
+            let geometry = try sourceGeometry.using(tolerances: tolerances)
             if let previous = segments.last, previous.end.distance(to: geometry.start) > tolerances.continuity {
                 notes.append("Disconnected geometry at segment \(segments.count + 1): gap \(previous.end.distance(to: geometry.start)) project units.")
             }
@@ -41,6 +47,7 @@ public struct Alignment: Identifiable, Sendable {
         if let declared = metadata.declaredLength, abs(declared - distance) > tolerances.importConsistency {
             notes.append("Declared alignment length \(declared) differs from horizontal geometric length \(distance).")
         }
+        self.tolerances = tolerances
         self.id = id; self.name = name; self.startStation = startStation; self.segments = segments
         self.stationEquations = equations; self.totalGeometricLength = distance
         self.metadata = metadata; self.warnings = notes

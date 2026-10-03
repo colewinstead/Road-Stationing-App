@@ -58,7 +58,7 @@ struct LandXMLAlignmentParser {
                 let start = try coordinate(element, "Start"); let end = try coordinate(element, "End")
                 switch element.name {
                 case "Line":
-                    let line = try LineSegment(start: start, end: end)
+                    let line = try LineSegment(start: start, end: end, tolerances: options.tolerances)
                     if let length = try number(element, "length", required: false),
                        abs(length - line.length) > options.tolerances.importConsistency {
                         throw GeometryError.invalidGeometry("Line declared length differs from horizontal endpoint distance.")

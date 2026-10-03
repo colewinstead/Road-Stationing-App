@@ -1,5 +1,8 @@
 # RoadStationCore Phase 1 report
 
+This is the original Windows implementation report. Current macOS audit, tolerance
+fixes and ORD comparison readiness are in [PHASE1_MACOS_AUDIT.md](PHASE1_MACOS_AUDIT.md).
+
 Validated on October 2, 2026, on Windows x86_64 with Swift 6.4. The user's updated
 scope is the cross-platform core package. No RoadStationApp, Xcode project or iOS
 UI was created; no Phase 2 features were implemented. The package and executable

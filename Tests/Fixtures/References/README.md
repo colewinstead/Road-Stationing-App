@@ -23,3 +23,7 @@ are original implementations under this repository's MIT license.
 Small fixtures outside this directory are authored for RoadStation. The
 spiral compound fixture's numbers are independently reproducible with
 tools/Generate-SpiralFixture.py (Fresnel series and analytic reversal identity).
+
+Detailed contents, parser diagnostics, provenance qualifications and missing real
+ORD spiral/equation coverage: [reference audit](../../../Validation/REFERENCE-FIXTURE-AUDIT.md).
+No reference fixture is an independent ORD numerical comparison.
