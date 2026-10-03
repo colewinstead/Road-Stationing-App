@@ -9,10 +9,12 @@ functionality remains blocked.** No expected ORD results are bundled.
 
 1. Open `RoadStationApp/RoadStationApp.xcodeproj` from the repository root.
    Keep the project inside this repository: its local package reference is `..`.
-2. Select the shared **RoadStationApp** scheme and an available **iPhone Simulator**.
+2. Select the shared **RoadStationApp** scheme and an available **iPhone Simulator**
+   or connected physical iPhone.
    This harness targets iOS **17.0 or later**, and was built with Xcode 27.0.
 3. Choose Product > Run (⌘R). Simulator builds do not require a paid developer
-   account. Physical device signing and device installation were not verified.
+   account. Physical iPhone installation and app launch are verified using Xcode
+   automatic signing with a Personal Team, as reported by the user.
 4. Select **Import LandXML** or a **Synthetic developer sample** in the Debug build.
    Tap an alignment row to open the workspace. Use Inspect, Entry, Info and Raw.
 
@@ -121,6 +123,20 @@ Existing core suite: **142 tests**. New helper suite: **6 tests**. See the root
 `PHASE15_REPORT.md` for actual simulator/build/UI outcomes and screenshot evidence.
 UI import tests need the staged files; run the script before running them in Xcode.
 
+The user has confirmed successful physical iPhone installation and app launch
+using Xcode automatic signing with a Personal Team. This verification covers
+installation and launch only; it does not establish GPS, MapKit, CRS, or
+field-location validation.
+
+| Capability | Status |
+| --- | --- |
+| Physical iPhone app installation/launch | **VERIFIED** — user-confirmed, Xcode automatic signing with a Personal Team |
+| Production/App Store distribution | **NOT VERIFIED** |
+| CoreLocation/GPS field behavior | **NOT IMPLEMENTED / NOT VERIFIED** |
+| MapKit/geographic maps | **NOT IMPLEMENTED / NOT VERIFIED** |
+| CRS transformations | **NOT IMPLEMENTED** |
+| Independent ORD numerical validation | **STILL PENDING** |
+
 ## Intentional limits
 
 Developer harness only: no geographic map, CRS transformation, CoreLocation,
@@ -130,8 +146,10 @@ magnifies its display approximation, while calculations remain independent.
 Pan/pinch zoom is centered on the viewport rather than the pinch location.
 Import/parser warnings are visible, and unsupported geometry is rejected by the
 core. Large complex XML/spirals can still reach existing parser/numerical limits.
-No process/session persistence or multi-project management is provided. Release
-packaging, app-store readiness and physical-device testing are outside this phase.
+No process/session persistence or multi-project management is provided. Physical
+iPhone installation/launch is verified; broader on-device workflow or
+field-location validation is not claimed. Production/App Store distribution is
+**NOT VERIFIED**; release packaging and App Store readiness are outside this phase.
 
 The next engineering gate is independent ORD numerical comparison, including
 real clothoids and station equations. This harness does not satisfy that gate.

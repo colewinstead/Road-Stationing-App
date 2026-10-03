@@ -61,8 +61,9 @@ The app target depends on the repository-local Swift Package reference `..`,
 linking `RoadStationCore` and `RoadStationHarnessSupport`. Core sources are not
 copied into the Xcode target. There are no third-party UI packages. Deployment
 target is **iOS 17.0**, matching the existing package minimum. Swift language mode
-is 6. The app is configured for iPhone; iPad and physical-device operation have
-not been verified.
+is 6. The app is configured for iPhone. Physical iPhone installation and app
+launch are verified using Xcode automatic signing with a Personal Team, as
+reported by the user. iPad operation has not been verified.
 
 ## Screens and behavior
 
@@ -113,6 +114,20 @@ labelled synthetic. Import/project state and queries remain session-only.
 - App installation and `simctl launch`: **actually verified**, followed by
   screenshot capture and XCTest UI interaction on the booted simulator.
 
+The user has also confirmed successful installation and launch on a physical
+iPhone using Xcode automatic signing with a Personal Team. This verification
+covers installation and app launch only; it does not establish GPS, MapKit, CRS,
+or field-location validation.
+
+| Capability | Status |
+| --- | --- |
+| Physical iPhone app installation/launch | **VERIFIED** — user-confirmed, Xcode automatic signing with a Personal Team |
+| Production/App Store distribution | **NOT VERIFIED** |
+| CoreLocation/GPS field behavior | **NOT IMPLEMENTED / NOT VERIFIED** |
+| MapKit/geographic maps | **NOT IMPLEMENTED / NOT VERIFIED** |
+| CRS transformations | **NOT IMPLEMENTED** |
+| Independent ORD numerical validation | **STILL PENDING** |
+
 The helper tests cover large-coordinate transform roundtrips with pan/zoom,
 north-up isotropic scale, horizontal/vertical/degenerate bounds, finite input,
 station/offset sign conventions and explicit equation ambiguity.
@@ -156,8 +171,10 @@ are synthetic; none are evidence of independent ORD validation.
 1. Open `RoadStationApp/RoadStationApp.xcodeproj` in Xcode. Keep the project in
    this checkout so its relative package reference resolves.
 2. Select the **RoadStationApp** shared scheme.
-3. Select an installed iPhone Simulator running iOS 17.0 or newer. The verified
-   destination here was **iPhone 18 Pro (iOS 27.0)**.
+3. Select an installed iPhone Simulator running iOS 17.0 or newer, or a connected
+   physical iPhone. The verified simulator destination was **iPhone 18 Pro
+   (iOS 27.0)**. Physical iPhone installation/launch was separately verified using
+   Xcode automatic signing with a Personal Team.
 4. Use **Product > Run (⌘R)**, with Debug configuration for sample controls.
 5. Load **Tangent • synthetic** and tap **TANGENT**, then tap near the line.
 6. Select **Entry**. E `1050`, N `1995` produces `STA 100+50.00`, `5 ft RT`.
@@ -178,9 +195,11 @@ The drawing uses fixed core sampling (0.05 source-unit chord error), so deep zoo
 magnifies the display approximation; calculations stay independent of drawing.
 Zoom is centered on the viewport, not the pinch location. The grid is visual,
 not a labelled surveying grid. Long values/metadata require scrolling; the
-canvas has a fixed 300-point height and is a debugging aid. No App Store assets,
-release distribution, physical-device validation or large-file performance
-certification is included. The managed environment supports headless simulator
+canvas has a fixed 300-point height and is a debugging aid. Physical iPhone
+installation/launch is verified; broader on-device workflow or field-location
+validation is not claimed. Production/App Store distribution is **NOT VERIFIED**;
+App Store assets, release distribution and large-file performance certification
+are outside this phase. The managed environment supports headless simulator
 execution/capture, but does not contain the normal Simulator desktop app. Its
 iOS 27 automation occasionally stalls or cannot obtain an accessibility window;
 failed initial attempts are not counted as successful tests. The final complete
