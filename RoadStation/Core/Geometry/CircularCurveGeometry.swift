@@ -13,6 +13,7 @@ public struct CircularCurveSegment: Sendable {
     public let rotation: Rotation
     public let sweep: Double
     public let startAngle: Double
+    public let tolerances: GeometryTolerances
     public var length: Double { radius * sweep }
     public var bounds: SegmentBounds {
         let endAngle = startAngle + rotation.sign * sweep
@@ -24,7 +25,7 @@ public struct CircularCurveSegment: Sendable {
                 points.append(ProjectCoordinate(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle)))
             }
         }
-        return SegmentBounds(points: points, padding: GeometryTolerances.standard.coordinate)
+        return SegmentBounds(points: points, padding: tolerances.coordinate)
     }
 
     public init(start: ProjectCoordinate, end: ProjectCoordinate, center: ProjectCoordinate,
@@ -48,6 +49,7 @@ public struct CircularCurveSegment: Sendable {
                 throw GeometryError.invalidGeometry("Curve rotation, endpoints, radius and declared length disagree.")
             }
         }
+        self.tolerances = tolerances
         self.start = start; self.end = end; self.center = center; self.radius = r
         self.rotation = rotation; self.sweep = sweep; self.startAngle = a
     }
@@ -56,7 +58,7 @@ public struct CircularCurveSegment: Sendable {
         return Vector2(x: -sin(a) * rotation.sign, y: cos(a) * rotation.sign)
     }
     public func point(at distance: Double) throws -> ProjectCoordinate {
-        let s = try GeometryUtilities.checkedDistance(distance, length: length)
+        let s = try GeometryUtilities.checkedDistance(distance, length: length, tolerance: tolerances.station)
         let a = startAngle + rotation.sign * s / radius
         return ProjectCoordinate(x: center.x + radius * cos(a), y: center.y + radius * sin(a),
                                  z: GeometryUtilities.elevation(start, end, fraction: s / length))
@@ -67,13 +69,13 @@ public struct CircularCurveSegment: Sendable {
         let angle = atan2(query.y - center.y, query.x - center.x)
         let delta = GeometryUtilities.normalizedAngle(rotation.sign * (angle - startAngle))
         var candidates = [0.0, length]
-        if radialDistance > GeometryTolerances.standard.coordinate, delta <= sweep { candidates.append(delta * radius) }
+        if radialDistance > tolerances.coordinate, delta <= sweep { candidates.append(delta * radius) }
         let values = try candidates.map { s in (s, try point(at: s)) }
         let best = values.min { $0.1.distance(to: query) < $1.1.distance(to: query) }!
         let distance = best.1.distance(to: query)
-        let tie = radialDistance <= GeometryTolerances.standard.coordinate || values.contains {
-            abs($0.0 - best.0) > GeometryTolerances.standard.station &&
-            abs($0.1.distance(to: query) - distance) <= GeometryTolerances.standard.tieDistance
+        let tie = radialDistance <= tolerances.coordinate || values.contains {
+            abs($0.0 - best.0) > tolerances.station &&
+            abs($0.1.distance(to: query) - distance) <= tolerances.tieDistance
         }
         return SegmentProjection(distanceAlong: best.0, point: best.1, tangent: tangent(at: best.0),
                                  queryDistance: distance, ambiguous: tie)

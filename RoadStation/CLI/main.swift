@@ -37,8 +37,16 @@ do {
     try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
     try ValidationExporter.json(results).write(to: URL(fileURLWithPath: args[2] + ".json"), options: .atomic)
     try ValidationExporter.csv(results).write(to: URL(fileURLWithPath: args[2] + ".csv"), atomically: true, encoding: .utf8)
-    let passed = results.filter(\.passed).count
-    print("\(passed)/\(results.count) validation cases passed. Exported \(args[2]).json and .csv")
+    let summary = ValidationSummary(results: results)
+    print(summary.text)
+    for category in [ValidationCategory.line, .curve, .spiral, .stationEquation] {
+        let subset = results.filter { $0.validationCase.category == category }
+        if !subset.isEmpty {
+            let group = ValidationSummary(results: subset)
+            print("\(category.rawValue): \(group.passed)/\(group.cases) passed")
+        }
+    }
+    print("Errors and tolerances are in source project linear units. Exported \(args[2]).json and .csv")
     for r in results where !r.passed { print("FAIL \(r.validationCase.id): \(r.error ?? "numerical difference exceeds tolerance")") }
-    if passed != results.count { exit(1) }
+    if summary.failed != 0 { exit(1) }
 } catch { fail(error.localizedDescription) }

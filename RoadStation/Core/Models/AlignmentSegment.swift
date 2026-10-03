@@ -4,6 +4,23 @@ public enum SegmentGeometry: Sendable {
     case line(LineSegment)
     case circularCurve(CircularCurveSegment)
     case spiral(SpiralSegment)
+    public var tolerances: GeometryTolerances {
+        switch self { case .line(let g): g.tolerances; case .circularCurve(let g): g.tolerances; case .spiral(let g): g.tolerances }
+    }
+    /// Revalidate and rebuild numerical caches when an alignment explicitly supplies a context.
+    func using(tolerances: GeometryTolerances) throws -> SegmentGeometry {
+        if self.tolerances == tolerances { return self }
+        switch self {
+        case .line(let g):
+            return .line(try LineSegment(start: g.start, end: g.end, tolerances: tolerances))
+        case .circularCurve(let g):
+            return .circularCurve(try CircularCurveSegment(start: g.start, end: g.end, center: g.center,
+                rotation: g.rotation, radius: g.radius, declaredLength: g.length, tolerances: tolerances))
+        case .spiral(let g):
+            return .spiral(try SpiralSegment(start: g.start, length: g.length, startHeading: g.startHeading,
+                startCurvature: g.startCurvature, endCurvature: g.endCurvature, declaredEnd: g.end, tolerances: tolerances))
+        }
+    }
     public var start: ProjectCoordinate {
         switch self { case .line(let g): g.start; case .circularCurve(let g): g.start; case .spiral(let g): g.start }
     }

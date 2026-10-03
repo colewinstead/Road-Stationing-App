@@ -9,7 +9,7 @@ public enum ValidationExporter {
     public static func csv(_ results: [AlignmentValidationResult]) -> String {
         let header = ["id", "alignment", "reference", "direction", "inputEasting", "inputNorthing", "inputStation", "inputOffset", "branchIndex",
                       "expectedStation", "expectedOffset", "expectedEasting", "expectedNorthing", "actualStation", "actualOffset", "actualEasting", "actualNorthing",
-                      "stationDifference", "offsetDifference", "coordinateDifference", "stationTolerance", "offsetTolerance", "coordinateTolerance", "status", "error"]
+                      "stationDifference", "offsetDifference", "coordinateDifference", "stationTolerance", "offsetTolerance", "coordinateTolerance", "status", "error", "referenceSoftware", "referenceSoftwareVersion", "sourceLandXML", "description", "category", "inputSide", "expectedSide", "actualSide", "equationSide"]
         func n(_ value: Double?) -> String { value.map { String($0) } ?? "" }
         func row(_ fields: [String]) -> String { fields.map { "\"" + $0.replacingOccurrences(of: "\"", with: "\"\"") + "\"" }.joined(separator: ",") }
         var lines = [row(header)]
@@ -20,7 +20,9 @@ public enum ValidationExporter {
                 n(c.expectedStation), n(c.expectedOffset), n(c.expectedCoordinate?.x), n(c.expectedCoordinate?.y),
                 n(r.actualStation), n(r.actualOffset), n(r.actualCoordinate?.x), n(r.actualCoordinate?.y),
                 n(r.stationDifference), n(r.offsetDifference), n(r.coordinateDifference), n(c.stationTolerance), n(c.offsetTolerance), n(c.coordinateTolerance),
-                r.passed ? "PASS" : "FAIL", r.error ?? ""]))
+                r.passed ? "PASS" : "FAIL", r.error ?? "", c.referenceSoftware ?? "", c.referenceSoftwareVersion ?? "",
+                c.sourceLandXML ?? "", c.description ?? "", c.category?.rawValue ?? "", c.inputSide?.rawValue ?? "",
+                c.expectedSide?.rawValue ?? "", r.actualSide?.rawValue ?? "", c.equationSide?.rawValue ?? ""]))
         }
         return lines.joined(separator: "\r\n") + "\r\n"
     }

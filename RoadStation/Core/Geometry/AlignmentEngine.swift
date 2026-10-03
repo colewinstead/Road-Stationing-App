@@ -15,7 +15,7 @@ public struct AlignmentEngine: Sendable {
         }
         var bestDistance = Double.infinity
         for (i, lowerBound) in ordered {
-            if lowerBound > bestDistance + GeometryTolerances.standard.tieDistance { break }
+            if lowerBound > bestDistance + alignment.tolerances.tieDistance { break }
             let projection = try alignment.segments[i].geometry.closestPoint(to: point)
             candidates.append((i, projection)); bestDistance = min(bestDistance, projection.queryDistance)
         }
@@ -29,19 +29,19 @@ public struct AlignmentEngine: Sendable {
         let ambiguous = projection.ambiguous || candidates.contains { candidate in
             let otherD = alignment.segments[candidate.0].geometricStartDistance + candidate.1.distanceAlong
             let otherTangent = candidate.1.tangent
-            return abs(candidate.1.queryDistance - projection.queryDistance) <= GeometryTolerances.standard.tieDistance &&
-                (abs(otherD - d) > GeometryTolerances.standard.station ||
-                 abs(otherTangent.cross(projection.tangent)) > GeometryTolerances.standard.tangentAmbiguity ||
+            return abs(candidate.1.queryDistance - projection.queryDistance) <= alignment.tolerances.tieDistance &&
+                (abs(otherD - d) > alignment.tolerances.station ||
+                 abs(otherTangent.cross(projection.tangent)) > alignment.tolerances.tangentAmbiguity ||
                  otherTangent.dot(projection.tangent) < 0)
         }
         return StationOffsetResult(geometricDistance: d, displayedStation: try StationingEngine(alignment: alignment).station(at: d),
-            signedOffset: offset, side: abs(offset) <= GeometryTolerances.standard.coordinate ? .onAlignment : (offset > 0 ? .left : .right),
+            signedOffset: offset, side: abs(offset) <= alignment.tolerances.coordinate ? .onAlignment : (offset > 0 ? .left : .right),
             nearestPoint: projection.point, nearestSegmentIndex: best.0, distanceFromQueryPointToAlignment: projection.queryDistance,
             tangent: projection.tangent, longitudinalResidual: GeometryUtilities.displacement(from: projection.point, to: point).dot(projection.tangent),
             nearestLocationIsAmbiguous: ambiguous, segmentType: segment.geometry.typeName)
     }
     public func point(at geometricDistance: Double) throws -> (point: ProjectCoordinate, tangent: Vector2, segmentIndex: Int) {
-        let d = try GeometryUtilities.checkedDistance(geometricDistance, length: alignment.totalGeometricLength)
+        let d = try GeometryUtilities.checkedDistance(geometricDistance, length: alignment.totalGeometricLength, tolerance: alignment.tolerances.station)
         // At shared boundaries choose the incoming segment, matching forward ties.
         let index = alignment.segments.firstIndex { d <= $0.geometricEndDistance } ?? alignment.segments.count - 1
         let segment = alignment.segments[index]; let local = d - segment.geometricStartDistance

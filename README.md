@@ -227,8 +227,12 @@ cross-checks bounds pruning.
 `GeometryTolerances` centralizes positive finite tolerances. Defaults are in
 project units: coordinate/station/tie/closest-point 1e-7, integration 1e-10,
 continuity/import consistency 0.001. Angle comparison is 1e-10 radians; approximate
-nearest-solution tangent ambiguity uses 1e-8 radians. Import tolerances can be
-configured in parser options. Quadrature also has a floating-point roundoff floor.
+nearest-solution tangent ambiguity uses 1e-8 radians. Tolerances can be
+configured in parser options or geometry constructors and remain attached to the
+immutable geometry. An alignment inherits a shared geometry context when omitted;
+mixed contexts require an explicit `tolerances:` override, which revalidates all
+segments and rebuilds spiral caches. Alignment/query engines use that same context.
+`checkedDistance` requires an explicit tolerance, preventing silent fallback. Quadrature also has a floating-point roundoff floor.
 Round-trip tests require 2e-6 project units (1e-5 for supplied large projected
 examples). Independent position benchmarks require 1e-10 project units.
 Tolerance defaults are engineering assumptions, not external certification.
@@ -257,9 +261,10 @@ process's PATH. It also leaves that environment available for `swift build` and
 `swift run` in the same PowerShell session. A newly opened terminal may already
 have the installer environment. The script does not alter machine settings.
 
-This implementation was compiled and tested on Windows with Swift 6.4. See
-PHASE1_REPORT.md for exact counts and timings. macOS/Linux CI is configured but
-has not been run from this local checkout. No iOS app was created or validated.
+This implementation was originally compiled and tested on Windows with Swift 6.4.
+The macOS Phase 1 audit and local debug/release results are recorded in
+[PHASE1_MACOS_AUDIT.md](PHASE1_MACOS_AUDIT.md). The existing macOS/Linux CI matrix
+checks both configurations and the CLI. No iOS app was created or validated.
 Swift 6.4 Windows may emit an ignored root Info.plist for XCTest resources and a
 warning about its .build/debug convenience symlink; these are build-tool artifacts.
 
@@ -295,6 +300,19 @@ numeric signed differences, Euclidean coordinate difference, tolerances,
 reference source and PASS/FAIL. Cases load from JSON; CSV is an **output** format.
 Public runner/exporter APIs can later be used by RoadStationApp.
 
+For real ORD collection, use the [step-by-step procedure](Validation/ORD-VALIDATION-PROCEDURE.md)
+and [unpopulated forward/inverse template](Validation/ORD-validation-template.json).
+Optional fields add software/version, XML filename, feature description, category,
+LT/RT/ON magnitudes and explicit forward equation limits; existing signed-offset
+JSON remains compatible. Console output includes counts and maximum absolute
+station/offset and Euclidean coordinate errors. The
+[reference audit](Validation/REFERENCE-FIXTURE-AUDIT.md) distinguishes export-derived
+regressions, synthetic fixtures and independent mathematical benchmarks.
+
+**Real ORD spiral validation: MISSING**
+
+**Real ORD station-equation validation: MISSING**
+
 For external validation, add surveyed/project points and stations from ORD/Civil
 3D **without calculating expected answers with this engine**. Retain source unit,
 alignment revision, equation branch, software version and coordinate convention.
@@ -316,10 +334,10 @@ fixture licensing are documented in Tests/Fixtures/References/README.md.
 - The synthetic Civil 3D-labelled reference spiral has an inconsistent endpoint
   and is deliberately rejected. It is not an external accuracy benchmark.
 - No local persistence or iOS interaction is needed in the updated package scope.
-  OpenRoads/Civil 3D numerical validation and Apple-platform package checks remain
-  release gates for a future native application.
+  OpenRoads/Civil 3D numerical validation remains a
+  release gate for a future native application.
 
-Next: independently validate this engine, then build RoadStationApp on macOS
+Next: independently validate this engine, then consider RoadStationApp on macOS
 against these APIs. Phase 2 may subsequently add a dedicated CRS adapter,
 CoreLocation/GNSS integration and MapKit after the engine passes that external
 validation gate. **No Phase 2 work is implemented here.**

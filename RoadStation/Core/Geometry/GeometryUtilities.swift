@@ -1,7 +1,7 @@
 import Foundation
 
 /// Absolute distances in project linear units; angles in radians.
-public struct GeometryTolerances: Sendable {
+public struct GeometryTolerances: Equatable, Sendable {
     public var coordinate: Double = 1e-7
     public var angle: Double = 1e-10
     public var station: Double = 1e-7
@@ -41,7 +41,7 @@ public enum GeometryUtilities {
         guard let a = start.z, let b = end.z else { return nil }
         return a + (b - a) * fraction
     }
-    static func checkedDistance(_ s: Double, length: Double, tolerance: Double = GeometryTolerances.standard.station) throws -> Double {
+    static func checkedDistance(_ s: Double, length: Double, tolerance: Double) throws -> Double {
         guard s.isFinite, s >= -tolerance, s <= length + tolerance else {
             throw GeometryError.stationOutsideAlignment(s)
         }

@@ -11,7 +11,7 @@ public struct SpiralSegment: Sendable {
     public let endCurvature: Double
     private let panelLength: Double
     private let checkpoints: [ProjectCoordinate]
-    private let tolerances: GeometryTolerances
+    public let tolerances: GeometryTolerances
     public var bounds: SegmentBounds {
         // Every phase-panel chord is within K*h²/8 of the exact curve.
         let padding = max(abs(startCurvature), abs(endCurvature)) * panelLength * panelLength / 8 + tolerances.coordinate

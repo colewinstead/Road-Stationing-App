@@ -5,17 +5,20 @@ public struct LineSegment: Sendable {
     public let end: ProjectCoordinate
     public let length: Double
     public let tangent: Vector2
+    public let tolerances: GeometryTolerances
     public var bounds: SegmentBounds { SegmentBounds(points: [start, end]) }
-    public init(start: ProjectCoordinate, end: ProjectCoordinate) throws {
+    public init(start: ProjectCoordinate, end: ProjectCoordinate, tolerances: GeometryTolerances = .standard) throws {
+        try tolerances.validate()
         let length = start.distance(to: end)
-        guard start.isFinite, end.isFinite, length.isFinite, length > GeometryTolerances.standard.coordinate else {
+        guard start.isFinite, end.isFinite, length.isFinite, length > tolerances.coordinate else {
             throw GeometryError.invalidGeometry("Line requires distinct finite endpoints.")
         }
+        self.tolerances = tolerances
         self.start = start; self.end = end; self.length = length
         tangent = Vector2(x: (end.x - start.x) / length, y: (end.y - start.y) / length)
     }
     public func point(at distance: Double) throws -> ProjectCoordinate {
-        let s = try GeometryUtilities.checkedDistance(distance, length: length)
+        let s = try GeometryUtilities.checkedDistance(distance, length: length, tolerance: tolerances.station)
         return ProjectCoordinate(x: start.x + tangent.x * s, y: start.y + tangent.y * s,
                                  z: GeometryUtilities.elevation(start, end, fraction: s / length))
     }

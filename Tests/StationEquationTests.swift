@@ -51,6 +51,12 @@ final class StationEquationTests: XCTestCase {
         XCTAssertEqual(s.resolve(station: 9999), .outsideAlignment); XCTAssertEqual(s.resolve(station: .nan), .outsideAlignment)
         XCTAssertThrowsError(try s.station(at: 1001)); XCTAssertThrowsError(try s.station(at: .infinity))
     }
+    func testExplicitBranchSurvivesEquivalentEquationLocationDeduplication() throws {
+        let s = try engine([.init(geometricDistance: 100, stationBack: 10100, stationAhead: 10100)])
+        guard case .unique = s.resolve(station: 10100) else { return XCTFail("Same physical location") }
+        XCTAssertEqual(try s.location(station: 10100, branchIndex: 0).equationSide, .back)
+        XCTAssertEqual(try s.location(station: 10100, branchIndex: 1).equationSide, .ahead)
+    }
     func testFormatting() throws {
         XCTAssertEqual(StationFormatter.string(42738.42), "427+38.42")
         XCTAssertEqual(StationFormatter.string(125), "1+25.00"); XCTAssertEqual(StationFormatter.string(0), "0+00.00")
