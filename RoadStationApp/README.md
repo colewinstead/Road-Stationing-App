@@ -1,11 +1,12 @@
-# RoadStationApp — Phase 2B.1 developer harness
+# RoadStationApp — Phase 2B.2 saved projects
 
-A session-only SwiftUI iPhone harness for the authoritative RoadStationCore
+A SwiftUI iPhone app with local saved projects for the authoritative RoadStationCore
 package. It provides manual horizontal geometry inspection and CRS readiness
 after import. **CROSSGATES ORD validation passed 30/30 cases at 0.001 US survey
 foot tolerance.** CRS architecture and transformation tests are implemented;
 foreground live location and explicit searchable CRS selection are implemented.
-MapKit and production persistence remain unimplemented. Field-device testing is
+SwiftData metadata and private source LandXML persist across app launches.
+MapKit remains unimplemented. Physical-device lifecycle and field testing are
 still needed. See [PHASE2B_LOCATION_REPORT.md](../PHASE2B_LOCATION_REPORT.md). See
 [PHASE2_CRS_REPORT.md](../PHASE2_CRS_REPORT.md). No expected ORD results are bundled.
 
@@ -19,7 +20,7 @@ still needed. See [PHASE2B_LOCATION_REPORT.md](../PHASE2B_LOCATION_REPORT.md). S
 3. Choose Product > Run (⌘R). Simulator builds do not require a paid developer
    account. Physical iPhone installation and app launch are verified using Xcode
    automatic signing with a Personal Team, as reported by the user.
-4. Select **Import LandXML** or a **Synthetic developer sample** in the Debug build.
+4. Select **Import Project** or a **Synthetic developer sample** in the Debug build.
    Tap an alignment row to open the workspace. Use Inspect, Entry, Info and Raw.
 
 To build from a terminal (substitute your simulator UDID):
@@ -45,8 +46,14 @@ The Release configuration retains import/manual tools but hides sample controls.
 The app uses SwiftUI `fileImporter` for `.xml` and `.landxml`. Reads are bracketed
 by security-scoped URL access where granted, following
 [Apple's fileImporter requirements](https://developer.apple.com/documentation/swiftui/view/fileimporter(ispresented:allowedcontenttypes:oncompletion:)).
-Parsing occurs off the main actor. Errors appear on the import screen; an existing
-session project remains available if a replacement fails. No import is saved.
+Parsing and file access occur off the main actor. A successful import saves the
+original bytes in Application Support/RoadStation/Projects/<UUID>/Sources/<revision>.landxml
+and metadata in projects.store. The home screen lists saved projects on cold start.
+An unsuccessful import or replacement preserves the working project and reports
+an error. Choose Replace / Re-import LandXML from a saved row's menu or Project
+settings to recover a damaged source. Rename changes only the display name;
+Delete requires explicit confirmation and removes the project's owned directory.
+See [PHASE2B2_SAVED_PROJECTS_REPORT.md](../PHASE2B2_SAVED_PROJECTS_REPORT.md).
 
 On a physical iPhone, put the XML in Files (On My iPhone or another document
 provider) and pick it. For Simulator you can copy a file into the app's shared
@@ -58,15 +65,18 @@ mkdir -p "$app_data_dir/Documents"
 cp Tests/Fixtures/tangent-only.xml "$app_data_dir/Documents/example.xml"
 ```
 
-In **Import LandXML**, choose Browse > On My iPhone > RoadStation > example.
+In **Import Project**, choose Browse > On My iPhone > RoadStation > example.
 `UIFileSharingEnabled` and opening documents in place expose this folder for
-manual test inputs. The harness does not persist imported models/bookmarks,
-query histories, or project state. The test script stages only synthetic input
-files in that simulator folder so the actual picker flow can be exercised.
+manual test inputs. Private project storage never depends on this shared input
+folder or the original provider URL. Runtime query histories and live GPS samples
+are not persisted. Tests redirect project storage to isolated temporary UUID
+directories in DEBUG; Release cannot use that override. The test script stages
+synthetic input files so the actual picker flow can be exercised.
 
 ## Screens and operations
 
-- **Project/import:** project name, unconverted units, CRS description if present,
+- **Projects:** saved list, open/import, rename, confirmed delete and source replacement.
+- **Project detail:** project name, source filename/date, unconverted units, CRS confirmation/provenance,
   project warnings, alignment count and rows with start station/length/segments.
 - **Engineering canvas:** north-up planar centerline with aspect-preserving fit,
   drag pan, pinch/button zoom and Fit. Subtracts the local coordinate origin for
@@ -107,7 +117,7 @@ RoadStationApp/
 ```
 
 The Xcode app target links **RoadStationCore**, **RoadStationHarnessSupport**,
-**RoadStationAppleCRS**, **RoadStationCRSCatalog**, **RoadStationFieldPosition** and the installed **Projections** product. The core package
+**RoadStationAppleCRS**, **RoadStationCRSCatalog**, **RoadStationFieldPosition**, **RoadStationProjects** and the installed **Projections** product. The core package
 remains independent of projection libraries and Apple location/map frameworks.
 The harness helper contains only viewport and manual-input adapters. Phase 2A
 adds CRS models/import identification without editing validated geometry. Sample resource references point directly to five checked-in fixture
@@ -119,6 +129,8 @@ explicitly identify every sample as synthetic, including projected SR 82.
 ```sh
 swift test
 swift test -c release
+swift test --package-path RoadStationApp/CRSAdapter
+swift test --package-path RoadStationApp/CRSAdapter -c release
 tools/Test-iOS-Harness.sh YOUR_SIMULATOR_UDID
 ```
 
@@ -126,10 +138,12 @@ The script builds/installs the app, stages synthetic `.xml`/`.landxml` and malfo
 inputs in Simulator Files, and runs the shared scheme's UI tests without parallel
 simulator cloning. Results go under ignored `validation-output/phase15/`.
 Core suite: **151 tests** (142 existing + 9 CRS). Helper suite: **6 tests**.
-Apple CRS adapter suite: **12 tests**. Phase 2B/2B.1 field-position/picker suite: **33 Debug
-tests** (32 Release; the injection entry point is Debug only), shared by macOS and
-iOS Simulator. The catalog adds **8 tests**. See `PHASE2B1_CRS_PICKER_REPORT.md` in the repository root for current
-simulator/build/UI outcomes and `PHASE15_REPORT.md` for the earlier harness evidence.
+Apple package: **88 Debug / 86 Release tests**: 12 CRS, 47/45 field-position
+and picker, 8 catalog and 21 saved-project tests. The same Debug suites run under
+RoadStationCRSTests on iOS. The full UI suite has eight tests, including actual
+Files import, cold-start CRS/non-first-alignment restoration, rename and delete
+confirmation. See [PHASE2B2_SAVED_PROJECTS_REPORT.md](../PHASE2B2_SAVED_PROJECTS_REPORT.md)
+for current build, test and performance evidence.
 UI import tests need the staged files; run the script before running them in Xcode.
 
 The user has confirmed successful physical iPhone installation and app launch
@@ -149,19 +163,20 @@ field-location validation.
 ## Intentional limits
 
 Developer harness only: no geographic map, background location, camera, photos,
-reports, account, production persistence or cloud service. Drawing
+reports, accounts or cloud service. Drawing
 accuracy uses the core's fixed 0.05 source-unit chord-error sampling; deeper zoom
 magnifies its display approximation, while calculations remain independent.
 Pan/pinch zoom is centered on the viewport rather than the pinch location.
 Import/parser warnings are visible, and unsupported geometry is rejected by the
 core. Large complex XML/spirals can still reach existing parser/numerical limits.
-No process/session persistence or multi-project management is provided. Physical
-iPhone installation/launch is verified; broader on-device workflow or
+Projects persist locally; runtime calculations and location samples do not.
+Physical iPhone installation/launch is verified; saved-project lifecycle and broader
 field-location validation is not claimed. Production/App Store distribution is
 **NOT VERIFIED**; release packaging and App Store readiness are outside this phase.
 
-The next Phase 2C step is controlled physical-iPhone known-point validation,
-operation provenance and field-safety gates. Phase 2B does not establish survey
+The next Phase 2C step is a read-only MapKit context view for the opened saved
+project, with controlled physical-iPhone known-point validation and existing
+quality/provenance safeguards. Phase 2B does not establish survey
 accuracy. The CRS adapter is independently testable:
 
 ```sh
@@ -179,7 +194,8 @@ System**, browse/search and explicitly choose **Use CRS**. Advanced **Enter EPSG
 manually** still offers **Validate and use EPSG**. The original imported identity remains visible; manual
 selection is labeled separately. Output is converted to the declared project
 unit using the existing adapter. Unknown units/geographic degrees cannot be used
-for planar stationing. Selection is session-only and never guessed.
+for planar stationing. Confirmed selection and provenance persist with the project and are never guessed.
+Reopening validates the saved CRS against current PROJ without starting location.
 
 Open an alignment, then **Live Location / Field Position**. **Start Location**
 requests When In Use permission if needed. **Stop Location**, leaving this screen,

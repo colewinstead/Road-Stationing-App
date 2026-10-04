@@ -8,6 +8,7 @@ let package = Package(
     products: [
         .library(name: "RoadStationAppleCRS", targets: ["RoadStationAppleCRS"]),
         .library(name: "RoadStationCRSCatalog", targets: ["RoadStationCRSCatalog"]),
+        .library(name: "RoadStationProjects", targets: ["RoadStationProjects"]),
         .library(name: "RoadStationFieldPosition", targets: ["RoadStationFieldPosition"]),
         .executable(name: "roadstation-transform-benchmark", targets: ["RoadStationTransformBenchmark"])
     ],
@@ -32,6 +33,9 @@ let package = Package(
         .target(name: "RoadStationFieldPosition", dependencies: ["RoadStationAppleCRS", "RoadStationCRSCatalog",
             .product(name: "RoadStationCore", package: "Road-Stationing-App")]),
         .testTarget(name: "RoadStationFieldPositionTests", dependencies: ["RoadStationFieldPosition"]),
+        .target(name: "RoadStationProjects", dependencies: ["RoadStationFieldPosition", "RoadStationAppleCRS",
+            .product(name: "RoadStationCore", package: "Road-Stationing-App")]),
+        .testTarget(name: "RoadStationProjectsTests", dependencies: ["RoadStationProjects"]),
         .executableTarget(name: "RoadStationTransformBenchmark", dependencies: ["RoadStationAppleCRS"])
     ]
 )

@@ -19,7 +19,7 @@ jobs:
       - run: swift --version
       - run: swift test
       - run: swift test -c release
-      - name: Test Apple CRS and field-position pipeline
+      - name: Test Apple CRS, field-position and saved-project packages
         if: runner.os == 'macOS'
         run: swift test --package-path RoadStationApp/CRSAdapter
       - name: Check catalog matches pinned NGA database
@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: xcodebuild -version
-      - name: Build Phase 2B iPhone harness
+      - name: Build RoadStationApp iPhone Simulator
         run: >-
           xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj
           -scheme RoadStationApp -configuration Debug
@@ -75,26 +75,18 @@ jobs:
                   destination = f"platform=iOS Simulator,name={device['name']},OS={runtime['version']}"
                   with open(os.environ["GITHUB_ENV"], "a") as environment:
                       environment.write(f"IOS_SIMULATOR_DESTINATION={destination}\n")
+                      environment.write(f"IOS_SIMULATOR_ID={device['udid']}\n")
                   print(f"Selected {destination}")
                   break
           else:
               raise SystemExit("No available iPhone Simulator with an installed iOS runtime.")
           PY
-      - name: Test CRS and Phase 2B field position on iOS Simulator
+      - name: Test CRS, field position and saved projects on iOS Simulator
         run: >-
           xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj
           -scheme RoadStationCRSTests -configuration Debug
           -destination "$IOS_SIMULATOR_DESTINATION"
           -parallel-testing-enabled NO
           CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test
-      - name: Test explicit CRS and injected field-position UI
-        run: >-
-          xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj
-          -scheme RoadStationApp -configuration Debug
-          -destination "$IOS_SIMULATOR_DESTINATION"
-          -only-testing:RoadStationAppUITests/RoadStationAppUITests/testFieldPositionExplicitCRSAndDebugPipeline
-          -only-testing:RoadStationAppUITests/RoadStationAppUITests/testCRSPickerSearchRecommendationConfirmationAndManualFallback
-          -parallel-testing-enabled NO -collect-test-diagnostics never
-          -test-timeouts-enabled YES -default-test-execution-time-allowance 300
-          -maximum-test-execution-time-allowance 300
-          CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test
+      - name: Test full app UI including saved-project cold start
+        run: tools/Test-iOS-Harness.sh "$IOS_SIMULATOR_ID"

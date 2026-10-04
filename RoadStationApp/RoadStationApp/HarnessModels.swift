@@ -4,46 +4,8 @@ import RoadStationCore
 import RoadStationHarnessSupport
 import RoadStationAppleCRS
 import RoadStationFieldPosition
+import RoadStationProjects
 
-@MainActor
-final class ProjectModel: ObservableObject {
-    let field = FieldPositionSession(service: CoreLocationService())
-    @Published var project: Project?
-    @Published var source = ""
-    @Published var error: String?
-    @Published var isImporting = false
-    @Published var crsReadiness: CRSReadiness = .unresolved(.missingIdentification)
-
-    func importFile(_ url: URL, sourceLabel: String? = nil) {
-        guard !isImporting else { return }
-        isImporting = true; error = nil
-        Task {
-            do {
-                let imported = try await Task.detached(priority: .userInitiated) {
-                    let accessed = url.startAccessingSecurityScopedResource()
-                    defer { if accessed { url.stopAccessingSecurityScopedResource() } }
-                    // Read while scoped access is active; retain only the parsed session model.
-                    let project = try LandXMLParser().parse(url: url)
-                    let readiness = PROJProjectCoordinateTransformer.readiness(
-                        resolution: project.crsResolution, outputUnit: .linear(project.unit))
-                    return (project, readiness)
-                }.value
-                project = imported.0; crsReadiness = imported.1
-                field.load(project: imported.0)
-                source = sourceLabel ?? url.lastPathComponent
-            } catch { self.error = error.localizedDescription }
-            isImporting = false
-        }
-    }
-    #if DEBUG
-    func loadSample(_ sample: SampleFile) {
-        guard let url = Bundle.main.url(forResource: sample.name, withExtension: "xml") else {
-            error = "Bundled sample is missing: \(sample.name).xml"; return
-        }
-        importFile(url, sourceLabel: "Synthetic sample • \(sample.name).xml")
-    }
-    #endif
-}
 
 #if DEBUG
 struct SampleFile: Identifiable {

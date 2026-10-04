@@ -5,7 +5,7 @@ platform-independent Swift core. The current implementation imports LandXML
 horizontal alignments and performs planar station/offset calculations for lines,
 circular curves, clothoid spirals and station equations.
 
-The repository currently has five development milestones:
+The repository currently has six development milestones:
 
 - **Phase 1 — RoadStationCore:** portable calculation engine, LandXML parser,
   validation CLI and core test suite.
@@ -22,6 +22,10 @@ The repository currently has five development milestones:
   browse and one-shot location recommendations with explicit confirmation.
   Advanced manual EPSG remains available. See
   [PHASE2B1_CRS_PICKER_REPORT.md](PHASE2B1_CRS_PICKER_REPORT.md).
+- **Phase 2B.2 — saved projects (implementation complete):** local SwiftData metadata and project-owned
+  original LandXML, cold-start reopen, confirmed CRS/provenance and stable alignment
+  restoration, rename, confirmed deletion and staged source replacement. See
+  [PHASE2B2_SAVED_PROJECTS_REPORT.md](PHASE2B2_SAVED_PROJECTS_REPORT.md).
 
 The Phase 1.5 app has been built and tested in the iPhone Simulator and has also
 been installed and launched successfully on a physical iPhone using Xcode
@@ -31,7 +35,8 @@ automatic signing.
 location after explicit CRS confirmation. It shows GPS accuracy and withholds
 new calculations from stale/invalid fixes while retaining an explicitly labeled
 last-known snapshot during an active session. Physical-device field validation is still needed. MapKit
-and production persistence remain unimplemented.
+remains unimplemented. Local saved projects are implemented; physical-device
+lifecycle testing remains required.
 
 A real OpenRoads Designer validation dataset is checked in under
 [Validation/RealORD/CROSSGATES](Validation/RealORD/CROSSGATES/README.md). It
@@ -57,7 +62,7 @@ RoadStationApp/
   RoadStationApp/                     SwiftUI developer harness
   HarnessSupport/                     Viewport/manual-query helpers
   HarnessSupportTests/                Helper tests
-  CRSAdapter/                         Apple-only NGA PROJ package + transformation tests
+  CRSAdapter/                         Apple CRS/catalog/field-position/saved-project packages
   RoadStationAppUITests/              Simulator UI tests
 Tests/                                Core XCTest suites and fixtures
 Validation/
@@ -65,7 +70,7 @@ Validation/
 tools/Test-Windows.ps1                Windows build/test helper
 tools/Test-iOS-Harness.sh             Simulator UI-test helper
 tools/Generate-CRS-Catalog.py          Repeatable metadata extraction from NGA proj.db
-.github/workflows/core-tests.yml      Core checks + iOS Simulator build
+.github/workflows/core-tests.yml      Core/Apple checks + iOS build, unit and full UI tests
 ```
 
 Parse once, then query immutable, validated, `Sendable` models. Segment start/end
@@ -97,7 +102,11 @@ let coordinate = try engine.coordinate(
 ).coordinate
 ```
 
-The app owns file access, project persistence, screens and interaction. Public
+The app owns file access, project persistence, screens and interaction. SwiftData
+stores lightweight project metadata; an app-owned copy of the original LandXML
+is reparsed on each open. Geometry is never serialized into the database.
+Confirmed CRS and the last alignment are restored without starting location.
+Public
 `AlignmentSampling.polylines` and segment bounds support a future engineering
 canvas without introducing a UI dependency. Samples are for display only and
 keep disconnected segments separate. Forward/inverse math never uses them.
@@ -395,11 +404,13 @@ case file and tolerance definitions.
   not supported. Extremely looping spirals can exceed numerical budgets.
 - The synthetic Civil 3D-labelled reference spiral has an inconsistent endpoint
   and is deliberately rejected. It is not an external accuracy benchmark.
-- RoadStationApp is currently a developer harness with session-only state. It does
-  not yet include production persistence, MapKit, background location,
+- RoadStationApp now keeps local saved projects. It does
+  not yet include MapKit, background location,
   camera/photo workflows, cloud sync or App Store distribution.
 
-Next Phase 2C: physical-iPhone known-point field validation, CRS/operation
-provenance and alignment-distance/quality safeguards before any map display.
+Next Phase 2C: a small read-only MapKit context view for the opened saved project,
+using the existing inverse transformer for display samples and keeping stationing
+in project space. Validate known points, axis/units and GPS quality on the physical
+iPhone before claiming map/field accuracy.
 See [PHASE2B_LOCATION_REPORT.md](PHASE2B_LOCATION_REPORT.md) for exact scope and
 verification limits.

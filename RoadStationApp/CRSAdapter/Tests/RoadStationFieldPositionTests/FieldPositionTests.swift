@@ -769,4 +769,25 @@ final class FieldPositionTests: XCTestCase {
     }
     #endif
 
+    @MainActor func testSavedConfirmationRestoresAllProvenanceWithoutStartingLocationOrStationing() async throws {
+        for provenance in [CRSSelectionProvenance.landXML, .manual, .catalog] {
+            let service = FakeLocationService(); service.permission = .notDetermined
+            let counter = TransformationCounter()
+            let session = FieldPositionSession(service: service, factory: { resolution, unit in
+                ControlledTransformer(base: try PROJProjectCoordinateTransformer(resolution: resolution, outputUnit: .linear(unit)),
+                    gates: [:], failures: [], counter: counter)
+            })
+            session.load(project: try project())
+            await session.restoreConfirmedCRS(code: 3857, provenance: provenance, now: now)
+            await session.selectAlignment(try alignment(), now: now)
+            XCTAssertEqual(session.confirmedCRS?.provenance, provenance)
+            XCTAssertEqual(session.confirmedCRS?.definition.crs.epsgCode, 3857)
+            XCTAssertFalse(session.isRunning); XCTAssertNil(session.fieldPosition); XCTAssertNil(session.sample)
+            XCTAssertEqual(service.requests, 0); XCTAssertEqual(service.starts, 0); XCTAssertEqual(counter.count, 0)
+            await session.restoreConfirmedCRS(code: -1, provenance: provenance, now: now)
+            XCTAssertNil(session.confirmedCRS); XCTAssertFalse(session.isRunning)
+            XCTAssertEqual(service.requests, 0); XCTAssertEqual(service.starts, 0); XCTAssertEqual(counter.count, 0)
+        }
+    }
+
 }
