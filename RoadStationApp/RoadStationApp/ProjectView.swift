@@ -9,7 +9,7 @@ struct ProjectView: View {
         NavigationStack {
             List {
                 Section {
-                    Label("Phase 2A developer harness", systemImage: "wrench.and.screwdriver")
+                    Label("Phase 2B.1 developer harness", systemImage: "wrench.and.screwdriver")
                         .font(.subheadline).foregroundStyle(.secondary)
                     Text("Horizontal engineering coordinates. CROSSGATES ORD validation passed 30/30 cases at 0.001 US survey foot tolerance.")
                         .font(.footnote).foregroundStyle(.secondary)
@@ -25,14 +25,15 @@ struct ProjectView: View {
                         LabeledContent("Name", value: project.name)
                         LabeledContent("Units", value: unitName(project.unit))
                         LabeledContent("Coordinate system", value: project.coordinateSystemDescription ?? "Not specified")
-                        LabeledContent("CRS readiness", value: crsReadinessText(model.crsReadiness))
+                        LabeledContent("Imported CRS readiness", value: crsReadinessText(model.crsReadiness))
                         LabeledContent("Alignments", value: String(project.alignments.count))
                         Text(model.source).font(.caption).foregroundStyle(.secondary)
                     }
+                    Section("Project CRS") { ProjectCRSControls(session: model.field) }
                     Section("Alignments") {
                         ForEach(project.alignments) { alignment in
                             NavigationLink {
-                                AlignmentWorkspace(alignment: alignment, unit: project.unit)
+                                AlignmentWorkspace(alignment: alignment, unit: project.unit, field: model.field)
                             } label: {
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text(alignment.name).font(.headline)
@@ -61,7 +62,7 @@ struct ProjectView: View {
                     Text("Samples test the harness. They are not real ORD numerical validation.").font(.caption).foregroundStyle(.secondary)
                 }
                 #endif
-                Section { Text("Live GPS is not implemented.\nImported project data exists only for this session.").font(.footnote).foregroundStyle(.secondary) }
+                Section { Text("Field Position requires explicit CRS confirmation and current location.\nImported project data exists only for this session.").font(.footnote).foregroundStyle(.secondary) }
             }
             .navigationTitle("RoadStation")
             .fileImporter(isPresented: $showImporter, allowedContentTypes: [.xml, UTType(importedAs: "com.roadstation.landxml", conformingTo: .xml)]) { result in
@@ -76,7 +77,7 @@ struct ProjectView: View {
 
 func crsReadinessText(_ readiness: CRSReadiness) -> String {
     switch readiness {
-    case .unresolved: "Unresolved — CRS selection required before geographic conversion"
+    case .unresolved: "Unresolved in LandXML"
     case .unavailable(let error): error.localizedDescription
     case .ready(let definition): "\(definition.crs.identifier) — horizontal conversion available"
     }

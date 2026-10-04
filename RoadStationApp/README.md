@@ -1,10 +1,12 @@
-# RoadStationApp — Phase 2A developer harness
+# RoadStationApp — Phase 2B.1 developer harness
 
 A session-only SwiftUI iPhone harness for the authoritative RoadStationCore
 package. It provides manual horizontal geometry inspection and CRS readiness
 after import. **CROSSGATES ORD validation passed 30/30 cases at 0.001 US survey
 foot tolerance.** CRS architecture and transformation tests are implemented;
-live GPS, MapKit and a production CRS picker remain unimplemented. See
+foreground live location and explicit searchable CRS selection are implemented.
+MapKit and production persistence remain unimplemented. Field-device testing is
+still needed. See [PHASE2B_LOCATION_REPORT.md](../PHASE2B_LOCATION_REPORT.md). See
 [PHASE2_CRS_REPORT.md](../PHASE2_CRS_REPORT.md). No expected ORD results are bundled.
 
 ## Open and run in Xcode
@@ -105,7 +107,7 @@ RoadStationApp/
 ```
 
 The Xcode app target links **RoadStationCore**, **RoadStationHarnessSupport**,
-**RoadStationAppleCRS** and the installed **Projections** product. The core package
+**RoadStationAppleCRS**, **RoadStationCRSCatalog**, **RoadStationFieldPosition** and the installed **Projections** product. The core package
 remains independent of projection libraries and Apple location/map frameworks.
 The harness helper contains only viewport and manual-input adapters. Phase 2A
 adds CRS models/import identification without editing validated geometry. Sample resource references point directly to five checked-in fixture
@@ -124,8 +126,10 @@ The script builds/installs the app, stages synthetic `.xml`/`.landxml` and malfo
 inputs in Simulator Files, and runs the shared scheme's UI tests without parallel
 simulator cloning. Results go under ignored `validation-output/phase15/`.
 Core suite: **151 tests** (142 existing + 9 CRS). Helper suite: **6 tests**.
-Apple CRS adapter suite: **12 tests**, run on macOS and iOS Simulator. See the root
-`PHASE15_REPORT.md` for actual simulator/build/UI outcomes and screenshot evidence.
+Apple CRS adapter suite: **12 tests**. Phase 2B/2B.1 field-position/picker suite: **33 Debug
+tests** (32 Release; the injection entry point is Debug only), shared by macOS and
+iOS Simulator. The catalog adds **8 tests**. See `PHASE2B1_CRS_PICKER_REPORT.md` in the repository root for current
+simulator/build/UI outcomes and `PHASE15_REPORT.md` for the earlier harness evidence.
 UI import tests need the staged files; run the script before running them in Xcode.
 
 The user has confirmed successful physical iPhone installation and app launch
@@ -137,15 +141,15 @@ field-location validation.
 | --- | --- |
 | Physical iPhone app installation/launch | **VERIFIED** — user-confirmed, Xcode automatic signing with a Personal Team |
 | Production/App Store distribution | **NOT VERIFIED** |
-| CoreLocation/GPS field behavior | **NOT IMPLEMENTED / NOT VERIFIED** |
+| CoreLocation/GPS field behavior | **IMPLEMENTED** — physical-device field validation still needed |
 | MapKit/geographic maps | **NOT IMPLEMENTED / NOT VERIFIED** |
-| CRS transformations | **IMPLEMENTED** — Apple-only adapter; no live location |
+| CRS transformations | **IMPLEMENTED** — explicit confirmation + live-location pipeline |
 | Independent ORD numerical validation | **PASSED 30/30** — CROSSGATES, 0.001 US survey foot |
 
 ## Intentional limits
 
-Developer harness only: no geographic map, CRS picker, CoreLocation,
-GPS/GNSS, camera, photos, reports, account, database or cloud service. Drawing
+Developer harness only: no geographic map, background location, camera, photos,
+reports, account, production persistence or cloud service. Drawing
 accuracy uses the core's fixed 0.05 source-unit chord-error sampling; deeper zoom
 magnifies its display approximation, while calculations remain independent.
 Pan/pinch zoom is centered on the viewport rather than the pinch location.
@@ -156,13 +160,91 @@ iPhone installation/launch is verified; broader on-device workflow or
 field-location validation is not claimed. Production/App Store distribution is
 **NOT VERIFIED**; release packaging and App Store readiness are outside this phase.
 
-The next Phase 2B step is explicit user CRS selection/confirmation and a
-controlled CoreLocation adapter with accuracy gating. Phase 2A does not establish
-field-location or survey accuracy. The CRS adapter is independently testable:
+The next Phase 2C step is controlled physical-iPhone known-point validation,
+operation provenance and field-safety gates. Phase 2B does not establish survey
+accuracy. The CRS adapter is independently testable:
 
 ```sh
 swift test --package-path RoadStationApp/CRSAdapter
 xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj \
   -scheme RoadStationCRSTests \
   -destination "platform=iOS Simulator,id=YOUR_SIMULATOR_UDID" test
+```
+
+
+## Phase 2B Field Position
+
+Import a project and confirm its explicit LandXML EPSG, or open **Choose Coordinate
+System**, browse/search and explicitly choose **Use CRS**. Advanced **Enter EPSG
+manually** still offers **Validate and use EPSG**. The original imported identity remains visible; manual
+selection is labeled separately. Output is converted to the declared project
+unit using the existing adapter. Unknown units/geographic degrees cannot be used
+for planar stationing. Selection is session-only and never guessed.
+
+Open an alignment, then **Live Location / Field Position**. **Start Location**
+requests When In Use permission if needed. **Stop Location**, leaving this screen,
+or leaving the foreground stops updates. Denied/restricted permission and
+approximate-location status remain visible. Station/offset are dominant, with
+GPS accuracy, Easting/Northing, fix age, alignment and EPSG context.
+
+Default policy: fixes become ineligible for new calculation after 5 seconds; accuracy greater than 10 meters
+shows a poor-accuracy warning with the approximate result retained. Cached fixes
+predating Start are withheld. Invalid coordinates/accuracy/timestamps are
+excluded from new calculation. Ambiguous nearest results remain explicitly marked.
+
+After the first successful fix, its station/offset and matching accuracy/timestamp
+remain visible while the next fix computes. The completed position replaces all
+displayed values together; the small update indicator does not change card size.
+If it becomes stale, the snapshot stays visible with **Stale — last known position**
+and its current age. A fresh successful fix replaces it and removes that warning.
+Repeated stale checks do not erase or republish it. Invalid/failed subsequent updates
+also retain the last-known snapshot with a warning. Stop, project/alignment/CRS
+replacement and permission revocation clear it. The five-second safety classification
+is unchanged; stale data never produces a new station/offset calculation.
+
+RoadStation does not throttle/debounce or poll CoreLocation. Every active authorized
+callback is processed; iOS controls its cadence and does not promise periodic fixes.
+Best-for-navigation accuracy, no distance filter and automatic pausing disabled
+remain unchanged. The one-second UI clock only updates age/classification.
+
+Debug builds provide **DEBUG location injection**: enter WGS84 degrees and
+horizontal accuracy in meters. The real projection/geometry pipeline is used,
+with a conspicuous injection label and the same freshness policy. No injected
+control exists in Release. No physical-device field-accuracy claim is made.
+
+```sh
+swift run --package-path RoadStationApp/CRSAdapter roadstation-transform-benchmark
+```
+
+## Phase 2B.1 CRS picker
+
+Choose Coordinate System opens a dedicated Recommended / Browse / Search sheet.
+Browse includes 1,081 State Plane EPSG definitions across all 50 states and Puerto
+Rico/Virgin Islands jurisdictions. Search names, state/zone, datum, unit or EPSG
+code; for example Mississippi West, NAD83 2011, survey foot or 6510. A preview
+shows project/native units and requires **Use CRS**. Imported LandXML EPSG remains
+prominent with imported confirmation provenance. Advanced manual EPSG entry is
+still available inside the sheet.
+
+**Choose CRS** requests a fresh one-time location when already authorized. With
+undetermined permission, **Use My Location** requests When In Use permission,
+then one fix. Denied/restricted permission leaves Browse, Search and manual entry
+available. A separate manager uses `requestLocation()` only: it never starts
+continuous updates or Field Position, calculates stationing, or selects a CRS.
+The acquired fix is checked once, then its recommendations stay available for the
+sheet with capture time and accuracy in project units. Poor/reduced accuracy
+shows an approximate warning. Finding/refresh status preserves the layout and
+prior capture; failure offers explicit retry. The live five-second stale policy
+is unchanged. Published rectangular areas are not precise zone polygons.
+
+The Apple catalog is generated from the pinned NGA proj.db, cached as immutable
+Swift metadata and searched off MainActor. It distinguishes US survey feet,
+international feet and meters, and labels different convertible native units.
+DEBUG fix injects a clearly synthetic recommendation position through shared
+acquisition/ranking logic; it retains the capture for the picker presentation. See the Phase 2B.1
+report for membership rules, compiled C APIs, performance and full validation.
+
+```sh
+python3 tools/Generate-CRS-Catalog.py --check
+swift test --package-path RoadStationApp/CRSAdapter -c release
 ```

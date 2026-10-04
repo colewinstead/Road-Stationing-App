@@ -1,16 +1,21 @@
 import SwiftUI
 import RoadStationCore
 import RoadStationHarnessSupport
+import RoadStationFieldPosition
 
 struct AlignmentWorkspace: View {
     @StateObject private var model: WorkspaceModel
     @State private var tab = WorkspaceTab.inspect
-    init(alignment: RoadStationCore.Alignment, unit: ProjectUnit) {
+    @ObservedObject private var field: FieldPositionSession
+    init(alignment: RoadStationCore.Alignment, unit: ProjectUnit, field: FieldPositionSession) {
         _model = StateObject(wrappedValue: WorkspaceModel(alignment: alignment, unit: unit))
+        self.field = field
     }
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                NavigationLink("Live Location / Field Position") { FieldPositionView(session: field) }
+                    .buttonStyle(.bordered).accessibilityIdentifier("open-field-position")
                 EngineeringCanvas(model: model).frame(height: 300)
                 HStack(spacing: 12) {
                     Label("Query", systemImage: "circle.fill").foregroundStyle(.orange)
@@ -31,14 +36,13 @@ struct AlignmentWorkspace: View {
                 case .info: AlignmentInfo(model: model)
                 case .raw: RawInspection(model: model)
                 }
-                Text("GPS: Not available in Phase 1.5").font(.footnote).foregroundStyle(.secondary)
-                Text("Drawing samples are display-only. Queries use AlignmentEngine. No coordinate transformations are performed.")
+                Text("Drawing samples are display-only. Manual queries use AlignmentEngine in unchanged project coordinates.")
                     .font(.caption).foregroundStyle(.secondary)
             }.padding()
         }
         .background(Color(.systemGroupedBackground))
         .navigationTitle(model.alignment.name).navigationBarTitleDisplayMode(.inline)
-        .task { await model.loadDrawing() }
+        .task { await field.selectAlignment(model.alignment); await model.loadDrawing() }
     }
 }
 

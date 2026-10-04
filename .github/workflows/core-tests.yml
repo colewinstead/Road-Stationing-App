@@ -19,11 +19,23 @@ jobs:
       - run: swift --version
       - run: swift test
       - run: swift test -c release
-      - name: Test Apple CRS adapter against NGA PROJ
+      - name: Test Apple CRS and field-position pipeline
         if: runner.os == 'macOS'
         run: swift test --package-path RoadStationApp/CRSAdapter
+      - name: Check catalog matches pinned NGA database
+        if: runner.os == 'macOS'
+        run: python3 tools/Generate-CRS-Catalog.py --check
+      - name: Test Apple catalog and pipeline in Release
+        if: runner.os == 'macOS'
+        run: swift test --package-path RoadStationApp/CRSAdapter -c release
       - name: Validate and export sample cases
         run: swift run roadstation-validate Tests/Fixtures/tangent-only.xml Tests/Fixtures/validation-cases.json validation-output/analytic
+      - name: Validate CROSSGATES real ORD cases
+        run: >-
+          swift run roadstation-validate
+          Validation/RealORD/CROSSGATES/CROSSGATES.xml
+          Validation/RealORD/CROSSGATES/CROSSGATES-ord-cases.json
+          validation-output/CROSSGATES
       - uses: actions/upload-artifact@v4
         with:
           name: validation-${{ matrix.os }}
@@ -34,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: xcodebuild -version
-      - name: Build Phase 2A iPhone harness
+      - name: Build Phase 2B iPhone harness
         run: >-
           xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj
           -scheme RoadStationApp -configuration Debug
@@ -68,10 +80,21 @@ jobs:
           else:
               raise SystemExit("No available iPhone Simulator with an installed iOS runtime.")
           PY
-      - name: Test Phase 2A CRS on iOS Simulator
+      - name: Test CRS and Phase 2B field position on iOS Simulator
         run: >-
           xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj
           -scheme RoadStationCRSTests -configuration Debug
           -destination "$IOS_SIMULATOR_DESTINATION"
           -parallel-testing-enabled NO
+          CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test
+      - name: Test explicit CRS and injected field-position UI
+        run: >-
+          xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj
+          -scheme RoadStationApp -configuration Debug
+          -destination "$IOS_SIMULATOR_DESTINATION"
+          -only-testing:RoadStationAppUITests/RoadStationAppUITests/testFieldPositionExplicitCRSAndDebugPipeline
+          -only-testing:RoadStationAppUITests/RoadStationAppUITests/testCRSPickerSearchRecommendationConfirmationAndManualFallback
+          -parallel-testing-enabled NO -collect-test-diagnostics never
+          -test-timeouts-enabled YES -default-test-execution-time-allowance 300
+          -maximum-test-execution-time-allowance 300
           CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test
