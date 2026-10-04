@@ -113,6 +113,27 @@ struct ProjectView: View {
         ScrollViewReader { scroll in
         List {
             statusSections
+            if let alignment = session.field.alignment {
+                Section {
+                    VStack(alignment: .leading, spacing: 12) {
+                        LabeledContent("Selected alignment", value: alignment.name)
+                            .font(.headline).accessibilityIdentifier("restored-alignment")
+                        Text("Find your station and offset with phone GPS.").font(.callout)
+                    }.padding(.vertical, 4)
+                    NavigationLink { FieldPositionView(session: session.field) } label: {
+                        Label("Open Field Position", systemImage: "location.fill")
+                            .font(.headline).frame(maxWidth: .infinity, minHeight: 52)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }.buttonStyle(.borderedProminent).controlSize(.large).accessibilityIdentifier("project-field-position")
+                    NavigationLink { AlignmentWorkspace(alignment: alignment, unit: session.project.unit, field: session.field) } label: {
+                        Label("Inspect Alignment", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
+                            .font(.headline).frame(maxWidth: .infinity, minHeight: 44)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }.buttonStyle(.bordered).controlSize(.large).accessibilityIdentifier("continue-alignment")
+                }
+            } else {
+                Section { Text("Choose an alignment below to begin field positioning.").font(.headline) }
+            }
             Section("Project") {
                 Text(model.isSavingChoices ? "Saving project choices…" : model.choicesSaveError == nil ? "Project saved" : "Choices not saved — retry saving")
                     .font(.caption).foregroundStyle(model.choicesSaveError == nil ? Color.secondary : Color.red)
@@ -122,12 +143,6 @@ struct ProjectView: View {
                 LabeledContent("Source saved", value: session.saved.sourceUpdatedAt.formatted(date: .abbreviated, time: .shortened))
                 LabeledContent("Units", value: unitName(session.project.unit))
                 LabeledContent("Alignments", value: String(session.project.alignments.count)).accessibilityIdentifier("project-alignment-count")
-                if let alignment = session.field.alignment {
-                    LabeledContent("Last selected alignment", value: alignment.name).accessibilityIdentifier("restored-alignment")
-                    NavigationLink("Continue \(alignment.name)") { AlignmentWorkspace(alignment: alignment, unit: session.project.unit, field: session.field) }
-                        .accessibilityIdentifier("continue-alignment")
-                    NavigationLink("Live Location / Field Position") { FieldPositionView(session: session.field) }.accessibilityIdentifier("project-field-position")
-                }
             }
             Section("Project CRS") { ProjectCRSControls(session: session.field) }
             Section("Alignments") {

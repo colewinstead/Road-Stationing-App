@@ -31,8 +31,16 @@ line drawn on screen. It does not provide survey-grade positioning.
 - Import `.xml` or `.landxml` through iOS Files. Projects retain an app-owned
   local copy of the source, confirmed CRS and last selected alignment.
 - Reopen a saved project, confirm or review CRS readiness, select an alignment,
-  and explicitly start Field Position. Location stops when the user stops it,
-  leaves that screen, or the app leaves the foreground.
+  and open Field Position. Location starts automatically once the alignment and
+  confirmed CRS are ready, stops when that screen closes or the app enters the
+  background or becomes inactive, and restarts when the visible screen becomes active.
+- Field Position uses a large north-up planar alignment canvas, a floating
+  top-left station/offset readout with smaller accuracy and source, and a
+  collapsible bottom details panel. Follow/Recenter and camera actions change
+  only the display; browsing or opening details does not stop foreground location.
+- The selected alignment's prominent Open Field Position action and secondary
+  Inspect Alignment action appear before project metadata. Last-fix time is
+  available in field details without a ticking age display.
 - Browse/search CRS metadata, use one-shot location recommendations, or enter
   an EPSG code manually. A recommendation never confirms a CRS on the user's behalf.
 - Supporting tools provide a planar engineering canvas, tap inspection, manual
@@ -55,9 +63,13 @@ line drawn on screen. It does not provide survey-grade positioning.
 - Preserve source units and distinguish meters, international feet and US survey
   feet. CRS and units must be explicit; unresolved CRS or unsuitable units block
   location-based planar stationing. Never guess a CRS from coordinate magnitude.
-- Phone GPS is approximate. Keep accuracy, fix age, permission state, ambiguity
+- Phone GPS is approximate. Keep accuracy, freshness status, permission state, ambiguity
   and stale/last-known status visible. Stale or invalid fixes cannot produce new
-  calculations; retained snapshots must remain clearly labeled.
+  calculations; retained snapshots must remain clearly labeled. A persistent
+  safety/status overlay above the camera controls keeps active quality warnings
+  visible while the readout or details scroll, without resizing the canvas or
+  bottom panel. Phone, nearest point, forward tangent and uncertainty ring share the
+  displayed snapshot; manual query markers remain separate.
 - Local saved projects support reopening, renaming, deletion and source
   replacement. Failed replacement must preserve the existing source. Current
   persistence code is in the working tree; older READMEs describe session-only
@@ -100,5 +112,6 @@ uncertainty plainly and avoid accuracy or distribution claims beyond the evidenc
 ## Open Decisions
 
 Specific field accessibility needs, production distribution, pricing and broader
-platform support have not been established. No visual direction was chosen during
-init.
+platform support have not been established. The confirmed field layout follows
+native Maps-style composition with existing system fonts, colors and controls;
+its spatial surface is a planar canvas, with no geographic basemap yet.

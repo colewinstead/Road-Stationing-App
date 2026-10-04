@@ -78,6 +78,8 @@ synthetic input files so the actual picker flow can be exercised.
 - **Projects:** saved list, open/import, rename, confirmed delete and source replacement.
 - **Project detail:** project name, source filename/date, unconverted units, CRS confirmation/provenance,
   project warnings, alignment count and rows with start station/length/segments.
+  The selected alignment's prominent **Open Field Position** action and secondary
+  **Inspect Alignment** action appear before project metadata.
 - **Engineering canvas:** north-up planar centerline with aspect-preserving fit,
   drag pan, pinch/button zoom and Fit. Subtracts the local coordinate origin for
   display, retaining the full engineering values in the core. Line is primary
@@ -110,7 +112,7 @@ RoadStation/Core/                   authoritative geometry + portable CRS model
 RoadStationApp/
   RoadStationApp.xcodeproj/          app, UI/CRS test targets and shared schemes
   RoadStationApp/                    SwiftUI screens, models and Info.plist
-  HarnessSupport/                   planar viewport and input parsing only
+  HarnessSupport/                   planar viewport, display camera and input parsing
   HarnessSupportTests/              platform-independent helper tests
   RoadStationAppUITests/             actual simulator UI flows
   CRSAdapter/                       NGA PROJ adapter and shared macOS/iOS CRS tests
@@ -119,7 +121,7 @@ RoadStationApp/
 The Xcode app target links **RoadStationCore**, **RoadStationHarnessSupport**,
 **RoadStationAppleCRS**, **RoadStationCRSCatalog**, **RoadStationFieldPosition**, **RoadStationProjects** and the installed **Projections** product. The core package
 remains independent of projection libraries and Apple location/map frameworks.
-The harness helper contains only viewport and manual-input adapters. Phase 2A
+The harness helper contains viewport, display-camera and manual-input adapters. Phase 2A
 adds CRS models/import identification without editing validated geometry. Sample resource references point directly to five checked-in fixture
 files; these sources are not duplicated in the repository. Debug sample controls
 explicitly identify every sample as synthetic, including projected SR 82.
@@ -197,31 +199,58 @@ unit using the existing adapter. Unknown units/geographic degrees cannot be used
 for planar stationing. Confirmed selection and provenance persist with the project and are never guessed.
 Reopening validates the saved CRS against current PROJ without starting location.
 
-Open an alignment, then **Live Location / Field Position**. **Start Location**
-requests When In Use permission if needed. **Stop Location**, leaving this screen,
-or leaving the foreground stops updates. Denied/restricted permission and
-approximate-location status remain visible. Station/offset are dominant, with
-GPS accuracy, Easting/Northing, fix age, alignment and EPSG context.
+Use **Open Field Position** for the selected alignment on the project screen,
+or open **Live Location / Field Position** from the inspection workspace. Location starts
+without a Start/Stop button once the alignment and explicitly confirmed CRS are
+ready, requesting When In Use permission if needed. Leaving this screen or
+the app becoming inactive stops updates and clears the reading. Returning to the
+visible screen in the foreground restarts location and waits for a current fix.
+Denied/restricted permission and approximate-location status remain visible.
+The native Maps-style layout retains system fonts, colors and controls: a large
+north-up planar alignment canvas sits beneath a floating top-left station/offset
+readout with smaller GPS accuracy and source. The selected alignment heads a
+bottom panel that expands/collapses by tapping or dragging its header. Coordinates,
+full units, a static **Last fix** timestamp, CRS controls and explanatory text are
+in its scrollable disclosures. The readout hugs its content and falls back to
+scrolling when constrained. A persistent safety/status overlay above the camera
+controls shows stale/last-known,
+ambiguity and active quality warnings independently of the readout and details.
+Long warnings can scroll within the bounded overlay at large text sizes, and
+VoiceOver reads the full summary. Its status changes do not consume canvas or
+bottom-panel space, and stale status does not
+add content to the station/offset/accuracy/source card.
+
+Phone position, nearest alignment point, forward tangent and approximate GPS
+uncertainty ring use the same completed snapshot as the readout. An ambiguous
+nearest point is labeled representative; stale fixes use a last-known marker.
+The ring is not a guaranteed error boundary. Manual query markers remain separate.
+Follow and Recenter sit at the lower right, alongside a camera menu for Fit
+Alignment, zoom and directional pan. Dragging, zooming or fitting pauses Follow;
+resuming Follow tracks current fixes, while Recenter frames the displayed fix.
+Camera actions and opening/closing the details panel do not stop foreground GPS.
+This is a display-only planar view; MapKit remains unimplemented.
 
 Default policy: fixes become ineligible for new calculation after 5 seconds; accuracy greater than 10 meters
 shows a poor-accuracy warning with the approximate result retained. Cached fixes
-predating Start are withheld. Invalid coordinates/accuracy/timestamps are
+predating the current location visit are withheld. Invalid coordinates/accuracy/timestamps are
 excluded from new calculation. Ambiguous nearest results remain explicitly marked.
 
 After the first successful fix, its station/offset and matching accuracy/timestamp
 remain visible while the next fix computes. The completed position replaces all
-displayed values together; the small update indicator does not change card size.
+displayed values together, with a small update indicator while calculation runs.
 If it becomes stale, the snapshot stays visible with **Stale — last known position**
-and its current age. A fresh successful fix replaces it and removes that warning.
+in the status overlay; its timestamp remains available in details. A fresh
+successful fix replaces it and removes that warning.
 Repeated stale checks do not erase or republish it. Invalid/failed subsequent updates
-also retain the last-known snapshot with a warning. Stop, project/alignment/CRS
+also retain the last-known snapshot with a warning. Screen exit/background, project/alignment/CRS
 replacement and permission revocation clear it. The five-second safety classification
 is unchanged; stale data never produces a new station/offset calculation.
 
 RoadStation does not throttle/debounce or poll CoreLocation. Every active authorized
 callback is processed; iOS controls its cadence and does not promise periodic fixes.
 Best-for-navigation accuracy, no distance filter and automatic pausing disabled
-remain unchanged. The one-second UI clock only updates age/classification.
+remain unchanged. There is no ticking fix-age display. A cancelable freshness
+deadline applies the unchanged five-second classification policy.
 
 Debug builds provide **DEBUG location injection**: enter WGS84 degrees and
 horizontal accuracy in meters. The real projection/geometry pipeline is used,

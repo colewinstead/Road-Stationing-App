@@ -3,6 +3,41 @@ import RoadStationCore
 import RoadStationHarnessSupport
 
 final class HarnessSupportTests: XCTestCase {
+    func testFieldCameraFollowBrowsingStalenessRecenterAndFit() throws {
+        var camera = FieldCanvasCamera()
+        let phone = ProjectCoordinate(x: 986327, y: 1453411)
+        let nearest = ProjectCoordinate(x: 986327, y: 1453406)
+        camera.follow(phone: phone, nearest: nearest, contextSpan: 50, isCurrent: true)
+        let initial = try XCTUnwrap(camera.bounds)
+        camera.magnify(2)
+        camera.move(x: 75, y: -40)
+        XCTAssertFalse(camera.isFollowing)
+        camera.follow(phone: .init(x: phone.x + 10, y: phone.y), nearest: nearest, contextSpan: 50, isCurrent: true)
+        XCTAssertEqual(camera.bounds?.minX, initial.minX, "Fresh GPS must not move a browsed camera")
+        XCTAssertEqual(camera.pan, .init(x: 75, y: -40))
+        camera.recenter(phone: phone, nearest: nearest, contextSpan: 50)
+        XCTAssertFalse(camera.isFollowing, "Recenter is a one-shot action")
+        XCTAssertEqual(camera.zoom, 1); XCTAssertEqual(camera.pan, .init(x: 0, y: 0))
+        camera.resume(phone: phone, nearest: nearest, contextSpan: 50)
+        camera.follow(phone: .init(x: phone.x + 10, y: phone.y), nearest: .init(x: nearest.x + 10, y: nearest.y), contextSpan: 50, isCurrent: false)
+        XCTAssertEqual(camera.bounds?.minX, initial.minX, "Stale fixes must not drive Follow")
+        camera.follow(phone: .init(x: phone.x + 10, y: phone.y), nearest: .init(x: nearest.x + 10, y: nearest.y), contextSpan: 50, isCurrent: true)
+        XCTAssertEqual(try XCTUnwrap(camera.bounds).minX, initial.minX + 10, accuracy: 1e-9)
+        XCTAssertEqual(try XCTUnwrap(camera.bounds).maxX - camera.bounds!.minX, initial.maxX - initial.minX, accuracy: 1e-9)
+        camera.resume(phone: .init(x: 0, y: 0), nearest: .init(x: 0, y: 0), contextSpan: 50)
+        camera.follow(phone: .init(x: 100, y: 0), nearest: .init(x: 0, y: 0), contextSpan: 50, isCurrent: true)
+        let widerViewport = CanvasViewport(bounds: try XCTUnwrap(camera.bounds), width: 390, height: 280)
+        for point in [ProjectCoordinate(x: 0, y: 0), .init(x: 100, y: 0)] {
+            let screen = widerViewport.screen(point)
+            XCTAssertGreaterThanOrEqual(screen.x, 24); XCTAssertLessThanOrEqual(screen.x, 366)
+        }
+        let alignmentBounds = SegmentBounds(points: [.init(x: 0, y: 0), .init(x: 1000, y: 500)])
+        camera.fitAlignment(alignmentBounds)
+        XCTAssertFalse(camera.isFollowing)
+        XCTAssertEqual(camera.bounds?.maxX, 1000, "Fit Alignment must not include a distant phone/query")
+        camera.follow(phone: phone, nearest: nearest, contextSpan: 50, isCurrent: true)
+        XCTAssertEqual(camera.bounds?.maxX, 1000)
+    }
     func testLargeProjectedCoordinatesRoundTripAfterPanAndZoom() {
         let bounds = SegmentBounds(points: [.init(x: 986327.5959036754, y: 1453411.9250950934),
                                            .init(x: 1000744.5894447418, y: 1446675.9547965613)])

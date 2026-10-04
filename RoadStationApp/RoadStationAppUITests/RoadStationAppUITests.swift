@@ -47,8 +47,47 @@ final class RoadStationAppUITests: XCTestCase {
         if app.buttons["Done"].isHittable { app.buttons["Done"].tap() }
     }
     @MainActor
+    private func revealFieldSetup(_ app: XCUIApplication) {
+        guard app.navigationBars["Field Position"].waitForExistence(timeout: 10), !app.staticTexts["confirmed-crs"].exists else { return }
+        let panel = app.buttons["field-details-toggle"]
+        if panel.value as? String == "Collapsed" { panel.tap() }
+        if app.buttons["open-crs-picker"].exists { return }
+        let disclosure = app.staticTexts["Coordinate system & setup"]
+        for _ in 0..<5 where !disclosure.isHittable { pageUp(app) }
+        disclosure.tap()
+    }
+    @MainActor
+    private func revealDebugLocation(_ app: XCUIApplication) {
+        let panel = app.buttons["field-details-toggle"]
+        if panel.value as? String == "Collapsed" { panel.tap() }
+        let disclosure = app.staticTexts["DEBUG location injection"]
+        for _ in 0..<6 where !disclosure.isHittable { pageUp(app) }
+        disclosure.tap()
+    }
+    @MainActor
     private func attachment(_ name: String, app: XCUIApplication) {
         let image = XCTAttachment(screenshot: app.screenshot()); image.name = name; image.lifetime = .keepAlways; add(image)
+    }
+
+    @MainActor
+    func testProjectFieldAndInspectionActionsNavigateIndependently() throws {
+        let app = makeApp(); app.launch(); app.activate()
+        sample("tangent-only", alignment: "TANGENT", in: app)
+        app.navigationBars.buttons.firstMatch.tap()
+        let field = app.buttons["project-field-position"]
+        for _ in 0..<6 where !field.isHittable { app.swipeDown() }
+        XCTAssertTrue(field.waitForExistence(timeout: 10)); field.tap()
+        XCTAssertTrue(app.navigationBars["Field Position"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.otherElements["engineering-canvas"].exists)
+        app.navigationBars.buttons.firstMatch.tap()
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        XCTAssertFalse(app.navigationBars["Field Position"].exists)
+        app.buttons["continue-alignment"].tap()
+        XCTAssertTrue(app.otherElements["engineering-canvas"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.navigationBars["Field Position"].exists)
+        app.navigationBars.buttons.firstMatch.tap()
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        attachment("project-independent-actions", app: app)
     }
 
     @MainActor
@@ -219,6 +258,7 @@ final class RoadStationAppUITests: XCTestCase {
         let recommendedUse = app.buttons["use-catalog-crs"]
         for _ in 0..<5 where !recommendedUse.isHittable { pageUp(app) }
         recommendedUse.tap()
+        revealFieldSetup(app)
         XCTAssertTrue(app.staticTexts["confirmed-crs"].waitForExistence(timeout: 20))
         XCTAssertTrue(app.staticTexts["confirmed-crs"].label.contains("EPSG:6510"))
         app.buttons["open-crs-picker"].tap()
@@ -235,6 +275,7 @@ final class RoadStationAppUITests: XCTestCase {
         let use = app.buttons["use-catalog-crs"]
         for _ in 0..<5 where !use.isHittable { pageUp(app) }
         use.tap()
+        revealFieldSetup(app)
         XCTAssertTrue(app.staticTexts["confirmed-crs"].waitForExistence(timeout: 20))
         XCTAssertTrue(app.staticTexts["confirmed-crs"].label.contains("EPSG:6510"))
         attachment("phase2b1-crs-selected", app: app)
@@ -253,13 +294,15 @@ final class RoadStationAppUITests: XCTestCase {
         let open = app.buttons["open-field-position"]
         for _ in 0..<4 where !open.isHittable { app.swipeDown() }
         open.tap()
-        let start = app.buttons["start-location"]
-        for _ in 0..<4 where !start.isHittable { pageUp(app) }
-        XCTAssertFalse(start.isEnabled)
+        XCTAssertFalse(app.buttons["start-location"].exists)
+        XCTAssertFalse(app.buttons["stop-location"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["field-safety-status"].label.contains("CRS required"))
         let picker = app.buttons["open-crs-picker"]
         for _ in 0..<6 where !picker.isHittable { pageUp(app) }
         picker.tap()
-        app.buttons["open-manual-epsg"].tap()
+        let manual = app.buttons["open-manual-epsg"]
+        for _ in 0..<6 where !manual.isHittable { pageUp(app) }
+        XCTAssertTrue(manual.waitForExistence(timeout: 10)); manual.tap()
         set("epsg-entry", "999999", in: app)
         app.buttons["select-epsg"].tap()
         let status = app.staticTexts["manual-epsg-status"]
@@ -268,9 +311,15 @@ final class RoadStationAppUITests: XCTestCase {
         waitForExpectations(timeout: 20)
         set("epsg-entry", "3857", in: app)
         app.buttons["select-epsg"].tap()
+        revealFieldSetup(app)
         XCTAssertTrue(app.staticTexts["confirmed-crs"].waitForExistence(timeout: 20))
         // Independent inverse spherical Mercator formula (R=6378137m),
         // E=1050,N=1995 US survey feet. No RoadStation inverse supplies this fix.
+        // No Start action: explicit CRS confirmation enables location automatically.
+        let liveStatus = app.descendants(matching: .any)["field-safety-status"]
+        expectation(for: NSPredicate(format: "value == %@", "active"), evaluatedWith: app.staticTexts["location-source"])
+        waitForExpectations(timeout: 10)
+        revealDebugLocation(app)
         set("injected-latitude", "0.005462450563693558", in: app)
         set("injected-longitude", "0.0028749739852440867", in: app)
         set("injected-accuracy", "4", in: app)
@@ -282,29 +331,119 @@ final class RoadStationAppUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["live-offset"].label.contains("5.0 ft RT"))
         XCTAssertTrue(app.staticTexts["location-source"].label.contains("DEBUG injected"))
         XCTAssertTrue(app.staticTexts["live-accuracy"].label.contains("13.1 ft"))
-        let card = app.otherElements["field-result-card"]
-        let freshFrame = card.frame
         attachment("phase2b-field-position", app: app)
-        let liveStatus = app.staticTexts["live-status"]
-        expectation(for: NSPredicate(format: "label == %@", "Stale — last known position"), evaluatedWith: liveStatus)
+        let canvas = app.otherElements["field-alignment-canvas"]
+        XCTAssertTrue(canvas.exists)
+        let freshCanvasFrame = canvas.frame
+        let freshStationFrame = station.frame
+        let readout = app.otherElements["field-result-card"]
+        let freshReadoutFrame = readout.frame
+        XCTAssertLessThanOrEqual(readout.frame.maxY - app.staticTexts["location-source"].frame.maxY, 32, "The card must hug its remaining content")
+        XCTAssertFalse(app.staticTexts["live-age"].exists, "No ticking fix-age counter")
+        canvas.coordinate(withNormalizedOffset: .init(dx: 0.75, dy: 0.65))
+            .press(forDuration: 0.1, thenDragTo: canvas.coordinate(withNormalizedOffset: .init(dx: 0.45, dy: 0.65)))
+        XCTAssertEqual(app.buttons["field-follow"].label, "Follow: Paused")
+        XCTAssertEqual(app.staticTexts["location-source"].value as? String, "active", "Browsing must keep the field session active")
+        app.buttons["field-recenter"].tap()
+        XCTAssertEqual(app.buttons["field-follow"].label, "Follow: Paused")
+        app.buttons["field-follow"].tap()
+        XCTAssertEqual(app.buttons["field-follow"].label, "Follow: On")
+        app.buttons["field-details-toggle"].tap()
+        XCTAssertEqual(app.staticTexts["location-source"].value as? String, "active", "Details must keep the field session active")
+        app.buttons["field-details-toggle"].tap()
+        for id in ["live-station", "live-offset", "live-accuracy", "location-source"] {
+            XCTAssertTrue(fullyVisible(app.staticTexts[id], in: app), "Primary field reading must be visible without scrolling: \(id)")
+        }
+        XCTAssertTrue(app.buttons["field-details-toggle"].label.contains("TANGENT"))
+        XCTAssertTrue(app.buttons["field-details-toggle"].isHittable)
+        XCTAssertFalse(app.staticTexts["Easting"].exists)
+        expectation(for: NSPredicate(format: "label CONTAINS %@", "Stale — last known position"), evaluatedWith: liveStatus)
         waitForExpectations(timeout: 12)
         XCTAssertEqual(station.label, "STA 100+50.00")
         XCTAssertTrue(app.staticTexts["live-offset"].label.contains("5.0 ft RT"))
         XCTAssertTrue(app.staticTexts["live-accuracy"].label.contains("13.1 ft"))
-        XCTAssertEqual(card.frame.height, freshFrame.height, accuracy: 1)
-        XCTAssertEqual(card.frame.minY, freshFrame.minY, accuracy: 1)
+        XCTAssertTrue((canvas.value as? String)?.contains("Last known position") == true)
+        XCTAssertEqual(canvas.frame.height, freshCanvasFrame.height, accuracy: 1, "Staleness must not resize the canvas")
+        XCTAssertEqual(station.frame.minY, freshStationFrame.minY, accuracy: 1)
+        XCTAssertEqual(readout.frame.height, freshReadoutFrame.height, accuracy: 1)
+        let safety = app.descendants(matching: .any)["field-safety-status"]
+        XCTAssertTrue(safety.label.contains("Stale"))
+        app.buttons["field-details-toggle"].tap()
+        XCTAssertTrue(fullyVisible(safety, in: app), "Safety status must stay visible when details expand")
+        app.buttons["field-details-toggle"].tap()
         attachment("phase2b-stale-last-known-position", app: app)
+        revealDebugLocation(app)
         let inject = app.buttons["inject-location"]
         for _ in 0..<6 where !inject.isHittable { pageUp(app) }
         inject.tap()
-        expectation(for: NSPredicate(format: "label == %@", "Location ready."), evaluatedWith: liveStatus)
+        expectation(for: NSPredicate(format: "label CONTAINS %@", "Current fix"), evaluatedWith: liveStatus)
         waitForExpectations(timeout: 10)
         XCTAssertEqual(station.label, "STA 100+50.00")
-        XCTAssertEqual(card.frame.height, freshFrame.height, accuracy: 1)
-        XCTAssertEqual(card.frame.minY, freshFrame.minY, accuracy: 1)
-        for _ in 0..<5 where !app.buttons["stop-location"].isHittable { pageUp(app) }
-        app.buttons["stop-location"].tap()
-        XCTAssertFalse(station.exists)
+        app.buttons["field-details-toggle"].tap()
+        XCTAssertEqual(app.buttons["field-details-toggle"].value as? String, "Expanded")
+        let expandedCanvasFrame = canvas.frame
+        let expandedStationFrame = station.frame
+        let expandedReadoutFrame = readout.frame
+        expectation(for: NSPredicate(format: "label CONTAINS %@", "Stale — last known position"), evaluatedWith: liveStatus)
+        waitForExpectations(timeout: 12)
+        XCTAssertEqual(canvas.frame.height, expandedCanvasFrame.height, accuracy: 1, "Staleness must not resize the expanded canvas")
+        XCTAssertEqual(station.frame.minY, expandedStationFrame.minY, accuracy: 1)
+        XCTAssertEqual(readout.frame.height, expandedReadoutFrame.height, accuracy: 1)
+        // Background stops/clears the synthetic fix. Foreground restarts device location.
+        XCUIDevice.shared.press(.home)
+        XCTAssertTrue(app.wait(for: .runningBackground, timeout: 10))
+        app.activate()
+        XCTAssertTrue(app.navigationBars["Field Position"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["location-source"].label.contains("DEBUG injected"))
+        expectation(for: NSPredicate(format: "value == %@", "active"), evaluatedWith: app.staticTexts["location-source"])
+        waitForExpectations(timeout: 10)
+        // Exiting and re-entering starts a new location visit, never reviving the debug fix.
+        app.navigationBars.buttons.firstMatch.tap()
+        app.buttons["open-field-position"].tap()
+        XCTAssertTrue(app.navigationBars["Field Position"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["location-source"].label.contains("DEBUG injected"))
+        expectation(for: NSPredicate(format: "value == %@", "active"), evaluatedWith: app.staticTexts["location-source"])
+        waitForExpectations(timeout: 10)
+        attachment("field-auto-resumed", app: app)
+    }
+
+    @MainActor
+    func testFieldPositionLargeTextReadout() throws {
+        let app = makeApp()
+        app.launchArguments += ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        app.launch(); app.activate()
+        sample("tangent-only", alignment: "TANGENT", in: app)
+        app.buttons["open-field-position"].tap()
+        app.buttons["open-crs-picker"].tap()
+        let manual = app.buttons["open-manual-epsg"]
+        for _ in 0..<12 where !manual.isHittable { pageUp(app) }
+        XCTAssertTrue(manual.waitForExistence(timeout: 10)); manual.tap()
+        set("epsg-entry", "3857", in: app); app.buttons["select-epsg"].tap()
+        XCTAssertTrue(app.navigationBars["Field Position"].waitForExistence(timeout: 20))
+        revealDebugLocation(app)
+        set("injected-latitude", "0.005462450563693558", in: app)
+        set("injected-longitude", "0.0028749739852440867", in: app)
+        set("injected-accuracy", "40", in: app)
+        let inject = app.buttons["inject-location"]
+        for _ in 0..<5 where !inject.isHittable { pageUp(app) }
+        inject.tap()
+        let station = app.staticTexts["live-station"]
+        XCTAssertTrue(station.waitForExistence(timeout: 10))
+        XCTAssertEqual(station.label, "STA 100+50.00")
+        XCTAssertGreaterThan(station.frame.height, 60, "Station must follow the accessibility text size")
+        XCTAssertLessThanOrEqual(station.frame.maxX, app.frame.width)
+        attachment("field-accessibility-reading", app: app)
+        let status = app.descendants(matching: .any)["field-safety-status"]
+        expectation(for: NSPredicate(format: "label CONTAINS %@", "Stale — last known position"), evaluatedWith: status)
+        waitForExpectations(timeout: 12)
+        XCTAssertGreaterThan(status.frame.height, 30, "Large warnings must wrap without a fixed-height cap")
+        let safety = app.descendants(matching: .any)["field-safety-status"]
+        XCTAssertTrue(safety.label.contains("Stale")); XCTAssertTrue(safety.label.contains("Poor GPS accuracy"))
+        XCTAssertTrue(fullyVisible(safety, in: app))
+        XCTAssertGreaterThanOrEqual(safety.frame.minY, app.otherElements["field-result-card"].frame.maxY, "Warnings must not cover the reading")
+        attachment("field-accessibility-stale", app: app)
+        safety.swipeUp()
+        attachment("field-accessibility-warning-scrolled", app: app)
     }
 
     @MainActor
@@ -326,6 +465,7 @@ final class RoadStationAppUITests: XCTestCase {
         let manual = app.buttons["open-manual-epsg"]
         for _ in 0..<5 where !manual.isHittable { pageUp(app) }
         manual.tap(); set("epsg-entry", "3857", in: app); app.buttons["select-epsg"].tap()
+        revealFieldSetup(app)
         XCTAssertTrue(app.staticTexts["confirmed-crs"].waitForExistence(timeout: 20))
         XCTAssertTrue(app.staticTexts["confirmed-crs"].label.contains("EPSG:3857"))
         // Wait for the actual persistence summary, not a sleep before termination.
