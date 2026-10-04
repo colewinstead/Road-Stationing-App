@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        AA2100000000000000000001 /* PROJTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2100000000000000000002; };
+        AA2100000000000000000003 /* RoadStationAppleCRS in Frameworks */ = {isa = PBXBuildFile; productRef = AA2000000000000000000002; };
+        AA2100000000000000000004 /* RoadStationCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9416473BB73196B98F9D9179; };
+        AA2000000000000000000001 /* RoadStationAppleCRS in Frameworks */ = {isa = PBXBuildFile; productRef = AA2000000000000000000002 /* RoadStationAppleCRS */; };
 		1C25D3719CB905525B1D275B /* RoadStationCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9416473BB73196B98F9D9179 /* RoadStationCore */; };
 		2C2DA6C7582597BE73DC2212 /* HarnessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02ED327C0C200E36EA3C127 /* HarnessModels.swift */; };
 		3807083D4CFF4C22BFB69624 /* RoadStationHarnessSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 6C87784D531E27D1B09F679F /* RoadStationHarnessSupport */; };
@@ -14,6 +18,7 @@
 		5313DC5FC69B0B3C0D5399ED /* RoadStationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B817370553D80DC7055C5FA /* RoadStationApp.swift */; };
 		57DBFF4AC376AF1A8889EEE8 /* AlignmentWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087258D24147E494D097E46B /* AlignmentWorkspace.swift */; };
 		58F21583C02AB75BCF4984EF /* RoadStationAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C81621AAE29089F81101CE /* RoadStationAppUITests.swift */; };
+		5D63C0C83071CA61001A1843 /* Projections in Frameworks */ = {isa = PBXBuildFile; productRef = 5D63C0C73071CA61001A1843 /* Projections */; };
 		6BDDCE138579CC7B8102BE8E /* spiral-curve-spiral.xml in Resources */ = {isa = PBXBuildFile; fileRef = 39238F0D1E9386F047DC3389 /* spiral-curve-spiral.xml */; };
 		7D3F212ADBAB371F4A526D0A /* tangent-only.xml in Resources */ = {isa = PBXBuildFile; fileRef = 49F54C8292662431A6ED9B35 /* tangent-only.xml */; };
 		8A07B9645B1C5ABEF8BF608A /* ProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4336B936E428910889ED0DD /* ProjectView.swift */; };
@@ -35,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+        AA2100000000000000000002 /* PROJTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRSAdapter/Tests/RoadStationAppleCRSTests/PROJTransformerTests.swift; sourceTree = SOURCE_ROOT; };
+        AA2100000000000000000005 /* RoadStationCRSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = RoadStationCRSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0112DAE3F84CB4DF5179BE01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		087258D24147E494D097E46B /* AlignmentWorkspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlignmentWorkspace.swift; sourceTree = "<group>"; };
 		27C1550842DE5BEFE616C28B /* References/sr82_synthetic.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = References/sr82_synthetic.xml; sourceTree = "<group>"; };
@@ -54,6 +61,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+        AA2100000000000000000006 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (AA2100000000000000000003, AA2100000000000000000004,); runOnlyForDeploymentPostprocessing = 0; };
 		0462E937CBCD8BD8E076D90C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -65,6 +73,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA2000000000000000000001 /* RoadStationAppleCRS in Frameworks */,
+				5D63C0C83071CA61001A1843 /* Projections in Frameworks */,
 				1C25D3719CB905525B1D275B /* RoadStationCore in Frameworks */,
 				3807083D4CFF4C22BFB69624 /* RoadStationHarnessSupport in Frameworks */,
 			);
@@ -113,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				3A2A88DEEFF3D1D23E496597 /* RoadStationApp */,
+				AA2100000000000000000002 /* PROJTransformerTests.swift */,
 				732DD74D4ACEA31527451D52 /* RoadStationAppUITests */,
 				2C86181283459818EDE44241 /* Existing synthetic fixtures */,
 				FBDC4F23F93125BBEEAE800C /* Products */,
@@ -123,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				38A007151ABE87CC01A5B6E9 /* RoadStationApp.app */,
+				AA2100000000000000000005 /* RoadStationCRSTests.xctest */,
 				81F9A9EC30C8C1B2E0812CD9 /* RoadStationAppUITests.xctest */,
 			);
 			name = Products;
@@ -131,6 +143,17 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+        AA2100000000000000000008 /* RoadStationCRSTests */ = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = AA2100000000000000000009;
+            buildPhases = (AA2100000000000000000007, AA2100000000000000000006,);
+            buildRules = (); dependencies = ();
+            name = RoadStationCRSTests;
+            packageProductDependencies = (AA2000000000000000000002, 9416473BB73196B98F9D9179,);
+            productName = RoadStationCRSTests;
+            productReference = AA2100000000000000000005;
+            productType = "com.apple.product-type.bundle.unit-test";
+        };
 		04CCEB446C78AE06815CED74 /* RoadStationAppUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16229FB490A6BE52FDC09FDC /* Build configuration list for PBXNativeTarget "RoadStationAppUITests" */;
@@ -165,6 +188,8 @@
 			packageProductDependencies = (
 				9416473BB73196B98F9D9179 /* RoadStationCore */,
 				6C87784D531E27D1B09F679F /* RoadStationHarnessSupport */,
+				AA2000000000000000000002 /* RoadStationAppleCRS */,
+				5D63C0C73071CA61001A1843 /* Projections */,
 			);
 			productName = RoadStationApp;
 			productReference = 38A007151ABE87CC01A5B6E9 /* RoadStationApp.app */;
@@ -198,13 +223,16 @@
 			);
 			mainGroup = B28B7AF69320201D1CF206EB;
 			packageReferences = (
+				AA2000000000000000000003 /* XCLocalSwiftPackageReference "CRSAdapter" */,
 				5896047EEAE44FC0E9857DDD /* XCLocalSwiftPackageReference ".." */,
+				5D63C0C63071CA61001A1843 /* XCRemoteSwiftPackageReference "projections-ios" */,
 			);
 			productRefGroup = FBDC4F23F93125BBEEAE800C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				4F6027D858B72CC70E5CC8E9 /* RoadStationApp */,
+				AA2100000000000000000008 /* RoadStationCRSTests */,
 				04CCEB446C78AE06815CED74 /* RoadStationAppUITests */,
 			);
 		};
@@ -233,6 +261,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+        AA2100000000000000000007 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (AA2100000000000000000001,); runOnlyForDeploymentPostprocessing = 0; };
 		2D764CD838DB39F040AA7EC4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -266,6 +295,18 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+        AA2100000000000000000010 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {
+            CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES;
+            IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.colewinstead.RoadStationCRSTests;
+            PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos;
+            SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = 1;
+        }; name = Debug; };
+        AA2100000000000000000011 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {
+            CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES;
+            IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.colewinstead.RoadStationCRSTests;
+            PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos;
+            SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = 1;
+        }; name = Release; };
 		1B7AD7D6325B0652C5A3BAAC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -401,6 +442,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+        AA2100000000000000000009 = {isa = XCConfigurationList; buildConfigurations = (AA2100000000000000000010, AA2100000000000000000011,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 		16229FB490A6BE52FDC09FDC /* Build configuration list for PBXNativeTarget "RoadStationAppUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -431,13 +473,31 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+        AA2000000000000000000003 /* XCLocalSwiftPackageReference "CRSAdapter" */ = {isa = XCLocalSwiftPackageReference; relativePath = CRSAdapter; };
 		5896047EEAE44FC0E9857DDD /* XCLocalSwiftPackageReference ".." */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ..;
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		5D63C0C63071CA61001A1843 /* XCRemoteSwiftPackageReference "projections-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ngageoint/projections-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+        AA2000000000000000000002 /* RoadStationAppleCRS */ = {isa = XCSwiftPackageProductDependency; package = AA2000000000000000000003 /* XCLocalSwiftPackageReference "CRSAdapter" */; productName = RoadStationAppleCRS; };
+		5D63C0C73071CA61001A1843 /* Projections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D63C0C63071CA61001A1843 /* XCRemoteSwiftPackageReference "projections-ios" */;
+			productName = Projections;
+		};
 		6C87784D531E27D1B09F679F /* RoadStationHarnessSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RoadStationHarnessSupport;

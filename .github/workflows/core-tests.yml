@@ -19,6 +19,9 @@ jobs:
       - run: swift --version
       - run: swift test
       - run: swift test -c release
+      - name: Test Apple CRS adapter against NGA PROJ
+        if: runner.os == 'macOS'
+        run: swift test --package-path RoadStationApp/CRSAdapter
       - name: Validate and export sample cases
         run: swift run roadstation-validate Tests/Fixtures/tangent-only.xml Tests/Fixtures/validation-cases.json validation-output/analytic
       - uses: actions/upload-artifact@v4
@@ -31,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: xcodebuild -version
-      - name: Build Phase 1.5 iPhone harness
+      - name: Build Phase 2A iPhone harness
         run: >-
           xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj
           -scheme RoadStationApp -configuration Debug

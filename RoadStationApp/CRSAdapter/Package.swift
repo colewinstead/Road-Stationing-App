@@ -1,0 +1,25 @@
+// swift-tools-version: 6.0
+import PackageDescription
+
+// Apple-only dependency boundary. The root/core package has no external dependency.
+let package = Package(
+    name: "RoadStationAppleCRS",
+    platforms: [.iOS(.v17), .macOS(.v14)],
+    products: [.library(name: "RoadStationAppleCRS", targets: ["RoadStationAppleCRS"])],
+    dependencies: [
+        .package(path: "../.."),
+        .package(url: "https://github.com/ngageoint/projections-ios.git", exact: "3.0.0"),
+        .package(url: "https://github.com/ngageoint/PROJ.git", exact: "9.4.2")
+    ],
+    targets: [
+        .target(name: "ProjectionResources", dependencies: [
+            .product(name: "Projections", package: "projections-ios")
+        ]),
+        .target(name: "RoadStationAppleCRS", dependencies: [
+            .product(name: "RoadStationCore", package: "Road-Stationing-App"),
+            .product(name: "Projections", package: "projections-ios"),
+            .product(name: "proj", package: "PROJ"), "ProjectionResources"
+        ]),
+        .testTarget(name: "RoadStationAppleCRSTests", dependencies: ["RoadStationAppleCRS"])
+    ]
+)

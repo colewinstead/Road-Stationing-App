@@ -1,9 +1,11 @@
-# RoadStationApp — Phase 1.5 developer harness
+# RoadStationApp — Phase 2A developer harness
 
 A session-only SwiftUI iPhone harness for the authoritative RoadStationCore
-package. It provides manual horizontal geometry inspection before real ORD
-numerical comparison. **Independent ORD validation is pending. Phase 2 GPS/CRS
-functionality remains blocked.** No expected ORD results are bundled.
+package. It provides manual horizontal geometry inspection and CRS readiness
+after import. **CROSSGATES ORD validation passed 30/30 cases at 0.001 US survey
+foot tolerance.** CRS architecture and transformation tests are implemented;
+live GPS, MapKit and a production CRS picker remain unimplemented. See
+[PHASE2_CRS_REPORT.md](../PHASE2_CRS_REPORT.md). No expected ORD results are bundled.
 
 ## Open and run in Xcode
 
@@ -92,19 +94,21 @@ check fails, the valid inverse coordinate remains displayed and plotted.
 
 ```text
 Package.swift                       unchanged core product + harness helper product
-RoadStation/Core/                   authoritative engine (not copied or edited)
+RoadStation/Core/                   authoritative geometry + portable CRS model
 RoadStationApp/
-  RoadStationApp.xcodeproj/          app, UI-test target and shared scheme
+  RoadStationApp.xcodeproj/          app, UI/CRS test targets and shared schemes
   RoadStationApp/                    SwiftUI screens, models and Info.plist
   HarnessSupport/                   planar viewport and input parsing only
   HarnessSupportTests/              platform-independent helper tests
   RoadStationAppUITests/             actual simulator UI flows
+  CRSAdapter/                       NGA PROJ adapter and shared macOS/iOS CRS tests
 ```
 
-The Xcode app target links **RoadStationCore** and **RoadStationHarnessSupport**
-via the repository's local Swift package. The helper product contains only UI
-coordinate conversion and text adapters. Existing core source/test targets are
-unchanged. Sample resource references point directly to five checked-in fixture
+The Xcode app target links **RoadStationCore**, **RoadStationHarnessSupport**,
+**RoadStationAppleCRS** and the installed **Projections** product. The core package
+remains independent of projection libraries and Apple location/map frameworks.
+The harness helper contains only viewport and manual-input adapters. Phase 2A
+adds CRS models/import identification without editing validated geometry. Sample resource references point directly to five checked-in fixture
 files; these sources are not duplicated in the repository. Debug sample controls
 explicitly identify every sample as synthetic, including projected SR 82.
 
@@ -119,7 +123,8 @@ tools/Test-iOS-Harness.sh YOUR_SIMULATOR_UDID
 The script builds/installs the app, stages synthetic `.xml`/`.landxml` and malformed
 inputs in Simulator Files, and runs the shared scheme's UI tests without parallel
 simulator cloning. Results go under ignored `validation-output/phase15/`.
-Existing core suite: **142 tests**. New helper suite: **6 tests**. See the root
+Core suite: **151 tests** (142 existing + 9 CRS). Helper suite: **6 tests**.
+Apple CRS adapter suite: **12 tests**, run on macOS and iOS Simulator. See the root
 `PHASE15_REPORT.md` for actual simulator/build/UI outcomes and screenshot evidence.
 UI import tests need the staged files; run the script before running them in Xcode.
 
@@ -134,12 +139,12 @@ field-location validation.
 | Production/App Store distribution | **NOT VERIFIED** |
 | CoreLocation/GPS field behavior | **NOT IMPLEMENTED / NOT VERIFIED** |
 | MapKit/geographic maps | **NOT IMPLEMENTED / NOT VERIFIED** |
-| CRS transformations | **NOT IMPLEMENTED** |
-| Independent ORD numerical validation | **STILL PENDING** |
+| CRS transformations | **IMPLEMENTED** — Apple-only adapter; no live location |
+| Independent ORD numerical validation | **PASSED 30/30** — CROSSGATES, 0.001 US survey foot |
 
 ## Intentional limits
 
-Developer harness only: no geographic map, CRS transformation, CoreLocation,
+Developer harness only: no geographic map, CRS picker, CoreLocation,
 GPS/GNSS, camera, photos, reports, account, database or cloud service. Drawing
 accuracy uses the core's fixed 0.05 source-unit chord-error sampling; deeper zoom
 magnifies its display approximation, while calculations remain independent.
@@ -151,5 +156,13 @@ iPhone installation/launch is verified; broader on-device workflow or
 field-location validation is not claimed. Production/App Store distribution is
 **NOT VERIFIED**; release packaging and App Store readiness are outside this phase.
 
-The next engineering gate is independent ORD numerical comparison, including
-real clothoids and station equations. This harness does not satisfy that gate.
+The next Phase 2B step is explicit user CRS selection/confirmation and a
+controlled CoreLocation adapter with accuracy gating. Phase 2A does not establish
+field-location or survey accuracy. The CRS adapter is independently testable:
+
+```sh
+swift test --package-path RoadStationApp/CRSAdapter
+xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj \
+  -scheme RoadStationCRSTests \
+  -destination "platform=iOS Simulator,id=YOUR_SIMULATOR_UDID" test
+```

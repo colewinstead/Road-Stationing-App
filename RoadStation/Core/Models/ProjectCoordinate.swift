@@ -21,8 +21,3 @@ public struct Vector2: Equatable, Sendable {
     /// Survey bearing: clockwise from north, radians in [0, 2π).
     public var bearing: Double { GeometryUtilities.normalizedAngle(atan2(x, y)) }
 }
-
-/// Future projection adapters implement this outside the geometry engine.
-public protocol ProjectCoordinateTransformer: Sendable {
-    func projectCoordinate(latitude: Double, longitude: Double) throws -> ProjectCoordinate
-}

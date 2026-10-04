@@ -9,9 +9,9 @@ struct ProjectView: View {
         NavigationStack {
             List {
                 Section {
-                    Label("Phase 1.5 developer harness", systemImage: "wrench.and.screwdriver")
+                    Label("Phase 2A developer harness", systemImage: "wrench.and.screwdriver")
                         .font(.subheadline).foregroundStyle(.secondary)
-                    Text("Horizontal engineering coordinates. Independent ORD numerical validation is pending.")
+                    Text("Horizontal engineering coordinates. CROSSGATES ORD validation passed 30/30 cases at 0.001 US survey foot tolerance.")
                         .font(.footnote).foregroundStyle(.secondary)
                     Button { showImporter = true } label: { Label("Import LandXML", systemImage: "square.and.arrow.down") }
                         .accessibilityIdentifier("import-landxml").disabled(model.isImporting)
@@ -25,6 +25,7 @@ struct ProjectView: View {
                         LabeledContent("Name", value: project.name)
                         LabeledContent("Units", value: unitName(project.unit))
                         LabeledContent("Coordinate system", value: project.coordinateSystemDescription ?? "Not specified")
+                        LabeledContent("CRS readiness", value: crsReadinessText(model.crsReadiness))
                         LabeledContent("Alignments", value: String(project.alignments.count))
                         Text(model.source).font(.caption).foregroundStyle(.secondary)
                     }
@@ -60,7 +61,7 @@ struct ProjectView: View {
                     Text("Samples test the harness. They are not real ORD numerical validation.").font(.caption).foregroundStyle(.secondary)
                 }
                 #endif
-                Section { Text("GPS: Not available in Phase 1.5\nImported project data exists only for this session.").font(.footnote).foregroundStyle(.secondary) }
+                Section { Text("Live GPS is not implemented.\nImported project data exists only for this session.").font(.footnote).foregroundStyle(.secondary) }
             }
             .navigationTitle("RoadStation")
             .fileImporter(isPresented: $showImporter, allowedContentTypes: [.xml, UTType(importedAs: "com.roadstation.landxml", conformingTo: .xml)]) { result in
@@ -70,6 +71,14 @@ struct ProjectView: View {
                 }
             }
         }
+    }
+}
+
+func crsReadinessText(_ readiness: CRSReadiness) -> String {
+    switch readiness {
+    case .unresolved: "Unresolved — CRS selection required before geographic conversion"
+    case .unavailable(let error): error.localizedDescription
+    case .ready(let definition): "\(definition.crs.identifier) — horizontal conversion available"
     }
 }
 

@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import RoadStationCore
 import RoadStationHarnessSupport
+import RoadStationAppleCRS
 
 @MainActor
 final class ProjectModel: ObservableObject {
@@ -9,6 +10,7 @@ final class ProjectModel: ObservableObject {
     @Published var source = ""
     @Published var error: String?
     @Published var isImporting = false
+    @Published var crsReadiness: CRSReadiness = .unresolved(.missingIdentification)
 
     func importFile(_ url: URL, sourceLabel: String? = nil) {
         guard !isImporting else { return }
@@ -19,9 +21,13 @@ final class ProjectModel: ObservableObject {
                     let accessed = url.startAccessingSecurityScopedResource()
                     defer { if accessed { url.stopAccessingSecurityScopedResource() } }
                     // Read while scoped access is active; retain only the parsed session model.
-                    return try LandXMLParser().parse(url: url)
+                    let project = try LandXMLParser().parse(url: url)
+                    let readiness = PROJProjectCoordinateTransformer.readiness(
+                        resolution: project.crsResolution, outputUnit: .linear(project.unit))
+                    return (project, readiness)
                 }.value
-                project = imported; source = sourceLabel ?? url.lastPathComponent
+                project = imported.0; crsReadiness = imported.1
+                source = sourceLabel ?? url.lastPathComponent
             } catch { self.error = error.localizedDescription }
             isImporting = false
         }
