@@ -3,9 +3,11 @@ import SwiftUI
 import RoadStationCore
 import RoadStationHarnessSupport
 import RoadStationAppleCRS
+import RoadStationFieldPosition
 
 @MainActor
 final class ProjectModel: ObservableObject {
+    let field = FieldPositionSession(service: CoreLocationService())
     @Published var project: Project?
     @Published var source = ""
     @Published var error: String?
@@ -27,6 +29,7 @@ final class ProjectModel: ObservableObject {
                     return (project, readiness)
                 }.value
                 project = imported.0; crsReadiness = imported.1
+                field.load(project: imported.0)
                 source = sourceLabel ?? url.lastPathComponent
             } catch { self.error = error.localizedDescription }
             isImporting = false

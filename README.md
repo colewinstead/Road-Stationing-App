@@ -5,7 +5,7 @@ platform-independent Swift core. The current implementation imports LandXML
 horizontal alignments and performs planar station/offset calculations for lines,
 circular curves, clothoid spirals and station equations.
 
-The repository currently has three completed development milestones:
+The repository currently has five development milestones:
 
 - **Phase 1 — RoadStationCore:** portable calculation engine, LandXML parser,
   validation CLI and core test suite.
@@ -15,14 +15,23 @@ The repository currently has three completed development milestones:
 - **Phase 2A — CRS architecture:** portable CRS models and an Apple-only NGA
   PROJ adapter with explicit axis/unit handling and transformation tests. See
   [PHASE2_CRS_REPORT.md](PHASE2_CRS_REPORT.md).
+- **Phase 2B — live field position:** explicit project EPSG confirmation/selection,
+  foreground When In Use CoreLocation, freshness/accuracy status and the existing
+  station/offset engine. See [PHASE2B_LOCATION_REPORT.md](PHASE2B_LOCATION_REPORT.md).
+- **Phase 2B.1 — CRS picker:** searchable EPSG metadata, nationwide State Plane
+  browse and one-shot location recommendations with explicit confirmation.
+  Advanced manual EPSG remains available. See
+  [PHASE2B1_CRS_PICKER_REPORT.md](PHASE2B1_CRS_PICKER_REPORT.md).
 
 The Phase 1.5 app has been built and tested in the iPhone Simulator and has also
 been installed and launched successfully on a physical iPhone using Xcode
 automatic signing.
 
-**RoadStation is not surveying software.** CoreLocation/GNSS and MapKit remain
-unimplemented. The CRS adapter transforms explicitly supplied WGS84 coordinates;
-the app does not yet provide live phone-location stationing or a CRS picker.
+**RoadStation is not surveying software.** Field Position uses foreground phone
+location after explicit CRS confirmation. It shows GPS accuracy and withholds
+new calculations from stale/invalid fixes while retaining an explicitly labeled
+last-known snapshot during an active session. Physical-device field validation is still needed. MapKit
+and production persistence remain unimplemented.
 
 A real OpenRoads Designer validation dataset is checked in under
 [Validation/RealORD/CROSSGATES](Validation/RealORD/CROSSGATES/README.md). It
@@ -55,6 +64,7 @@ Validation/
   RealORD/CROSSGATES/                 Real ORD source data and validation cases
 tools/Test-Windows.ps1                Windows build/test helper
 tools/Test-iOS-Harness.sh             Simulator UI-test helper
+tools/Generate-CRS-Catalog.py          Repeatable metadata extraction from NGA proj.db
 .github/workflows/core-tests.yml      Core checks + iOS Simulator build
 ```
 
@@ -294,7 +304,8 @@ This implementation was originally compiled and tested on Windows with Swift 6.4
 The macOS Phase 1 audit and local debug/release results are recorded in
 [PHASE1_MACOS_AUDIT.md](PHASE1_MACOS_AUDIT.md). Phase 1.5 is documented in
 [PHASE15_REPORT.md](PHASE15_REPORT.md). CI covers the macOS/Linux core package
-matrix and an iOS Simulator build. The Phase 1.5 app has also been installed and
+matrix, CROSSGATES, Apple field-position/CRS tests, an iOS Simulator build and the
+explicit CRS/injected-position UI flow. The Phase 1.5 app has also been installed and
 launched on a physical iPhone. Production/App Store distribution and live GPS
 behavior remain unverified. Phase 2A CRS tests pass on macOS and iOS Simulator.
 Swift 6.4 Windows
@@ -368,7 +379,8 @@ The current comparison tolerance is 0.001 US survey foot for station, offset
 and coordinate error. Preserve failed cases and investigate source revision,
 units, coordinate convention, equation branch and report rounding before
 changing tolerances. The Phase 2A regression run passed all 30 cases without
-changing source geometry or tolerances.
+changing source geometry or tolerances. Phase 2B also passes all 30 with the same
+case file and tolerance definitions.
 
 ## Product roadmap
 
@@ -446,10 +458,6 @@ because it aligns visually.
 - The synthetic Civil 3D-labelled reference spiral has an inconsistent endpoint
   and is deliberately rejected. It is not an external accuracy benchmark.
 - RoadStationApp is currently a developer harness with session-only state. It does
-  not yet include production persistence, CoreLocation/GNSS, MapKit, a CRS
-  picker, camera/photo workflows, cloud sync or App Store distribution.
+  not yet include production persistence, MapKit, background location,
+  camera/photo workflows, cloud sync or App Store distribution.
 
-Next Phase 2B: explicit project CRS selection/confirmation, followed by the
-app-side CoreLocation boundary with accuracy/staleness gating and controlled
-known-point validation. See [PHASE2_CRS_REPORT.md](PHASE2_CRS_REPORT.md) for adapter
-limitations and the completed Phase 2A verification.
