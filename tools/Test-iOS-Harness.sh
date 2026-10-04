@@ -24,11 +24,12 @@ app_data_dir="$(xcrun simctl get_app_container "$simulator_id" com.colewinstead.
 mkdir -p "$app_data_dir/Documents"
 cp Tests/Fixtures/tangent-only.xml "$app_data_dir/Documents/import-check.landxml"
 cp Tests/Fixtures/tangent-only.xml "$app_data_dir/Documents/import-xml.xml"
+cp Tests/Fixtures/multiple-alignments.xml "$app_data_dir/Documents/import-multi.landxml"
 cp Tests/Fixtures/malformed.xml "$app_data_dir/Documents/malformed.xml"
 xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj -scheme RoadStationApp \
   -configuration Debug -destination "platform=iOS Simulator,id=$simulator_id" \
   -derivedDataPath "$build_dir" -resultBundlePath "$results_dir" \
   -parallel-testing-enabled NO -collect-test-diagnostics never \
   -test-timeouts-enabled YES -default-test-execution-time-allowance 300 \
-  -maximum-test-execution-time-allowance 300 CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test
+  -maximum-test-execution-time-allowance 420 CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test
 printf 'Result bundle: %s\n' "$results_dir"

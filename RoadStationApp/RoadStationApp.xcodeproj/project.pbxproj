@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        DD2200000000000000000009 = {isa = PBXBuildFile; fileRef = DD220000000000000000000A; };
+        DD2200000000000000000001 = {isa = PBXBuildFile; productRef = DD2200000000000000000002; };
+        DD2200000000000000000003 = {isa = PBXBuildFile; productRef = DD2200000000000000000002; };
+        DD2200000000000000000004 = {isa = PBXBuildFile; fileRef = DD2200000000000000000005; };
+        DD2200000000000000000006 = {isa = PBXBuildFile; fileRef = DD2200000000000000000007; };
         CC2100000000000000000001 = {isa = PBXBuildFile; fileRef = CC2100000000000000000002; };
         CC2100000000000000000003 = {isa = PBXBuildFile; productRef = CC2100000000000000000004; };
         CC2100000000000000000005 = {isa = PBXBuildFile; productRef = CC2100000000000000000004; };
@@ -48,6 +53,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+        DD220000000000000000000A = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ../Validation/RealORD/CROSSGATES/CROSSGATES.xml; sourceTree = SOURCE_ROOT; };
+        DD2200000000000000000005 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedProjectsModel.swift; sourceTree = "<group>"; };
+        DD2200000000000000000007 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRSAdapter/Tests/RoadStationProjectsTests/ProjectRepositoryTests.swift; sourceTree = SOURCE_ROOT; };
         CC2100000000000000000002 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRSPickerView.swift; sourceTree = "<group>"; };
         CC2100000000000000000007 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRSAdapter/Tests/RoadStationCRSCatalogTests/CRSCatalogTests.swift; sourceTree = SOURCE_ROOT; };
         BB2000000000000000000002 /* FieldPositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldPositionView.swift; sourceTree = "<group>"; };
@@ -73,7 +81,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-        AA2100000000000000000006 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (AA2100000000000000000003, AA2100000000000000000004, BB2000000000000000000005, CC2100000000000000000005,); runOnlyForDeploymentPostprocessing = 0; };
+        AA2100000000000000000006 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (DD2200000000000000000003, AA2100000000000000000003, AA2100000000000000000004, BB2000000000000000000005, CC2100000000000000000005,); runOnlyForDeploymentPostprocessing = 0; };
 		0462E937CBCD8BD8E076D90C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -86,7 +94,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB2000000000000000000003 /* RoadStationFieldPosition in Frameworks */,
-                CC2100000000000000000003,
+                CC2100000000000000000003, DD2200000000000000000001,
 				AA2000000000000000000001 /* RoadStationAppleCRS in Frameworks */,
 				5D63C0C83071CA61001A1843 /* Projections in Frameworks */,
 				1C25D3719CB905525B1D275B /* RoadStationCore in Frameworks */,
@@ -119,7 +127,7 @@
 				D02ED327C0C200E36EA3C127 /* HarnessModels.swift */,
 				FAF2DDECD07C30D1C8C8C6AB /* InspectionViews.swift */,
 				BB2000000000000000000002 /* FieldPositionView.swift */,
-                CC2100000000000000000002,
+                CC2100000000000000000002, DD2200000000000000000005,
 				B4336B936E428910889ED0DD /* ProjectView.swift */,
 				3B817370553D80DC7055C5FA /* RoadStationApp.swift */,
 				0112DAE3F84CB4DF5179BE01 /* Info.plist */,
@@ -140,7 +148,7 @@
 			children = (
 				3A2A88DEEFF3D1D23E496597 /* RoadStationApp */,
 				BB2000000000000000000007 /* FieldPositionTests.swift */,
-                CC2100000000000000000007,
+                CC2100000000000000000007, DD2200000000000000000007,
 				AA2100000000000000000002 /* PROJTransformerTests.swift */,
 				732DD74D4ACEA31527451D52 /* RoadStationAppUITests */,
 				2C86181283459818EDE44241 /* Existing synthetic fixtures */,
@@ -164,10 +172,10 @@
         AA2100000000000000000008 /* RoadStationCRSTests */ = {
             isa = PBXNativeTarget;
             buildConfigurationList = AA2100000000000000000009;
-            buildPhases = (AA2100000000000000000007, AA2100000000000000000006,);
+            buildPhases = (AA2100000000000000000007, AA2100000000000000000006, DD2200000000000000000008,);
             buildRules = (); dependencies = ();
             name = RoadStationCRSTests;
-            packageProductDependencies = (AA2000000000000000000002, 9416473BB73196B98F9D9179, BB2000000000000000000004, CC2100000000000000000004,);
+            packageProductDependencies = (AA2000000000000000000002, 9416473BB73196B98F9D9179, BB2000000000000000000004, CC2100000000000000000004, DD2200000000000000000002,);
             productName = RoadStationCRSTests;
             productReference = AA2100000000000000000005;
             productType = "com.apple.product-type.bundle.unit-test";
@@ -207,7 +215,7 @@
 				9416473BB73196B98F9D9179 /* RoadStationCore */,
 				6C87784D531E27D1B09F679F /* RoadStationHarnessSupport */,
 				BB2000000000000000000004 /* RoadStationFieldPosition */,
-                CC2100000000000000000004,
+                CC2100000000000000000004, DD2200000000000000000002,
 				AA2000000000000000000002 /* RoadStationAppleCRS */,
 				5D63C0C73071CA61001A1843 /* Projections */,
 			);
@@ -259,6 +267,7 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+        DD2200000000000000000008 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (DD2200000000000000000009,); runOnlyForDeploymentPostprocessing = 0; };
 		0267DA67D63ACF3DC6A14A47 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -281,13 +290,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-        AA2100000000000000000007 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (AA2100000000000000000001, BB2000000000000000000006, CC2100000000000000000006,); runOnlyForDeploymentPostprocessing = 0; };
+        AA2100000000000000000007 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (AA2100000000000000000001, BB2000000000000000000006, CC2100000000000000000006, DD2200000000000000000006,); runOnlyForDeploymentPostprocessing = 0; };
 		2D764CD838DB39F040AA7EC4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
                 BB2000000000000000000001 /* FieldPositionView.swift in Sources */,
-                CC2100000000000000000001,
+                CC2100000000000000000001, DD2200000000000000000004,
 				57DBFF4AC376AF1A8889EEE8 /* AlignmentWorkspace.swift in Sources */,
 				CB49221565FAFE4F1D47DC7C /* EngineeringCanvas.swift in Sources */,
 				D31E9D7DCF76E373E5D6B435 /* EntryTools.swift in Sources */,
@@ -514,6 +523,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+        DD2200000000000000000002 = {isa = XCSwiftPackageProductDependency; package = AA2000000000000000000003; productName = RoadStationProjects; };
         CC2100000000000000000004 = {isa = XCSwiftPackageProductDependency; package = AA2000000000000000000003; productName = RoadStationCRSCatalog; };
         BB2000000000000000000004 /* RoadStationFieldPosition */ = {isa = XCSwiftPackageProductDependency; package = AA2000000000000000000003; productName = RoadStationFieldPosition; };
         AA2000000000000000000002 /* RoadStationAppleCRS */ = {isa = XCSwiftPackageProductDependency; package = AA2000000000000000000003 /* XCLocalSwiftPackageReference "CRSAdapter" */; productName = RoadStationAppleCRS; };

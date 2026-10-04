@@ -84,6 +84,17 @@ public final class FieldPositionSession: ObservableObject {
         guard let crs = try? CoordinateReferenceSystem(epsgCode: code) else { return }
         await select(crs: crs, provenance: .catalog, now: now)
     }
+    /// Restore a previously explicit confirmation, including its original provenance.
+    /// This still validates through the current backend; it never starts location.
+    public func restoreConfirmedCRS(code: Int, provenance: CRSSelectionProvenance, now: Date = Date()) async {
+        guard let crs = try? CoordinateReferenceSystem(epsgCode: code) else {
+            selectionRevision += 1; isValidatingCRS = false
+            invalidate(); transformer = nil; confirmedCRS = nil
+            status = .crsUnavailable("Saved CRS EPSG:\(code) is invalid. Choose and confirm another CRS.")
+            return
+        }
+        await select(crs: crs, provenance: provenance, now: now)
+    }
     private func select(crs: CoordinateReferenceSystem, provenance: CRSSelectionProvenance, now: Date) async {
         guard let project else { status = .crsRequired; return }
         selectionRevision += 1; isValidatingCRS = true

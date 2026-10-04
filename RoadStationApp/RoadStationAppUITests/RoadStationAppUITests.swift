@@ -3,6 +3,11 @@ import XCTest
 final class RoadStationAppUITests: XCTestCase {
     override func setUpWithError() throws { continueAfterFailure = false }
 
+    @MainActor private func makeApp() -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchEnvironment["ROADSTATION_TEST_STORAGE"] = UUID().uuidString
+        return app
+    }
     @MainActor
     private func pageUp(_ app: XCUIApplication) {
         app.coordinate(withNormalizedOffset: .init(dx: 0.94, dy: 0.88))
@@ -10,10 +15,17 @@ final class RoadStationAppUITests: XCTestCase {
     }
     @MainActor
     private func fullyVisible(_ element: XCUIElement, in app: XCUIApplication) -> Bool {
-        element.exists && element.isHittable && element.frame.minY > 110 && element.frame.maxY < app.frame.height - 70
+        guard element.exists else { return false }
+        let frame = element.frame
+        guard frame.minX.isFinite, frame.minY.isFinite, frame.width.isFinite, frame.height.isFinite,
+              frame.width > 0, frame.height > 0, frame.minY > 110, frame.maxY < app.frame.height - 70 else { return false }
+        return element.isHittable
     }
     @MainActor
     private func sample(_ name: String, alignment: String, in app: XCUIApplication) {
+        for _ in 0..<3 where !app.navigationBars["RoadStation"].exists {
+            if app.navigationBars.buttons.firstMatch.isHittable { app.navigationBars.buttons.firstMatch.tap() }
+        }
         let button = app.buttons["sample-\(name)"]
         for _ in 0..<6 where !fullyVisible(button, in: app) { pageUp(app) }
         XCTAssertTrue(button.waitForExistence(timeout: 5)); button.tap()
@@ -28,6 +40,7 @@ final class RoadStationAppUITests: XCTestCase {
         let field = app.textFields[id]
         for _ in 0..<5 where !field.isHittable { app.swipeUp() }
         XCTAssertTrue(field.waitForExistence(timeout: 5)); field.tap()
+        if !app.keyboards.firstMatch.waitForExistence(timeout: 3) { field.tap() }
         let previous = field.value as? String ?? ""
         if !previous.isEmpty, previous != field.placeholderValue { field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: previous.count)) }
         field.typeText(value)
@@ -40,7 +53,7 @@ final class RoadStationAppUITests: XCTestCase {
 
     @MainActor
     func testCanvasAndManualForwardInverse() throws {
-        let app = XCUIApplication(); app.launch(); app.activate()
+        let app = makeApp(); app.launch(); app.activate()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
         sample("tangent-only", alignment: "TANGENT", in: app)
         let canvas = app.otherElements["engineering-canvas"]
@@ -72,7 +85,7 @@ final class RoadStationAppUITests: XCTestCase {
 
     @MainActor
     func testStationEquationRequiresExplicitBranch() throws {
-        let app = XCUIApplication(); app.launch(); app.activate()
+        let app = makeApp(); app.launch(); app.activate()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
         sample("station-equations", alignment: "EQUATIONS", in: app)
         app.segmentedControls["workspace-tabs"].buttons["Entry"].tap()
@@ -89,7 +102,7 @@ final class RoadStationAppUITests: XCTestCase {
 
     @MainActor
     func testSyntheticSpiralAndLargeCoordinateDrawing() throws {
-        let app = XCUIApplication(); app.launch(); app.activate()
+        let app = makeApp(); app.launch(); app.activate()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
         sample("spiral-curve-spiral", alignment: "LSCSL", in: app)
         app.segmentedControls["workspace-tabs"].buttons["Info"].tap()
@@ -107,10 +120,12 @@ final class RoadStationAppUITests: XCTestCase {
     @MainActor
     private func pickFile(_ name: String, app: XCUIApplication) {
         let importButton = app.buttons["import-landxml"]
-        for _ in 0..<5 where !fullyVisible(importButton, in: app) { app.swipeDown() }
+        for _ in 0..<5 where !importButton.isHittable { app.swipeDown() }
+        expectation(for: NSPredicate(format: "enabled == true"), evaluatedWith: importButton)
+        waitForExpectations(timeout: 30)
         importButton.tap()
         let browse = app.tabBars["DOC.browsingModeTabBar"].buttons["Browse"]
-        XCTAssertTrue(browse.waitForExistence(timeout: 30)); browse.tap()
+        XCTAssertTrue(browse.waitForExistence(timeout: 60)); browse.tap()
         func cell(_ label: String) -> XCUIElement {
             app.cells.matching(NSPredicate(format: "label BEGINSWITH %@", label)).firstMatch
         }
@@ -141,7 +156,7 @@ final class RoadStationAppUITests: XCTestCase {
 
     @MainActor
     func testFilesPickerImportsBothExtensionsAndShowsErrors() throws {
-        let app = XCUIApplication(); app.launch(); app.activate()
+        let app = makeApp(); app.launch(); app.activate()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
         // The runner stages these synthetic files in shared Documents. This
         // exercises the actual system picker and security-scoped import path.
@@ -158,7 +173,7 @@ final class RoadStationAppUITests: XCTestCase {
 
     @MainActor
     func testMultipleAlignmentSelection() throws {
-        let app = XCUIApplication(); app.launch(); app.activate()
+        let app = makeApp(); app.launch(); app.activate()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
         sample("multiple-alignments", alignment: "NORTH", in: app)
         app.otherElements["engineering-canvas"].coordinate(withNormalizedOffset: .init(dx: 0.55, dy: 0.5)).tap()
@@ -167,7 +182,7 @@ final class RoadStationAppUITests: XCTestCase {
     }
     @MainActor
     func testCRSPickerSearchRecommendationConfirmationAndManualFallback() throws {
-        let app = XCUIApplication(); app.launch(); app.activate()
+        let app = makeApp(); app.launch(); app.activate()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
         sample("tangent-only", alignment: "TANGENT", in: app)
         let open = app.buttons["open-field-position"]
@@ -232,7 +247,7 @@ final class RoadStationAppUITests: XCTestCase {
 
     @MainActor
     func testFieldPositionExplicitCRSAndDebugPipeline() throws {
-        let app = XCUIApplication(); app.launch(); app.activate()
+        let app = makeApp(); app.launch(); app.activate()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
         sample("tangent-only", alignment: "TANGENT", in: app)
         let open = app.buttons["open-field-position"]
@@ -290,6 +305,69 @@ final class RoadStationAppUITests: XCTestCase {
         for _ in 0..<5 where !app.buttons["stop-location"].isHittable { pageUp(app) }
         app.buttons["stop-location"].tap()
         XCTAssertFalse(station.exists)
+    }
+
+    @MainActor
+    func testSavedProjectImportColdStartCRSAlignmentRenameAndDelete() throws {
+        executionTimeAllowance = 420 // Multiple cold launches and the real system Files UI.
+        let app = makeApp(); app.launch(); app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 30))
+        pickFile("import-multi", app: app)
+        revealImportedAlignment("NORTH", app: app)
+        XCTAssertTrue(app.descendants(matching: .any)["project-alignment-count"].exists)
+        app.buttons["alignment-NORTH"].tap()
+        XCTAssertTrue(app.otherElements["engineering-canvas"].waitForExistence(timeout: 10))
+        let field = app.buttons["open-field-position"]
+        for _ in 0..<5 where !field.isHittable { app.swipeDown() }
+        field.tap()
+        let choose = app.buttons["open-crs-picker"]
+        for _ in 0..<5 where !choose.isHittable { pageUp(app) }
+        choose.tap()
+        let manual = app.buttons["open-manual-epsg"]
+        for _ in 0..<5 where !manual.isHittable { pageUp(app) }
+        manual.tap(); set("epsg-entry", "3857", in: app); app.buttons["select-epsg"].tap()
+        XCTAssertTrue(app.staticTexts["confirmed-crs"].waitForExistence(timeout: 20))
+        XCTAssertTrue(app.staticTexts["confirmed-crs"].label.contains("EPSG:3857"))
+        // Wait for the actual persistence summary, not a sleep before termination.
+        app.navigationBars.buttons.firstMatch.tap(); app.navigationBars.buttons.firstMatch.tap()
+        XCTAssertTrue(app.descendants(matching: .any)["restored-alignment"].waitForExistence(timeout: 10))
+        for _ in 0..<6 where !app.staticTexts["project-save-status"].isHittable { app.swipeDown() }
+        expectation(for: NSPredicate(format: "label == %@", "Project saved"), evaluatedWith: app.staticTexts["project-save-status"])
+        waitForExpectations(timeout: 10)
+        attachment("phase2b2-selected-project", app: app)
+        app.terminate(); app.launch(); app.activate()
+        let saved = app.buttons["saved-project-import-multi"]
+        XCTAssertTrue(saved.waitForExistence(timeout: 20)); saved.tap()
+        let count = app.descendants(matching: .any)["project-alignment-count"]
+        XCTAssertTrue(count.waitForExistence(timeout: 10)); XCTAssertTrue(count.label.contains("2") || count.value as? String == "2")
+        let restored = app.descendants(matching: .any)["restored-alignment"]
+        XCTAssertTrue(restored.waitForExistence(timeout: 10)); XCTAssertTrue(restored.label.contains("NORTH") || (restored.value as? String)?.contains("NORTH") == true)
+        let confirmed = app.staticTexts["confirmed-crs"]
+        for _ in 0..<5 where !confirmed.isHittable { pageUp(app) }
+        XCTAssertTrue(confirmed.label.contains("EPSG:3857"))
+        attachment("phase2b2-cold-start-restored", app: app)
+        let rename = app.buttons["rename-project"]
+        for _ in 0..<7 where !rename.isHittable { pageUp(app) }
+        rename.tap()
+        XCTAssertTrue(app.navigationBars["Rename Project"].waitForExistence(timeout: 5))
+        set("rename-project-name", "Saved Road Test", in: app)
+        app.buttons["save-project-name"].tap()
+        XCTAssertTrue(app.navigationBars["Saved Road Test"].waitForExistence(timeout: 10))
+        app.terminate(); app.launch(); app.activate()
+        let renamed = app.buttons["saved-project-Saved Road Test"]
+        XCTAssertTrue(renamed.waitForExistence(timeout: 20)); renamed.tap()
+        let delete = app.buttons["delete-project"]
+        for _ in 0..<8 where !delete.isHittable { pageUp(app) }
+        delete.tap(); XCTAssertTrue(app.alerts["Delete Project?"].waitForExistence(timeout: 5))
+        app.alerts.buttons["Cancel"].firstMatch.tap()
+        XCTAssertFalse(app.alerts["Delete Project?"].exists)
+        delete.tap(); app.alerts["Delete Project?"].buttons["Delete"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["RoadStation"].waitForExistence(timeout: 20))
+        XCTAssertFalse(renamed.exists)
+        app.terminate(); app.launch(); app.activate()
+        XCTAssertTrue(app.navigationBars["RoadStation"].waitForExistence(timeout: 20))
+        XCTAssertFalse(renamed.exists)
+        attachment("phase2b2-deleted-project", app: app)
     }
 
 }

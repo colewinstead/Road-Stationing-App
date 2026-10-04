@@ -74,6 +74,9 @@ public enum CRSSelectionProvenance: String, Sendable {
 public struct ConfirmedProjectCRS: Equatable, Sendable {
     public let definition: ResolvedCRS
     public let provenance: CRSSelectionProvenance
+    public init(definition: ResolvedCRS, provenance: CRSSelectionProvenance) {
+        self.definition = definition; self.provenance = provenance
+    }
 }
 /// A completed position and its matching display context. Never combine the
 /// previous station with the accuracy/timestamp/context of a pending fix.
