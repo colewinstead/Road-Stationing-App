@@ -391,6 +391,68 @@ changing tolerances. The Phase 2A regression run passed all 30 cases without
 changing source geometry or tolerances. Phase 2B also passes all 30 with the same
 case file and tolerance definitions.
 
+## Product roadmap
+
+RoadStation is intended to grow from validated station/offset calculations into a
+persistent field-project application. Planned stages after the current CRS/location
+work include:
+
+- **Phase 2B.2 — Saved projects:** persist imported LandXML, confirmed CRS,
+  selected alignment and project settings so projects can be reopened without
+  re-importing source files. A project may contain multiple alignments.
+- **Phase 2C — MapKit:** show imported alignments and live field position on a
+  geographic basemap while keeping mapping separate from the validated geometry
+  engine.
+- **Phase 3 — Field records:** project-linked photos, notes, observations and
+  station-stamped reports.
+- **Phase 4 — Vertical/profile and surface workflows:** add vertical alignment
+  support and, when suitable existing/proposed surfaces are available, evaluate
+  grade and cut/fill workflows.
+- **Phase 5 — Georeferenced construction plans:** import project construction-plan
+  PDFs and use alignment/station information to register roadway plan sheets to
+  project coordinates. The goal is to let a field user view the **actual plan
+  sheet as the map** and see the phone's current position directly on the
+  construction drawing.
+
+### Phase 5 concept — construction plans as a field map
+
+A saved project may contain one or more LandXML alignments plus one or more plan
+sets. RoadStation should identify plan-view sheets, associate them with relevant
+alignment station ranges, and build a sheet-to-project-coordinate transform. For
+standard roadway sheets, station labels, match lines and centerline geometry can
+provide candidate control information because RoadStation can already convert
+station/offset to project Easting/Northing.
+
+The intended workflow is:
+
+```text
+Saved project
+    ↓
+LandXML alignment(s) + construction plan PDF
+    ↓
+Identify plan sheets / alignment / station ranges
+    ↓
+Georeference each usable plan view to project coordinates
+    ↓
+Phone WGS84 → project CRS → Easting/Northing
+    ↓
+Display live position on the actual construction plan sheet
+```
+
+Automatic registration should be attempted where the plan data provides enough
+reliable information, but it must not pretend every PDF can be georeferenced from
+station text alone. The design should support an assisted fallback where the user
+confirms station marks or supplies two or more station/offset control points on
+the sheet. Those controls can be converted through the existing alignment engine
+to known project coordinates.
+
+Longer-term plan-view behavior may include automatic switching to the next sheet
+as the user crosses a match line/station range, multiple alignments on the same
+sheet, and optional transparency comparison between georeferenced plans and a
+geographic/satellite basemap. Registration quality and control-point provenance
+must remain visible; a plan overlay must not be presented as survey-grade merely
+because it aligns visually.
+
 ## Known limitations and next gate
 
 - Only explicit clothoids are supported. Bloss, cubic, cosine, sinusoid and
