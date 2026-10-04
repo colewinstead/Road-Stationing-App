@@ -56,6 +56,20 @@ public struct LandXMLParser: Sendable {
             warnings.append("\(name) data is outside Phase 1 horizontal alignment scope and was not imported.")
         }
         return Project(name: root.child("Project")?.attributes["name"] ?? sourceName, unit: unit, alignments: alignments,
-            coordinateSystemDescription: root.child("CoordinateSystem")?.attributes["desc"] ?? root.child("CoordinateSystem")?.attributes["name"], warnings: warnings)
+            coordinateSystemDescription: root.child("CoordinateSystem")?.attributes["desc"] ?? root.child("CoordinateSystem")?.attributes["name"], warnings: warnings,
+            crsResolution: Self.crsResolution(epsgText: root.child("CoordinateSystem")?.attributes["epsgCode"]))
+    }
+
+    // Only explicit EPSG identification is interpreted. Names, filenames,
+    // descriptions, datums and coordinate magnitudes cannot identify a CRS.
+    private static func crsResolution(epsgText: String?) -> CRSResolution {
+        guard let epsgText else { return .unresolved(.missingIdentification) }
+        var codeText = epsgText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if codeText.uppercased().hasPrefix("EPSG:") { codeText = String(codeText.dropFirst(5)) }
+        guard !codeText.isEmpty, codeText.utf8.allSatisfy({ (48...57).contains($0) }),
+              let code = Int(codeText), let crs = try? CoordinateReferenceSystem(epsgCode: code) else {
+            return .unresolved(.invalidIdentification(epsgText))
+        }
+        return .identified(crs)
     }
 }

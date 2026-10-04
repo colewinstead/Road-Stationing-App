@@ -13,10 +13,13 @@ public struct Project: Identifiable, Sendable {
     public let unit: ProjectUnit
     public let alignments: [Alignment]
     public let coordinateSystemDescription: String?
+    public let crsResolution: CRSResolution
     public let warnings: [String]
     public init(id: UUID = UUID(), name: String, unit: ProjectUnit, alignments: [Alignment],
-                coordinateSystemDescription: String? = nil, warnings: [String] = []) {
+                coordinateSystemDescription: String? = nil, warnings: [String] = [],
+                crsResolution: CRSResolution = .unresolved(.missingIdentification)) {
         self.id = id; self.name = name; self.unit = unit; self.alignments = alignments
         self.coordinateSystemDescription = coordinateSystemDescription; self.warnings = warnings
+        self.crsResolution = crsResolution
     }
 }

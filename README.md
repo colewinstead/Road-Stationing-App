@@ -5,35 +5,40 @@ platform-independent Swift core. The current implementation imports LandXML
 horizontal alignments and performs planar station/offset calculations for lines,
 circular curves, clothoid spirals and station equations.
 
-The repository currently has two completed development milestones:
+The repository currently has three completed development milestones:
 
 - **Phase 1 — RoadStationCore:** portable calculation engine, LandXML parser,
   validation CLI and core test suite.
 - **Phase 1.5 — RoadStationApp developer harness:** native SwiftUI app for
   LandXML import, alignment selection, engineering-canvas inspection, tap
   queries and manual forward/inverse station-offset queries.
+- **Phase 2A — CRS architecture:** portable CRS models and an Apple-only NGA
+  PROJ adapter with explicit axis/unit handling and transformation tests. See
+  [PHASE2_CRS_REPORT.md](PHASE2_CRS_REPORT.md).
 
 The Phase 1.5 app has been built and tested in the iPhone Simulator and has also
 been installed and launched successfully on a physical iPhone using Xcode
 automatic signing.
 
-**RoadStation is not surveying software.** CoreLocation/GNSS, MapKit and CRS
-transformations are not implemented yet, so the app does not currently convert
-phone latitude/longitude into project coordinates or provide live field
-stationing.
+**RoadStation is not surveying software.** CoreLocation/GNSS and MapKit remain
+unimplemented. The CRS adapter transforms explicitly supplied WGS84 coordinates;
+the app does not yet provide live phone-location stationing or a CRS picker.
 
 A real OpenRoads Designer validation dataset is checked in under
 [Validation/RealORD/CROSSGATES](Validation/RealORD/CROSSGATES/README.md). It
 contains a direct ORD LandXML export, horizontal/vertical reports, station-offset
 reference data and independent validation cases covering real tangents, CW/CCW
 curves, clothoid spirals, LT/RT offsets and a station equation. The comparison
-still needs to be run and reviewed before Phase 2 GPS/CRS work begins.
+passed **30/30 cases** at **0.001 US survey foot** tolerance. Phase 2A
+preserves that geometry and tolerance.
+
 ## Architecture
 
 ```text
 Package.swift                         RoadStationCore + harness-support package
 RoadStation/Core/
   Models/                             Project, alignment, segments, coordinates, results
+  CRS/                                Portable CRS identities, readiness, errors, protocol
   LandXML/                            XML boundary, typed alignment builder, import errors
   Geometry/                           Lines, arcs, clothoids, stationing, offsets, bounds
   Validation/                         JSON cases, runner, JSON/CSV results
@@ -43,6 +48,7 @@ RoadStationApp/
   RoadStationApp/                     SwiftUI developer harness
   HarnessSupport/                     Viewport/manual-query helpers
   HarnessSupportTests/                Helper tests
+  CRSAdapter/                         Apple-only NGA PROJ package + transformation tests
   RoadStationAppUITests/              Simulator UI tests
 Tests/                                Core XCTest suites and fixtures
 Validation/
@@ -57,8 +63,9 @@ distances are cumulative **horizontal geometric length**, independent of station
 equations. Typed `SegmentGeometry` cases contain validated lines, circular arcs,
 or clothoids. Raw XML attribute dictionaries remain inside the import boundary.
 Alignment metadata preserves name, source identifier, description and declared
-length. Project metadata retains units and a CRS description without interpreting
-or transforming the CRS. Disconnected neighbors produce warnings and keep their
+length. Project metadata retains units and a CRS description. Explicit LandXML
+`epsgCode` identifies a CRS; absent or invalid identification stays unresolved.
+Import never transforms the geometry. Disconnected neighbors produce warnings and keep their
 original geometry; gaps do not count as geometric length.
 
 The checked-in **RoadStationApp** Xcode project links this repository as a
@@ -84,8 +91,9 @@ The app owns file access, project persistence, screens and interaction. Public
 `AlignmentSampling.polylines` and segment bounds support a future engineering
 canvas without introducing a UI dependency. Samples are for display only and
 keep disconnected segments separate. Forward/inverse math never uses them.
-`ProjectCoordinateTransformer` is only a future adapter interface; no projection
-implementation is supplied.
+`ProjectCoordinateTransformer` lives in the portable core; the Apple-only
+`RoadStationApp/CRSAdapter` package implements it with NGA PROJ. Core dependencies
+remain unchanged. Geographic degree output must not enter the planar engine.
 
 ## Supported LandXML
 
@@ -287,8 +295,9 @@ The macOS Phase 1 audit and local debug/release results are recorded in
 [PHASE1_MACOS_AUDIT.md](PHASE1_MACOS_AUDIT.md). Phase 1.5 is documented in
 [PHASE15_REPORT.md](PHASE15_REPORT.md). CI covers the macOS/Linux core package
 matrix and an iOS Simulator build. The Phase 1.5 app has also been installed and
-launched on a physical iPhone; production/App Store distribution, GPS behavior
-and CRS transformations are not yet validated or implemented. Swift 6.4 Windows
+launched on a physical iPhone. Production/App Store distribution and live GPS
+behavior remain unverified. Phase 2A CRS tests pass on macOS and iOS Simulator.
+Swift 6.4 Windows
 may emit an ignored root Info.plist for XCTest resources and a warning about its
 .build/debug convenience symlink; these are build-tool artifacts.
 ## Validation harness and adding cases
@@ -358,8 +367,9 @@ swift run roadstation-validate `
 The current comparison tolerance is 0.001 US survey foot for station, offset
 and coordinate error. Preserve failed cases and investigate source revision,
 units, coordinate convention, equation branch and report rounding before
-changing tolerances. Phase 2 remains blocked until this comparison has been
-run and reviewed.
+changing tolerances. The Phase 2A regression run passed all 30 cases without
+changing source geometry or tolerances.
+
 ## Known limitations and next gate
 
 - Only explicit clothoids are supported. Bloss, cubic, cosine, sinusoid and
@@ -374,9 +384,10 @@ run and reviewed.
 - The synthetic Civil 3D-labelled reference spiral has an inconsistent endpoint
   and is deliberately rejected. It is not an external accuracy benchmark.
 - RoadStationApp is currently a developer harness with session-only state. It does
-  not yet include production persistence, CoreLocation/GNSS, MapKit, CRS
-  transformation, camera/photo workflows, cloud sync or App Store distribution.
+  not yet include production persistence, CoreLocation/GNSS, MapKit, a CRS
+  picker, camera/photo workflows, cloud sync or App Store distribution.
 
-Next: run and review the checked-in CROSSGATES real-ORD comparison. After that
-gate passes, Phase 2 can add a dedicated CRS adapter, MapKit and CoreLocation/GNSS
-for live GPS station/offset. **No Phase 2 functionality is implemented yet.**
+Next Phase 2B: explicit project CRS selection/confirmation, followed by the
+app-side CoreLocation boundary with accuracy/staleness gating and controlled
+known-point validation. See [PHASE2_CRS_REPORT.md](PHASE2_CRS_REPORT.md) for adapter
+limitations and the completed Phase 2A verification.
