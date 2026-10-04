@@ -40,3 +40,38 @@ jobs:
           -scheme RoadStationApp -configuration Debug
           -sdk iphonesimulator -destination 'generic/platform=iOS Simulator'
           CODE_SIGNING_ALLOWED=NO build
+      - name: Select available iPhone Simulator
+        run: |
+          xcrun simctl list --json > "$RUNNER_TEMP/roadstation-simulators.json"
+          python3 <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          inventory = json.loads((Path(os.environ["RUNNER_TEMP"]) / "roadstation-simulators.json").read_text())
+          runtimes = sorted(
+              (runtime for runtime in inventory["runtimes"]
+               if runtime["isAvailable"] and ".iOS-" in runtime["identifier"]),
+              key=lambda runtime: tuple(map(int, runtime["version"].split("."))),
+              reverse=True,
+          )
+          for runtime in runtimes:
+              devices = inventory["devices"].get(runtime["identifier"], [])
+              device = next((device for device in devices
+                             if device["isAvailable"] and device["name"].startswith("iPhone")), None)
+              if device is not None:
+                  destination = f"platform=iOS Simulator,name={device['name']},OS={runtime['version']}"
+                  with open(os.environ["GITHUB_ENV"], "a") as environment:
+                      environment.write(f"IOS_SIMULATOR_DESTINATION={destination}\n")
+                  print(f"Selected {destination}")
+                  break
+          else:
+              raise SystemExit("No available iPhone Simulator with an installed iOS runtime.")
+          PY
+      - name: Test Phase 2A CRS on iOS Simulator
+        run: >-
+          xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj
+          -scheme RoadStationCRSTests -configuration Debug
+          -destination "$IOS_SIMULATOR_DESTINATION"
+          -parallel-testing-enabled NO
+          CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test

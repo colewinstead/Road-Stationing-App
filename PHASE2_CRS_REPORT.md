@@ -183,8 +183,12 @@ xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj \
 Xcode 27.0 (27A266a), iPhone 18 Pro simulator, iOS 27.0. App build succeeded.
 The build emits the routine AppIntents metadata warning because that framework
 is not used. Logs/results are under ignored `validation-output/phase2a/`.
-CI now includes Apple adapter tests on the existing macOS job; Linux continues
-building/testing the independent core.
+CI includes Apple adapter tests on the existing macOS job; Linux continues
+building/testing the independent core. The iOS job retains the RoadStationApp
+simulator build and also runs the RoadStationCRSTests scheme with parallel
+testing disabled and ad hoc signing enabled. It discovers an available iPhone
+from the newest installed available iOS runtime and constructs a name/OS
+destination at runtime; no simulator UUID or model is hard-coded.
 
 ### Real ORD regression
 
