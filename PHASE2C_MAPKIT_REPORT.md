@@ -121,3 +121,55 @@ need physical-device verification. Simulator, projection and ORD results do not
 establish survey accuracy, imagery accuracy, production distribution or field
 positioning accuracy. Only an iOS 27 runtime was available for simulator checks;
 the app deployment target remains iOS 17.
+
+## Follow-up: closer zoom and Inspect basemaps
+
+The user's OpenRoads alignment was drawn against Google satellite imagery;
+RoadStation uses Apple satellite imagery. Inspect Alignment now also opens on
+satellite after CRS confirmation, with Street Map, Engineering View, Fit and
+button zoom in its map menu. Taps convert geographic coordinates through the
+existing PROJ adapter into the unchanged Core query. Manual Entry/inverse results
+remain authoritative, are shown on the map, and fit into view. Missing CRS or a
+conversion failure retains the engineering canvas; Inspect does not start GPS.
+
+Both maps and the engineering grid use cyan tangents, yellow curves and magenta
+spirals, with black and white outlines. Labeled legends accompany these colors;
+legend text uses the system label color for light/dark readability and stacks at
+large text sizes.
+
+Native camera bounds explicitly allow a minimum camera distance of one meter.
+This is camera distance, not imagery resolution or a guaranteed one-meter ground
+extent. Recenter and subsequent Follow preserve the chosen horizontal ground scale;
+initial Follow still frames phone/nearest with context. One camera callback retains native width/distance measurements. Camera distance
+is normalized against the chosen width after MapKit completes a Details viewport
+resize; SwiftUI's size notification arrives before that native resize finishes.
+Preserving either the previous rectangle or distance alone caused a reproducible
+zoom change during Details resizing.
+Manual zoom/pan counts as a chosen camera scale even before the first fix. The
+VoiceOver map summary includes the actual visible width in meters.
+
+### EPSG:6510 placement investigation
+
+The bundled database identifies EPSG:6510 as **NAD83(2011) / Mississippi West
+(ftUS)**. A read-only C diagnostic used the app's built PROJ library, bundled
+`proj.db`, disabled network, `ALLOW_BALLPARK=NO`, `ONLY_BEST=YES`, and visualization
+axis normalization. The selected operation includes the inverse of **NAD83(2011)
+to WGS 84 (1)** (EPSG:9774) and declares **2.0-meter accuracy**. Its pipeline uses
+the Mississippi West Transverse Mercator conversion with explicit US survey foot
+units. Longitude -90.2 / latitude 32.3 converts to E 2337781.633029558 /
+N 1018443.749708669 ftUS and returns to the input within printed precision. This
+is a consistency check, not an independent known-point placement validation.
+Local diagnostic: `validation-output/phase2c/epsg6510-operation.txt`.
+
+Rejecting PROJ's synthetic ballpark operations does not make this registered
+2-meter approximation a survey-accurate datum transformation. No source XY,
+unit policy, station/offset calculation or datum operation was changed. The
+reported 1–2 ft northward appearance remains unverified. Differences between
+Google and Apple imagery are a plausible explanation; Google describes imagery
+as provider imagery and mosaics collected at different times in its
+[imagery documentation](https://support.google.com/earth/answer/6327779?hl=en).
+A surveyed/control point with known coordinates and datum realization is needed
+to distinguish imagery registration from datum or export placement. No arbitrary
+north/south alignment translation was applied.
+
+Follow-up native UI evidence is recorded below after completion.

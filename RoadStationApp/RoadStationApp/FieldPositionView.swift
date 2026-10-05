@@ -245,6 +245,7 @@ struct FieldPositionView: View {
                             ProjectCRSControls(session: session)
                         } label: { Text("Coordinate system & setup").frame(minHeight: 44) }
                         VStack(alignment: .leading, spacing: 8) {
+                            AlignmentSegmentLegend()
                             Label("Phone position / last known fix", systemImage: "circle.circle")
                             Label("Nearest alignment point (representative if ambiguous)", systemImage: "diamond")
                             Label("Forward alignment direction determines LT / RT", systemImage: "arrow.right")

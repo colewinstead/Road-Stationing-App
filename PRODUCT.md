@@ -44,7 +44,9 @@ line drawn on screen. It does not provide survey-grade positioning.
   available in field details without a ticking age display.
 - Browse/search CRS metadata, use one-shot location recommendations, or enter
   an EPSG code manually. A recommendation never confirms a CRS on the user's behalf.
-- Supporting tools provide a planar engineering canvas, tap inspection, manual
+- Inspect Alignment also defaults to satellite imagery after CRS confirmation,
+  with street-map and engineering-grid switching. Tangents, curves and spirals
+  use distinct outlined colors. Supporting tools provide tap inspection, manual
   coordinate-to-station/offset and inverse queries, metadata and raw results.
 
 ## Capabilities and Constraints

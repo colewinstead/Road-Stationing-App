@@ -16,7 +16,8 @@ struct AlignmentWorkspace: View {
             VStack(alignment: .leading, spacing: 16) {
                 NavigationLink("Live Location / Field Position") { FieldPositionView(session: field) }
                     .buttonStyle(.bordered).accessibilityIdentifier("open-field-position")
-                EngineeringCanvas(model: model).frame(height: 300)
+                InspectionSpatialView(model: model, field: field).frame(height: 300)
+                AlignmentSegmentLegend()
                 HStack(spacing: 12) {
                     Label("Query", systemImage: "circle.fill").foregroundStyle(.orange)
                     Label(model.result == nil && model.inverseResult != nil ? "Centerline" : "Nearest", systemImage: "circle.fill").foregroundStyle(.blue)

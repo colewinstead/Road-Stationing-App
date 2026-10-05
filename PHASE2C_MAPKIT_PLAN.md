@@ -37,14 +37,16 @@ This is a geographic display addition, not a change to engineering calculations.
 ## Screen and interaction contract
 
 Keep the current native SwiftUI composition and system styling (Operate mode).
-Replace only the field spatial surface; retain the manual Inspect engineering
-canvas and its tap-to-query behavior.
+Use geographic basemaps in Field Position and, after confirmed CRS, Inspect
+Alignment. Retain the engineering-grid fallback and exact tap-to-query behavior.
+The Inspect addition and closer zoom follow the user's implementation feedback.
 
 1. Open Field Position: show satellite imagery in a flat, north-up view. Fit the
    selected alignment while waiting for a usable fix. With a fresh completed
    snapshot and Follow enabled, frame the phone and nearest point with context.
-2. Draw the selected centerline with a contrasting outline so it remains visible
-   over both imagery and street mapping. Preserve source segment boundaries.
+2. Draw tangents in cyan, curves in yellow and spirals in magenta with black
+   and white outlines over imagery and street mapping. Preserve source segment
+   boundaries and show a labeled legend.
 3. Draw the snapshot phone marker, approximate accuracy ring, nearest-point
    diamond, dashed offset connector and forward-direction arrow. Ambiguous
    nearest points stay labeled **Representative**. Injected fixes retain their
@@ -52,7 +54,10 @@ canvas and its tap-to-query behavior.
 4. Pan/pinch pauses Follow without stopping location. Follow resumes on the next
    usable snapshot, or immediately if one is current. Recenter moves to the
    displayed snapshot, including a clearly labeled last-known fix, without
-   changing Follow. Fit Alignment pauses Follow and fits the whole centerline.
+   changing Follow or the chosen zoom. Subsequent Follow updates preserve close
+   zoom; the initial fix frames the phone and nearest point with context. Native
+   camera bounds permit a one-meter minimum camera distance. Fit Alignment
+   pauses Follow and fits the whole centerline.
 5. Place a native **Satellite / Street Map** picker in Camera actions. Changing
    style preserves camera, Follow, snapshot and location state. Keep the style
    choice in screen state for this phase; each new visit defaults to Satellite.

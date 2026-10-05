@@ -473,6 +473,96 @@ final class RoadStationAppUITests: XCTestCase {
         app.buttons["field-camera-actions"].tap()
         app.buttons["Fit Alignment"].tap()
         XCTAssertEqual(app.buttons["field-follow"].label, "Follow: Paused")
+        app.navigationBars.buttons.firstMatch.tap()
+        let inspection = app.descendants(matching: .any)["inspection-map"]
+        XCTAssertTrue(inspection.waitForExistence(timeout: 20))
+        expectation(for: NSPredicate(format: "value CONTAINS %@", "Alignment overlay ready"), evaluatedWith: inspection)
+        waitForExpectations(timeout: 20)
+        XCTAssertTrue(app.staticTexts["Tangent"].exists)
+        XCTAssertTrue(app.staticTexts["Curve"].exists)
+        XCTAssertTrue(app.staticTexts["Spiral"].exists)
+        inspection.coordinate(withNormalizedOffset: .init(dx: 0.45, dy: 0.55)).tap()
+        XCTAssertTrue(app.staticTexts["result-station"].waitForExistence(timeout: 10))
+        let station = app.staticTexts["result-station"].label
+        attachment("phase2c-inspection-satellite-query", app: app)
+        app.buttons["inspection-map-actions"].tap()
+        app.buttons["Street Map"].tap()
+        XCTAssertEqual(app.buttons["inspection-map-actions"].value as? String, "Street Map")
+        attachment("phase2c-inspection-street-query", app: app)
+        app.buttons["inspection-map-actions"].tap()
+        app.buttons["Engineering View"].tap()
+        XCTAssertTrue(app.otherElements["engineering-canvas"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["result-station"].label, station)
+        app.buttons["Show Map"].tap()
+        XCTAssertTrue(inspection.waitForExistence(timeout: 20))
+        XCTAssertEqual(app.staticTexts["result-station"].label, station)
+        app.segmentedControls["workspace-tabs"].buttons["Entry"].tap()
+        // Independent point: 50 ft along the fixture's first eastward tangent, 5 ft south (RT).
+        set("easting-entry", "986377.5959036754", in: app)
+        set("northing-entry", "1453406.9250950934", in: app)
+        let calculate = app.buttons["calculate-forward"]
+        for _ in 0..<4 where !calculate.isHittable { pageUp(app) }
+        calculate.tap()
+        XCTAssertTrue(app.staticTexts["result-station"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["result-station"].label, "STA 100+50.00")
+        XCTAssertEqual(app.staticTexts["result-offset"].label, "5.000 ft RT")
+        for _ in 0..<6 where !app.buttons["inspection-map-actions"].isHittable { app.swipeDown() }
+        attachment("phase2c-inspection-manual-query", app: app)
+    }
+
+    @MainActor
+    func testFieldCloseZoomSurvivesRecenterAndFollow() throws {
+        let app = makeApp(); app.launch(); app.activate()
+        sample("tangent-only", alignment: "TANGENT", in: app)
+        app.buttons["open-field-position"].tap()
+        app.buttons["open-crs-picker"].tap()
+        app.segmentedControls["crs-picker-tabs"].buttons["Search"].tap()
+        let manual = app.buttons["open-manual-epsg"]
+        for _ in 0..<12 where !manual.isHittable { pageUp(app) }
+        XCTAssertTrue(manual.waitForExistence(timeout: 10)); manual.tap()
+        set("epsg-entry", "3857", in: app); app.buttons["select-epsg"].tap()
+        revealDebugLocation(app)
+        set("injected-latitude", "0.005462450563693558", in: app)
+        set("injected-longitude", "0.0028749739852440867", in: app)
+        set("injected-accuracy", "4", in: app)
+        let inject = app.buttons["inject-location"]
+        for _ in 0..<5 where !inject.isHittable { pageUp(app) }
+        inject.tap()
+        let canvas = app.descendants(matching: .any)["field-alignment-canvas"]
+        expectation(for: NSPredicate(format: "value CONTAINS %@", "Nearest point shown"), evaluatedWith: canvas)
+        waitForExpectations(timeout: 20)
+        waitForStableFrame(app.buttons["field-details-toggle"])
+        func width() -> Double {
+            let summary = canvas.value as? String ?? ""
+            guard let suffix = summary.components(separatedBy: "Map width ").last,
+                  let value = Double(suffix.components(separatedBy: " ").first ?? "") else {
+                XCTFail("Map must expose its visible scale: \(summary)"); return .infinity
+            }
+            return value
+        }
+        for _ in 0..<10 {
+            app.buttons["field-camera-actions"].tap(); app.buttons["Zoom in"].tap()
+        }
+        let buttonZoomWidth = width()
+        XCTAssertLessThan(buttonZoomWidth, 10, "Button zoom must reach a close native view")
+        app.descendants(matching: .any)["field-map"].pinch(withScale: 2, velocity: 1)
+        let closeWidth = width()
+        XCTAssertLessThan(closeWidth, buttonZoomWidth * 0.9, "Pinch must continue zooming beyond the former limit")
+        XCTAssertLessThan(closeWidth, 10, "Native camera must allow a view narrower than ten meters")
+        XCTAssertEqual(app.buttons["field-follow"].label, "Follow: Paused")
+        app.buttons["field-recenter"].tap()
+        XCTAssertEqual(width(), closeWidth, accuracy: max(0.1, closeWidth * 0.05))
+        app.buttons["field-follow"].tap()
+        revealDebugLocation(app)
+        for _ in 0..<5 where !inject.isHittable { pageUp(app) }
+        inject.tap()
+        expectation(for: NSPredicate(format: "value CONTAINS %@", "Nearest point shown"), evaluatedWith: canvas)
+        waitForExpectations(timeout: 20)
+        waitForStableFrame(app.buttons["field-details-toggle"])
+        XCTAssertEqual(app.buttons["field-follow"].label, "Follow: On")
+        XCTAssertEqual(width(), closeWidth, accuracy: max(0.1, closeWidth * 0.05))
+        XCTAssertEqual(app.staticTexts["live-station"].label, "STA 100+50.00")
+        attachment("phase2c-close-zoom-preserved", app: app)
     }
 
     @MainActor

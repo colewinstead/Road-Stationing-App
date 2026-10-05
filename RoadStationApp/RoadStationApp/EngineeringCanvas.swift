@@ -52,10 +52,9 @@ struct EngineeringCanvas: View {
                         var path = Path(); path.move(to: screen(first))
                         for point in polyline.points.dropFirst() { path.addLine(to: screen(point)) }
                         let type = model.alignment.segments[polyline.segmentIndex].geometry
-                        let color: Color
-                        switch type { case .line: color = .primary; case .circularCurve: color = .blue; case .spiral: color = .purple }
-                        if isField { context.stroke(path, with: .color(Color(.systemBackground)), lineWidth: 8) }
-                        context.stroke(path, with: .color(isField ? .blue : color),
+                        context.stroke(path, with: .color(.white), lineWidth: isField ? 10 : 9)
+                        context.stroke(path, with: .color(.black), lineWidth: isField ? 7 : 6)
+                        context.stroke(path, with: .color(alignmentMapColor(type)),
                             style: StrokeStyle(lineWidth: isField ? 4 : 3, lineCap: .round, lineJoin: .round))
                     }
                     if isField, let position = fieldPosition {

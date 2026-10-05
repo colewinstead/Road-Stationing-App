@@ -83,9 +83,12 @@ synthetic input files so the actual picker flow can be exercised.
   **Inspect Alignment** action appear before project metadata.
 - **Engineering canvas:** north-up planar centerline with aspect-preserving fit,
   drag pan, pinch/button zoom and Fit. Subtracts the local coordinate origin for
-  display, retaining the full engineering values in the core. Line is primary
-  color, arc blue, spiral purple. Sampling is exclusively for drawing.
-- **Inspect:** tap converted to Easting/Northing; station, signed offset/side,
+  display, retaining the full engineering values in the core. Tangents are cyan,
+  curves yellow and spirals magenta, with black and white outlines and a labeled
+  legend. Sampling is exclusively for drawing.
+- **Inspect:** satellite by default after explicit CRS confirmation, with street
+  and engineering-grid switching. Map taps use the existing projection to
+  convert to Easting/Northing; station, signed offset/side,
   query/nearest coordinates, segment index/type and bearing. Query marker is
   orange, nearest marker blue, with a connector. Ambiguity is prominent in red.
 - **Entry:** coordinate → station/offset and station/offset → coordinate forms.
@@ -234,6 +237,8 @@ Map and grid drawings are display-only. MapKit uses the completed snapshot
 provided by the existing location session, not a separate location manager. The
 map arrow is transformed from grid forward direction into geographic display
 direction. Camera actions offers Satellite, Street Map and Engineering View;
+Recenter/Follow preserve your chosen zoom, including through Details resizing;
+native camera bounds permit closer zoom without adding imagery detail.
 Engineering View offers Show Map after CRS confirmation. Basemaps may be
 unavailable offline; local stationing and the grid do not require imagery. See
 [PHASE2C_MAPKIT_REPORT.md](../PHASE2C_MAPKIT_REPORT.md).
