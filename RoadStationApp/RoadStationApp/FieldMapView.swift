@@ -55,7 +55,6 @@ private struct FieldMapView: View {
     @State private var markerRequest = UUID()
     @State private var camera: MapCameraPosition = .automatic
     @State private var visibleRect = MKMapRect.null
-    @State private var cameraDistance: Double?
     @State private var chosenWidth: Double?
     @State private var isResizing = false
     @State private var isFollowing = true
@@ -84,7 +83,7 @@ private struct FieldMapView: View {
                 map
                     .frame(width: geometry.size.width, height: geometry.size.height).clipped()
                     .onMapCameraChange(frequency: .continuous) { update in
-                        visibleRect = update.rect; cameraDistance = update.camera.distance
+                        visibleRect = update.rect
                         if camera.positionedByUser, !isFollowing, !isResizing { chosenWidth = update.rect.width }
                     }
                     .onChange(of: camera) { _, position in
@@ -152,14 +151,15 @@ private struct FieldMapView: View {
             .onChange(of: geometry.size) { _, _ in isResizing = true }
             .task(id: geometry.size) {
                 isResizing = true
-                // Let MapKit finish layout after the 0.2-second Details animation.
+                // ponytail: settle the 0.2s Details animation; use resize completion for an interactive drawer.
                 do { try await Task.sleep(for: .milliseconds(300)) } catch { return }
                 isResizing = false
                 if isFollowing, isCurrent, let markers = matchingMarkers {
                     follow(markers, size: geometry.size)
-                } else if let width = chosenWidth, let cameraDistance, !visibleRect.isNull {
-                    camera = .camera(MapCamera(centerCoordinate: MKMapPoint(x: visibleRect.midX, y: visibleRect.midY).coordinate,
-                        distance: cameraDistance * width / visibleRect.width, heading: 0, pitch: 0))
+                } else if let width = chosenWidth, !visibleRect.isNull {
+                    let height = visibleRect.height * width / visibleRect.width
+                    setCamera(.init(x: visibleRect.midX - width / 2, y: visibleRect.midY - height / 2,
+                                    width: width, height: height))
                 }
             }
         }
@@ -271,13 +271,11 @@ private struct FieldMapView: View {
         hasFollowed = true
     }
     private func recenter(_ markers: FieldMapMarkers, size: CGSize, preserveZoom: Bool) {
-        if preserveZoom, !visibleRect.isNull, let cameraDistance {
+        if preserveZoom, !visibleRect.isNull {
             let width = chosenWidth ?? visibleRect.width
             chosenWidth = width
             let span = MKMapSize(width: width, height: visibleRect.height * width / visibleRect.width)
-            let rect = fittedRect([markers.phone], size: size, viewport: span)
-            camera = .camera(MapCamera(centerCoordinate: MKMapPoint(x: rect.midX, y: rect.midY).coordinate,
-                                       distance: cameraDistance * width / visibleRect.width, heading: 0, pitch: 0))
+            setCamera(fittedRect([markers.phone], size: size, viewport: span))
         } else {
             setCamera(fittedRect([markers.phone, markers.nearest], size: size))
         }

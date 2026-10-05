@@ -124,6 +124,8 @@ the app deployment target remains iOS 17.
 
 ## Follow-up: closer zoom and Inspect basemaps
 
+Updated: 2026-10-05.
+
 The user's OpenRoads alignment was drawn against Google satellite imagery;
 RoadStation uses Apple satellite imagery. Inspect Alignment now also opens on
 satellite after CRS confirmation, with Street Map, Engineering View, Fit and
@@ -139,12 +141,14 @@ large text sizes.
 
 Native camera bounds explicitly allow a minimum camera distance of one meter.
 This is camera distance, not imagery resolution or a guaranteed one-meter ground
-extent. Recenter and subsequent Follow preserve the chosen horizontal ground scale;
-initial Follow still frames phone/nearest with context. One camera callback retains native width/distance measurements. Camera distance
-is normalized against the chosen width after MapKit completes a Details viewport
-resize; SwiftUI's size notification arrives before that native resize finishes.
-Preserving either the previous rectangle or distance alone caused a reproducible
-zoom change during Details resizing.
+extent. Recenter and subsequent Follow preserve the chosen zoom; initial Follow
+still frames phone/nearest with context. The existing rectangle camera framing
+is reused with the current viewport aspect ratio. Follow waits for the fixed
+0.2-second Details animation to settle before applying a resize adjustment.
+The cancellable 300-ms layout wait is deliberately scoped to this toggle drawer;
+an interactive drawer would need native resize completion handling. One camera
+callback retains the actual visible rectangle. Coordinate calculations are
+independent of this display framing.
 Manual zoom/pan counts as a chosen camera scale even before the first fix. The
 VoiceOver map summary includes the actual visible width in meters.
 
@@ -172,4 +176,33 @@ A surveyed/control point with known coordinates and datum realization is needed
 to distinguish imagery registration from datum or export placement. No arbitrary
 north/south alignment translation was applied.
 
-Follow-up native UI evidence is recorded below after completion.
+### Follow-up verification
+
+- Close zoom regression **passed** on the final rectangle framing: button zoom
+  reaches a view narrower than 10 meters, native pinch zoom goes closer,
+  Recenter and a fresh Follow update retain that zoom within the unchanged
+  5% / 0.1-meter check, including opening/closing Details. The station remains
+  STA 100+50.00. Evidence: `validation-output/phase2c/Zoom-Native-Rect.xcresult`.
+- The existing engineering-grid tap/pan/zoom and manual forward/inverse scenario
+  passed with the shared segment palette. Evidence: the completed test case in
+  `validation-output/phase2c/Map-Refinements-Final-Dark.xcresult`; that broader
+  attempt was interrupted while diagnosing the separate camera regression.
+- Native Inspect passed satellite/street switching, map-tap inspection,
+  engineering fallback/return, retained query results and the independent manual
+  point STA 100+50.00 / 5.000 ft RT. Largest accessibility text also passed.
+  Evidence: those two completed cases in
+  `validation-output/phase2c/Camera-And-Inspection-Final.xcresult`; the camera
+  case in that earlier bundle failed and is superseded by the final zoom result.
+- Light/dark map screenshots were inspected, including
+  `validation-output/phase2c/inspection-satellite-light.png`,
+  `validation-output/phase2c/inspection-street-light.png`,
+  `validation-output/phase2c/phase2c-inspection-manual-query-dark.png` and
+  `validation-output/phase2c/field-accessibility-reading-dark.png`.
+
+The final light-mode rerun on rectangle framing passed both Inspect and largest
+accessibility-text scenarios: **2/2 passed**. Evidence:
+`validation-output/phase2c/Inspect-LargeText-Rect-Final.xcresult`.
+The final dark close-zoom scenario separately passed: **1/1 passed**. Its screenshot
+is `validation-output/phase2c/close-zoom-preserved-dark.png`.
+Physical-device limits and known-point placement remain unverified as described
+above.
