@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        EE2300000000000000000001 /* FieldMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2300000000000000000002; };
+        EE2300000000000000000003 /* FieldMapGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2300000000000000000004; };
         DD2200000000000000000009 = {isa = PBXBuildFile; fileRef = DD220000000000000000000A; };
         DD2200000000000000000001 = {isa = PBXBuildFile; productRef = DD2200000000000000000002; };
         DD2200000000000000000003 = {isa = PBXBuildFile; productRef = DD2200000000000000000002; };
@@ -53,6 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+        EE2300000000000000000002 /* FieldMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldMapView.swift; sourceTree = "<group>"; };
+        EE2300000000000000000004 /* FieldMapGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRSAdapter/Tests/RoadStationFieldPositionTests/FieldMapGeometryTests.swift; sourceTree = SOURCE_ROOT; };
         DD220000000000000000000A = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ../Validation/RealORD/CROSSGATES/CROSSGATES.xml; sourceTree = SOURCE_ROOT; };
         DD2200000000000000000005 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedProjectsModel.swift; sourceTree = "<group>"; };
         DD2200000000000000000007 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRSAdapter/Tests/RoadStationProjectsTests/ProjectRepositoryTests.swift; sourceTree = SOURCE_ROOT; };
@@ -127,6 +131,7 @@
 				D02ED327C0C200E36EA3C127 /* HarnessModels.swift */,
 				FAF2DDECD07C30D1C8C8C6AB /* InspectionViews.swift */,
 				BB2000000000000000000002 /* FieldPositionView.swift */,
+                EE2300000000000000000002 /* FieldMapView.swift */,
                 CC2100000000000000000002, DD2200000000000000000005,
 				B4336B936E428910889ED0DD /* ProjectView.swift */,
 				3B817370553D80DC7055C5FA /* RoadStationApp.swift */,
@@ -148,6 +153,7 @@
 			children = (
 				3A2A88DEEFF3D1D23E496597 /* RoadStationApp */,
 				BB2000000000000000000007 /* FieldPositionTests.swift */,
+                EE2300000000000000000004 /* FieldMapGeometryTests.swift */,
                 CC2100000000000000000007, DD2200000000000000000007,
 				AA2100000000000000000002 /* PROJTransformerTests.swift */,
 				732DD74D4ACEA31527451D52 /* RoadStationAppUITests */,
@@ -290,12 +296,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-        AA2100000000000000000007 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (AA2100000000000000000001, BB2000000000000000000006, CC2100000000000000000006, DD2200000000000000000006,); runOnlyForDeploymentPostprocessing = 0; };
+        AA2100000000000000000007 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (EE2300000000000000000003, AA2100000000000000000001, BB2000000000000000000006, CC2100000000000000000006, DD2200000000000000000006,); runOnlyForDeploymentPostprocessing = 0; };
 		2D764CD838DB39F040AA7EC4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
                 BB2000000000000000000001 /* FieldPositionView.swift in Sources */,
+                EE2300000000000000000001 /* FieldMapView.swift in Sources */,
                 CC2100000000000000000001, DD2200000000000000000004,
 				57DBFF4AC376AF1A8889EEE8 /* AlignmentWorkspace.swift in Sources */,
 				CB49221565FAFE4F1D47DC7C /* EngineeringCanvas.swift in Sources */,

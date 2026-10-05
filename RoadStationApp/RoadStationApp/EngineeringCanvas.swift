@@ -52,10 +52,9 @@ struct EngineeringCanvas: View {
                         var path = Path(); path.move(to: screen(first))
                         for point in polyline.points.dropFirst() { path.addLine(to: screen(point)) }
                         let type = model.alignment.segments[polyline.segmentIndex].geometry
-                        let color: Color
-                        switch type { case .line: color = .primary; case .circularCurve: color = .blue; case .spiral: color = .purple }
-                        if isField { context.stroke(path, with: .color(Color(.systemBackground)), lineWidth: 8) }
-                        context.stroke(path, with: .color(isField ? .blue : color),
+                        context.stroke(path, with: .color(.white), lineWidth: isField ? 10 : 9)
+                        context.stroke(path, with: .color(.black), lineWidth: isField ? 7 : 6)
+                        context.stroke(path, with: .color(alignmentMapColor(type)),
                             style: StrokeStyle(lineWidth: isField ? 4 : 3, lineCap: .round, lineJoin: .round))
                     }
                     if isField, let position = fieldPosition {
@@ -171,17 +170,19 @@ struct EngineeringCanvas: View {
     }
 }
 
-/// Owns the spatial surface and camera controls, independently of the engineering readout.
-/// A later basemap can replace the canvas here without moving the field controls.
-struct FieldSpatialView: View {
+/// The original project-coordinate surface remains available without map tiles.
+struct FieldPlanarView: View {
     @StateObject private var model: WorkspaceModel
     @ObservedObject var session: FieldPositionSession
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     var readoutHeight: CGFloat
+    var showMap: (() -> Void)?
     @State private var camera = FieldCanvasCamera()
-    init(alignment: RoadStationCore.Alignment, unit: ProjectUnit, session: FieldPositionSession, readoutHeight: CGFloat) {
+    init(alignment: RoadStationCore.Alignment, unit: ProjectUnit, session: FieldPositionSession, readoutHeight: CGFloat,
+         showMap: (() -> Void)? = nil) {
         _model = StateObject(wrappedValue: WorkspaceModel(alignment: alignment, unit: unit))
         self.session = session; self.readoutHeight = readoutHeight
+        self.showMap = showMap
     }
     private var position: FieldPositionSnapshot? {
         guard session.fieldPosition?.alignmentID == model.alignment.id else { return nil }
@@ -224,6 +225,7 @@ struct FieldSpatialView: View {
                     } label: { Image(systemName: "scope").frame(minWidth: 44, minHeight: 52) }
                         .accessibilityLabel("Recenter").accessibilityIdentifier("field-recenter").disabled(position == nil)
                     Menu {
+                        if let showMap { Button("Show Map", action: showMap).accessibilityIdentifier("field-show-map") }
                         Button("Fit Alignment") { camera.fitAlignment(model.bounds) }
                         Button("Zoom in") { camera.magnify(1.5) }
                         Button("Zoom out") { camera.magnify(1 / 1.5) }

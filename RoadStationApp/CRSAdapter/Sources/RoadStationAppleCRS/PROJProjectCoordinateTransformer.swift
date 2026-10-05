@@ -41,11 +41,28 @@ public struct PROJProjectCoordinateTransformer: ProjectCoordinateTransformer {
     }
 
     public func geographicCoordinate(from coordinate: ProjectCoordinate) throws -> GeographicCoordinate {
-        guard coordinate.isFinite else { throw CoordinateTransformationError.nonFiniteCoordinate }
-        guard coordinate.z == nil else { throw CoordinateTransformationError.unexpectedHeight }
+        try geographicCoordinates(from: [coordinate])[0]
+    }
+
+    /// Display preparation can convert a batch using one task-owned operation.
+    /// No handles escape this call; scalar inverse uses the same validation and math.
+    public func geographicCoordinates(from coordinates: [ProjectCoordinate]) throws -> [GeographicCoordinate] {
         let factor = try Self.scale(nativeUnit: definition.nativeUnit, outputUnit: definition.outputUnit)
-        let result = try transform(x: coordinate.x / factor, y: coordinate.y / factor, direction: PJ_INV)
-        return try GeographicCoordinate(latitude: result.y, longitude: result.x)
+        return try Self.withContext { context in
+            let operation = try Self.operation(crs: definition.crs, context: context)
+            defer { proj_destroy(operation) }
+            return try coordinates.map { coordinate in
+                try Task.checkCancellation()
+                guard coordinate.isFinite else { throw CoordinateTransformationError.nonFiniteCoordinate }
+                guard coordinate.z == nil else { throw CoordinateTransformationError.unexpectedHeight }
+                proj_errno_reset(operation)
+                let result = proj_trans(operation, PJ_INV, proj_coord(coordinate.x / factor, coordinate.y / factor, 0, 0))
+                guard proj_errno(operation) == 0 else {
+                    throw CoordinateTransformationError.transformationFailed(Self.errorDetail(context))
+                }
+                return try GeographicCoordinate(latitude: result.xy.y, longitude: result.xy.x)
+            }
+        }
     }
 
     private func transform(x: Double, y: Double, direction: PJ_DIRECTION) throws -> ProjectCoordinate {

@@ -1,4 +1,4 @@
-# RoadStationApp — Phase 2B.2 saved projects
+# RoadStationApp — Phase 2C MapKit field view
 
 A SwiftUI iPhone app with local saved projects for the authoritative RoadStationCore
 package. It provides manual horizontal geometry inspection and CRS readiness
@@ -6,7 +6,8 @@ after import. **CROSSGATES ORD validation passed 30/30 cases at 0.001 US survey
 foot tolerance.** CRS architecture and transformation tests are implemented;
 foreground live location and explicit searchable CRS selection are implemented.
 SwiftData metadata and private source LandXML persist across app launches.
-MapKit remains unimplemented. Physical-device lifecycle and field testing are
+MapKit satellite/street display and the engineering-grid fallback are implemented.
+Physical-device lifecycle and geographic field testing are
 still needed. See [PHASE2B_LOCATION_REPORT.md](../PHASE2B_LOCATION_REPORT.md). See
 [PHASE2_CRS_REPORT.md](../PHASE2_CRS_REPORT.md). No expected ORD results are bundled.
 
@@ -82,9 +83,12 @@ synthetic input files so the actual picker flow can be exercised.
   **Inspect Alignment** action appear before project metadata.
 - **Engineering canvas:** north-up planar centerline with aspect-preserving fit,
   drag pan, pinch/button zoom and Fit. Subtracts the local coordinate origin for
-  display, retaining the full engineering values in the core. Line is primary
-  color, arc blue, spiral purple. Sampling is exclusively for drawing.
-- **Inspect:** tap converted to Easting/Northing; station, signed offset/side,
+  display, retaining the full engineering values in the core. Tangents are cyan,
+  curves yellow and spirals magenta, with black and white outlines and a labeled
+  legend. Sampling is exclusively for drawing.
+- **Inspect:** satellite by default after explicit CRS confirmation, with street
+  and engineering-grid switching. Map taps use the existing projection to
+  convert to Easting/Northing; station, signed offset/side,
   query/nearest coordinates, segment index/type and bearing. Query marker is
   orange, nearest marker blue, with a connector. Ambiguity is prominent in red.
 - **Entry:** coordinate → station/offset and station/offset → coordinate forms.
@@ -158,7 +162,7 @@ field-location validation.
 | Physical iPhone app installation/launch | **VERIFIED** — user-confirmed, Xcode automatic signing with a Personal Team |
 | Production/App Store distribution | **NOT VERIFIED** |
 | CoreLocation/GPS field behavior | **IMPLEMENTED** — physical-device field validation still needed |
-| MapKit/geographic maps | **NOT IMPLEMENTED / NOT VERIFIED** |
+| MapKit/geographic maps | **IMPLEMENTED; PHYSICAL FIELD PLACEMENT NOT VERIFIED** |
 | CRS transformations | **IMPLEMENTED** — explicit confirmation + live-location pipeline |
 | Independent ORD numerical validation | **PASSED 30/30** — CROSSGATES, 0.001 US survey foot |
 
@@ -176,9 +180,9 @@ Physical iPhone installation/launch is verified; saved-project lifecycle and bro
 field-location validation is not claimed. Production/App Store distribution is
 **NOT VERIFIED**; release packaging and App Store readiness are outside this phase.
 
-The next Phase 2C step is a read-only MapKit context view for the opened saved
-project, with controlled physical-iPhone known-point validation and existing
-quality/provenance safeguards. Phase 2B does not establish survey
+Phase 2C implements a read-only MapKit context view for the opened saved
+project with existing quality/provenance safeguards. Physical-iPhone known-point
+validation remains required. Phase 2B does not establish survey
 accuracy. The CRS adapter is independently testable:
 
 ```sh
@@ -207,7 +211,8 @@ the app becoming inactive stops updates and clears the reading. Returning to the
 visible screen in the foreground restarts location and waits for a current fix.
 Denied/restricted permission and approximate-location status remain visible.
 The native Maps-style layout retains system fonts, colors and controls: a large
-north-up planar alignment canvas sits beneath a floating top-left station/offset
+north-up satellite map (with street-map switching and a planar Engineering View
+fallback) sits beneath a floating top-left station/offset
 readout with smaller GPS accuracy and source. The selected alignment heads a
 bottom panel that expands/collapses by tapping or dragging its header. Coordinates,
 full units, a static **Last fix** timestamp, CRS controls and explanatory text are
@@ -228,7 +233,15 @@ Follow and Recenter sit at the lower right, alongside a camera menu for Fit
 Alignment, zoom and directional pan. Dragging, zooming or fitting pauses Follow;
 resuming Follow tracks current fixes, while Recenter frames the displayed fix.
 Camera actions and opening/closing the details panel do not stop foreground GPS.
-This is a display-only planar view; MapKit remains unimplemented.
+Map and grid drawings are display-only. MapKit uses the completed snapshot
+provided by the existing location session, not a separate location manager. The
+map arrow is transformed from grid forward direction into geographic display
+direction. Camera actions offers Satellite, Street Map and Engineering View;
+Recenter/Follow preserve your chosen zoom, including through Details resizing;
+native camera bounds permit closer zoom without adding imagery detail.
+Engineering View offers Show Map after CRS confirmation. Basemaps may be
+unavailable offline; local stationing and the grid do not require imagery. See
+[PHASE2C_MAPKIT_REPORT.md](../PHASE2C_MAPKIT_REPORT.md).
 
 Default policy: fixes become ineligible for new calculation after 5 seconds; accuracy greater than 10 meters
 shows a poor-accuracy warning with the approximate result retained. Cached fixes
