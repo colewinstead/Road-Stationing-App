@@ -413,6 +413,13 @@ work include:
   project coordinates. The goal is to let a field user view the **actual plan
   sheet as the map** and see the phone's current position directly on the
   construction drawing.
+- **Phase 6 — Augmented Reality construction model:** import proposed finished-grade
+  LandXML surface/TIN data and render the proposed project at **true 1:1 scale**
+  through the iPhone camera. RoadStation should register the engineering model to
+  the real site using project coordinates, explicit calibration and, where
+  appropriate, geographic positioning so a field user can walk the project and
+  visualize where pavement, curb, slopes, ditches and other finished-grade
+  features will be built.
 
 ### Phase 5 concept — construction plans as a field map
 
@@ -453,6 +460,301 @@ geographic/satellite basemap. Registration quality and control-point provenance
 must remain visible; a plan overlay must not be presented as survey-grade merely
 because it aligns visually.
 
+
+### Phase 6 concept — full-scale AR construction model
+
+Phase 6 extends RoadStation from showing the project on a map or plan sheet to
+showing the proposed project **in the real world through the camera**. A saved
+project should be able to own a proposed finished-grade LandXML surface in
+addition to its horizontal alignments. RoadStation would parse the proposed
+surface/TIN into engineering-space vertices and triangular faces, preserve its
+project CRS and elevation information, and render that mesh through ARKit /
+RealityKit at engineering scale.
+
+The intended experience is:
+
+~~~text
+Saved RoadStation project
+    ↓
+Alignment LandXML + proposed finished-grade LandXML/TIN
+    ↓
+Parse surface points / faces / metadata
+    ↓
+Project-space 3D surface (Easting / Northing / Elevation)
+    ↓
+Establish project-to-AR registration
+    ↓
+Render proposed finished grade at 1:1 scale
+    ↓
+Walk the site while the proposed roadway remains fixed in the real world
+~~~
+
+A field user could stand on an undeveloped or partially built project, open an
+**AR View**, and see a translucent representation of the proposed roadway in its
+future location. As the user walks, the model should remain fixed relative to the
+site rather than moving with the phone. Potential visualization targets include
+pavement, curb and gutter, sidewalks, islands, ditches, side slopes, embankments
+and other elements represented by the imported finished-grade surface.
+
+The core product promise for this phase is intentionally:
+
+> **Visualize the proposed roadway at full scale in its future location.**
+
+It is not a claim of survey-grade AR stakeout. Rendering a 1:1 model is much
+easier than proving that the model is registered to the site with construction
+or survey accuracy. RoadStation must keep model scale separate from positioning
+accuracy and must show registration quality honestly.
+
+#### Phase 6A — LandXML surface / TIN engine
+
+RoadStation currently validates horizontal alignment geometry and intentionally
+does not compute LandXML surfaces. Phase 6 should add a separate surface model
+rather than overloading AlignmentEngine.
+
+A proposed structure is:
+
+~~~text
+RoadStationCore
+    AlignmentGeometry
+    SurfaceGeometry
+        Surface
+        SurfacePoint
+        TriangleFace
+        SurfaceBounds
+        SurfaceMetadata
+~~~
+
+The first AR-capable surface implementation should focus on the information
+required to reconstruct a proposed TIN:
+
+- surface/project identity and units;
+- 3D points in project Easting/Northing/Elevation;
+- triangular face connectivity;
+- bounds and basic topology validation;
+- source metadata and warnings;
+- explicit rejection of unsupported or contradictory definitions rather than
+  silently inventing geometry.
+
+The imported engineering surface remains authoritative. Rendering code may derive
+display meshes, tiled meshes or lower-detail representations, but those display
+products must never become the source for engineering calculations.
+
+#### Phase 6B — RealityKit 1:1 rendering
+
+RoadStation should convert the validated project-space TIN into a RealityKit mesh.
+ARKit/RealityKit operate in meters, so the renderer must use the project's known
+linear unit and perform an explicit conversion:
+
+~~~text
+1 project meter = 1 RealityKit meter
+1 international foot = 0.3048 RealityKit meters
+1 US survey foot = 1200/3937 RealityKit meters
+~~~
+
+Large State Plane coordinates must not be placed directly into scene coordinates.
+The AR renderer should establish a nearby local project origin and work with
+deltas from that origin while preserving full Easting/Northing/Elevation values
+in the engineering model.
+
+The first rendering milestone should prove:
+
+- correct 1:1 scale;
+- correct axis handedness and East/North/Up orientation;
+- stable camera-relative tracking;
+- translucent finished-grade rendering;
+- clipping and visibility behavior suitable for roadway-scale geometry;
+- acceptable performance on a physical iPhone.
+
+Large surfaces will likely require spatial tiling, culling and level-of-detail
+strategies so RoadStation does not send an entire multi-mile TIN to the GPU when
+the user can only see a small part of the project.
+
+#### Phase 6C — geographic project placement
+
+Where supported and appropriate, RoadStation can use its existing CRS stack to
+connect project coordinates to geographic AR placement:
+
+~~~text
+LandXML E / N / Z
+    ↓
+confirmed project CRS
+    ↓
+PROJ transformation
+    ↓
+WGS84 latitude / longitude + vertical reference
+    ↓
+geographic AR placement
+~~~
+
+Geographic AR should be treated as a convenience positioning mode, not as proof
+that the proposed surface is precisely registered. Availability, GNSS error,
+device heading, geographic-tracking support and vertical-reference differences
+can all move the displayed model.
+
+The app should therefore show the active positioning source and quality rather
+than hiding it. For example:
+
+~~~text
+AR Registration
+Source: iPhone geographic position
+Horizontal accuracy: ±18 ft
+Vertical accuracy: ±27 ft
+Heading: device estimate
+Use: visualization only
+~~~
+
+A surface must never be silently shifted to "look right."
+
+#### Phase 6D — engineering control-point calibration
+
+RoadStation's strongest AR positioning method should be explicit engineering
+calibration using known project coordinates. Because RoadStation already
+understands station/offset and project Easting/Northing, the user can provide
+control that generic AR viewers do not have.
+
+Possible control-point workflows include:
+
+~~~text
+Stand on known point
+    ↓
+Choose / enter:
+STA 125+00
+15.00 ft RT
+Elevation 312.44
+    ↓
+RoadStation resolves project XYZ
+    ↓
+Associate that XYZ with the current AR world location
+~~~
+
+A second known point, or a known backsight/direction, can establish horizontal
+orientation. Three or more well-distributed points can support a redundant fit
+and residual checks. Calibration should be able to use:
+
+- station + offset + elevation;
+- an imported survey/control point;
+- a known project coordinate;
+- a point selected from a future plan/surface view;
+- other explicitly identified engineering control.
+
+The app should retain the distinction between horizontal and vertical
+registration and report the evidence used. A calibrated session might show:
+
+~~~text
+AR Registration
+Horizontal: calibrated
+Vertical: calibrated
+Orientation: calibrated
+Control points: 3
+Fit residual: 0.08 ft
+~~~
+
+The exact residual model and acceptance thresholds must be defined and validated
+before any accuracy claim is made. A low mathematical residual does not by itself
+prove that the supplied control coordinates or phone placement were correct.
+
+#### Phase 6E — LiDAR / scene reconstruction and occlusion
+
+On supported devices, AR scene reconstruction can be used to improve visual
+integration with the existing site. Reconstructed real-world geometry could
+allow existing objects or ground to occlude parts of the proposed model instead
+of letting the proposed surface unrealistically draw through everything.
+
+Future experiments may also compare a locally observed scene surface with the
+proposed finished-grade surface for visualization. Any such comparison must be
+presented as an approximate field aid unless its measurement accuracy has been
+independently established; phone LiDAR is not a substitute for survey or
+machine-control data.
+
+#### Phase 6F — AR cut / fill visualization
+
+After Phase 4 establishes trustworthy existing-ground and proposed-surface
+workflows, AR can visualize the difference at the user's location or across a
+visible portion of the model.
+
+Potential modes include:
+
+~~~text
+Proposed finished grade
+Cut / fill heat map
+Pavement-only
+Curbs / edges
+Ditches / slopes
+Existing vs proposed
+~~~
+
+A point readout could eventually show:
+
+~~~text
+STA 256+42
+32.4 ft RT
+
+Existing ground: 314.6 ft
+Finished grade: 318.1 ft
+Fill: 3.5 ft
+~~~
+
+Color or opacity may communicate cut/fill visually, but numeric values must still
+come from validated engineering surfaces rather than the rendered mesh.
+
+#### Phase 6G — external RTK GNSS
+
+The architecture should leave room for an external high-accuracy GNSS receiver.
+An RTK-capable positioning source could provide project/geographic coordinates
+with much better repeatability than ordinary phone location and feed the same
+project-to-AR registration layer.
+
+RoadStation should model positioning source and quality explicitly so future
+inputs can coexist:
+
+~~~text
+iPhone GNSS
+Geographic AR
+Manual control-point calibration
+External RTK GNSS
+~~~
+
+The renderer should not care which positioning source produced the accepted
+project-to-AR transform. That separation will allow RoadStation to improve field
+accuracy later without rewriting the LandXML surface or RealityKit pipeline.
+
+#### Phase 6 registration and safety rules
+
+Phase 6 should preserve the same philosophy already used for CRS and live
+stationing:
+
+- never guess a CRS, vertical datum or engineering control point;
+- never silently move, rotate or scale the model to make it visually align;
+- always keep **1:1 model scale** separate from **registration accuracy**;
+- expose positioning source, accuracy and calibration state;
+- preserve the original surface and control-point provenance;
+- allow recalibration without altering source engineering data;
+- reject unsupported surface/vertical definitions rather than inventing them;
+- keep AR visualization distinct from survey-grade stakeout unless a future
+  workflow is independently validated to support such a claim.
+
+A long-term project directory can accommodate the feature without changing the
+saved-project identity:
+
+~~~text
+Projects/<UUID>/
+    Sources/
+        alignment.landxml
+        finished-grade.landxml
+    Plans/
+    PlanRegistration/
+    Surfaces/
+        derived-render-cache/
+    ARRegistration/
+        control-points / session metadata
+    Photos/
+    Reports/
+~~~
+
+Derived RealityKit meshes and level-of-detail caches should be reproducible from
+the authoritative source surface and may be discarded/rebuilt. Engineering
+source files and calibration provenance should remain traceable.
+
 ## Known limitations and next gate
 
 - Only explicit clothoids are supported. Bloss, cubic, cosine, sinusoid and
@@ -469,6 +771,9 @@ because it aligns visually.
 - RoadStationApp now keeps local saved projects. It does
   not yet include MapKit, background location,
   camera/photo workflows, cloud sync or App Store distribution.
+- LandXML surfaces/TINs, vertical registration, RealityKit/ARKit construction
+  visualization, LiDAR scene reconstruction and RTK positioning are roadmap
+  concepts only; none are implemented or validated yet.
 
 Next Phase 2C: a small read-only MapKit context view for the opened saved project,
 using the existing inverse transformer for display samples and keeping stationing
