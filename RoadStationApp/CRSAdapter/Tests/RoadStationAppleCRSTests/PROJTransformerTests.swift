@@ -100,6 +100,19 @@ final class PROJTransformerTests: XCTestCase {
         XCTAssertEqual(inverse.longitude, 10, accuracy: 1e-8)
     }
 
+    func testBatchInverseMatchesScalarAndRejectsInvalidBatch() throws {
+        for unit in [ProjectUnit.meter, .internationalFoot, .usSurveyFoot] {
+            let t = try transformer(25832, .linear(unit))
+            let factor = try XCTUnwrap(unit.metersPerUnit)
+            let points = [ProjectCoordinate(x: 691875.63214 / factor, y: 6098907.82501 / factor),
+                          ProjectCoordinate(x: 691885.63214 / factor, y: 6098917.82501 / factor)]
+            XCTAssertEqual(try t.geographicCoordinates(from: points), try points.map { try t.geographicCoordinate(from: $0) })
+            XCTAssertEqual(try t.geographicCoordinates(from: []), [])
+            XCTAssertThrowsError(try t.geographicCoordinates(from: points + [.init(x: .infinity, y: 0)]))
+            XCTAssertThrowsError(try t.geographicCoordinates(from: points + [.init(x: 0, y: 0, z: 1)]))
+        }
+    }
+
     func testForwardInverseRoundTripsAcrossMultipleEPSGsAndUnits() throws {
         for (code, latitude, longitude) in [(32632, 55.0, 12.0), (32756, -33.0, 151.0), (3857, 32.4, -89.2)] {
             for unit in [ProjectUnit.meter, .internationalFoot, .usSurveyFoot] {

@@ -5,7 +5,7 @@ platform-independent Swift core. The current implementation imports LandXML
 horizontal alignments and performs planar station/offset calculations for lines,
 circular curves, clothoid spirals and station equations.
 
-The repository currently has six development milestones:
+The repository currently has seven development milestones:
 
 - **Phase 1 — RoadStationCore:** portable calculation engine, LandXML parser,
   validation CLI and core test suite.
@@ -27,6 +27,10 @@ The repository currently has six development milestones:
   restoration, rename, confirmed deletion and staged source replacement. See
   [PHASE2B2_SAVED_PROJECTS_REPORT.md](PHASE2B2_SAVED_PROJECTS_REPORT.md).
 
+- **Phase 2C — MapKit:** satellite by default, street-map switching, geographic
+  alignment/snapshot overlays and a local engineering-grid fallback inside Field
+  Position. See [PHASE2C_MAPKIT_REPORT.md](PHASE2C_MAPKIT_REPORT.md).
+
 The Phase 1.5 app has been built and tested in the iPhone Simulator and has also
 been installed and launched successfully on a physical iPhone using Xcode
 automatic signing.
@@ -34,8 +38,8 @@ automatic signing.
 **RoadStation is not surveying software.** Field Position uses foreground phone
 location after explicit CRS confirmation. It shows GPS accuracy and withholds
 new calculations from stale/invalid fixes while retaining an explicitly labeled
-last-known snapshot during an active session. Physical-device field validation is still needed. MapKit
-remains unimplemented. Local saved projects are implemented; physical-device
+last-known snapshot during an active session. Physical-device field validation is still needed. MapKit display is implemented; geographic
+field placement is not yet physically verified. Local saved projects are implemented; physical-device
 lifecycle testing remains required.
 
 A real OpenRoads Designer validation dataset is checked in under
@@ -394,8 +398,8 @@ case file and tolerance definitions.
 ## Product roadmap
 
 RoadStation is intended to grow from validated station/offset calculations into a
-persistent field-project application. Planned stages after the current CRS/location
-work include:
+persistent field-project application. Phase 2B.2 and 2C are implemented; later
+stages remain planned:
 
 - **Phase 2B.2 — Saved projects:** persist imported LandXML, confirmed CRS,
   selected alignment and project settings so projects can be reopened without
@@ -467,10 +471,10 @@ because it aligns visually.
 - The synthetic Civil 3D-labelled reference spiral has an inconsistent endpoint
   and is deliberately rejected. It is not an external accuracy benchmark.
 - RoadStationApp now keeps local saved projects. It does
-  not yet include MapKit, background location,
+  not yet include background location,
   camera/photo workflows, cloud sync or App Store distribution.
 
-Next Phase 2C: a small read-only MapKit context view for the opened saved project,
+Phase 2C adds a read-only MapKit context view for the opened saved project,
 using the existing inverse transformer for display samples and keeping stationing
 in project space. Validate known points, axis/units and GPS quality on the physical
 iPhone before claiming map/field accuracy.

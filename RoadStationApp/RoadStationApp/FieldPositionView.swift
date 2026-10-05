@@ -60,6 +60,7 @@ struct FieldPositionView: View {
     @State private var showSetup = false
     @State private var catalog: CRSCatalog?
     @State private var readoutHeight: CGFloat = 240
+    @State private var engineeringView = false
     #if DEBUG
     @State private var showInjection = false
     @State private var latitude = ""
@@ -80,10 +81,12 @@ struct FieldPositionView: View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 GeometryReader { spatial in
-                let visibleReadoutHeight = min(readoutHeight, max(80, spatial.size.height - 200))
+                let readoutLimit = max(80, spatial.size.height - (dynamicTypeSize.isAccessibilitySize ? 300 : 200))
+                let visibleReadoutHeight = min(readoutHeight, readoutLimit)
                 ZStack(alignment: .topLeading) {
                     if let alignment = session.alignment, let unit = session.project?.unit {
-                        FieldSpatialView(alignment: alignment, unit: unit, session: session, readoutHeight: visibleReadoutHeight)
+                        FieldSpatialView(alignment: alignment, unit: unit, session: session, readoutHeight: visibleReadoutHeight,
+                                         engineeringView: $engineeringView)
                             .id(alignment.id)
                     } else {
                         ContentUnavailableView("Select an alignment", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
@@ -99,7 +102,7 @@ struct FieldPositionView: View {
                     .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 14))
                     .shadow(color: .black.opacity(0.12), radius: 8, y: 3)
                     .accessibilityElement(children: .contain).accessibilityIdentifier("field-result-card")
-                    .frame(maxHeight: max(80, spatial.size.height - 200), alignment: .top).padding(12)
+                    .frame(maxHeight: readoutLimit, alignment: .top).padding(12)
                     .onPreferenceChange(FieldReadoutHeight.self) { readoutHeight = $0 }
                 }.frame(maxWidth: .infinity, maxHeight: .infinity)
                 .overlay(alignment: .bottom) {
@@ -127,6 +130,8 @@ struct FieldPositionView: View {
         }
         .background(Color(.secondarySystemGroupedBackground))
         .navigationTitle("Field Position").navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color(.systemBackground), for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         #if DEBUG
         .toolbar { ToolbarItemGroup(placement: .keyboard) {
             if editingInjection { Spacer(); Button("Done") { editingInjection = false } }
@@ -199,6 +204,7 @@ struct FieldPositionView: View {
                             .font(.subheadline.weight(.semibold)).foregroundStyle(.tint)
                     }.frame(minHeight: 44)
                 }.padding(.horizontal, 16).padding(.top, 10).padding(.bottom, 10)
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain).accessibilityIdentifier("field-details-toggle")
             .accessibilityValue(panelExpanded ? "Expanded" : "Collapsed")
@@ -242,7 +248,8 @@ struct FieldPositionView: View {
                             Label("Phone position / last known fix", systemImage: "circle.circle")
                             Label("Nearest alignment point (representative if ambiguous)", systemImage: "diamond")
                             Label("Forward alignment direction determines LT / RT", systemImage: "arrow.right")
-                            Text("Grid north is up. The ring shows approximate horizontal GPS uncertainty in project units; it is not a guaranteed error boundary. The alignment drawing is display-only.")
+                            Text("The map is north up; Engineering View uses grid north. The ring shows approximate horizontal GPS uncertainty; it is not a guaranteed error boundary. The alignment drawing is display-only.")
+                            Text("Satellite and street basemaps may be unavailable offline. Choose Engineering View in Camera actions to use the local alignment grid. Stationing does not depend on map imagery.")
                         }.font(.callout)
                         #if DEBUG
                         DisclosureGroup(isExpanded: $showInjection) {

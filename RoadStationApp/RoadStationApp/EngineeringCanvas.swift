@@ -171,17 +171,19 @@ struct EngineeringCanvas: View {
     }
 }
 
-/// Owns the spatial surface and camera controls, independently of the engineering readout.
-/// A later basemap can replace the canvas here without moving the field controls.
-struct FieldSpatialView: View {
+/// The original project-coordinate surface remains available without map tiles.
+struct FieldPlanarView: View {
     @StateObject private var model: WorkspaceModel
     @ObservedObject var session: FieldPositionSession
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     var readoutHeight: CGFloat
+    var showMap: (() -> Void)?
     @State private var camera = FieldCanvasCamera()
-    init(alignment: RoadStationCore.Alignment, unit: ProjectUnit, session: FieldPositionSession, readoutHeight: CGFloat) {
+    init(alignment: RoadStationCore.Alignment, unit: ProjectUnit, session: FieldPositionSession, readoutHeight: CGFloat,
+         showMap: (() -> Void)? = nil) {
         _model = StateObject(wrappedValue: WorkspaceModel(alignment: alignment, unit: unit))
         self.session = session; self.readoutHeight = readoutHeight
+        self.showMap = showMap
     }
     private var position: FieldPositionSnapshot? {
         guard session.fieldPosition?.alignmentID == model.alignment.id else { return nil }
@@ -224,6 +226,7 @@ struct FieldSpatialView: View {
                     } label: { Image(systemName: "scope").frame(minWidth: 44, minHeight: 52) }
                         .accessibilityLabel("Recenter").accessibilityIdentifier("field-recenter").disabled(position == nil)
                     Menu {
+                        if let showMap { Button("Show Map", action: showMap).accessibilityIdentifier("field-show-map") }
                         Button("Fit Alignment") { camera.fitAlignment(model.bounds) }
                         Button("Zoom in") { camera.magnify(1.5) }
                         Button("Zoom out") { camera.magnify(1 / 1.5) }

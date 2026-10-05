@@ -34,7 +34,8 @@ line drawn on screen. It does not provide survey-grade positioning.
   and open Field Position. Location starts automatically once the alignment and
   confirmed CRS are ready, stops when that screen closes or the app enters the
   background or becomes inactive, and restarts when the visible screen becomes active.
-- Field Position uses a large north-up planar alignment canvas, a floating
+- Field Position defaults to a flat, north-up MapKit satellite map, with a street-map
+  toggle and a local planar Engineering View fallback, beneath a floating
   top-left station/offset readout with smaller accuracy and source, and a
   collapsible bottom details panel. Follow/Recenter and camera actions change
   only the display; browsing or opening details does not stop foreground location.
@@ -76,7 +77,7 @@ line drawn on screen. It does not provide survey-grade positioning.
   storage and must not override this confirmed product requirement.
 - Calculations are 2D. Retained elevation metadata does not establish vertical
   profile, slope-distance or elevation-at-offset functionality.
-- Geographic maps, background location, cloud sync, accounts, camera/photo
+- Background location, cloud sync, accounts, camera/photo
   workflows and App Store availability are not established capabilities.
 
 ## Brand Commitments
@@ -114,4 +115,8 @@ uncertainty plainly and avoid accuracy or distribution claims beyond the evidenc
 Specific field accessibility needs, production distribution, pricing and broader
 platform support have not been established. The confirmed field layout follows
 native Maps-style composition with existing system fonts, colors and controls;
-its spatial surface is a planar canvas, with no geographic basemap yet.
+its spatial surface uses native MapKit satellite/street basemaps with the original
+planar canvas retained as an offline fallback. Map rendering never supplies
+engineering calculations. Geographic overlays require an explicitly confirmed CRS;
+phone and alignment-result markers share the readout snapshot. Imagery availability
+and apparent alignment agreement do not establish positioning accuracy.
