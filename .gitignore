@@ -8,3 +8,5 @@ validation-output/
 tools/__pycache__/
 # Swift 6.4 Windows Swift Build can emit a test-resource plist at the root.
 /Info.plist
+
+.impeccable/review/

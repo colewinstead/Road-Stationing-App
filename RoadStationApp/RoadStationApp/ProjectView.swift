@@ -8,6 +8,7 @@ struct ProjectView: View {
     @StateObject private var model = ProjectModel()
     @State private var path: [UUID] = []
     @State private var importing = false
+    @State private var showingHelp = false
     @State private var replacing: SavedProjectRecord?
     @State private var renameTarget: SavedProjectRecord?
     @State private var deleteTarget: SavedProjectRecord?
@@ -52,7 +53,14 @@ struct ProjectView: View {
                 #endif
             }.onChange(of: model.error) { _, error in if error != nil { scroll.scrollTo("project-error", anchor: .top) } }
             }.navigationTitle("RoadStation")
-                .toolbar { if path.isEmpty { ToolbarItem(placement: .topBarTrailing) {
+                .toolbar { if path.isEmpty {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button { showingHelp = true } label: {
+                            Label("Help & About", systemImage: "questionmark.circle")
+                                .frame(minWidth: 44, minHeight: 44)
+                        }.accessibilityIdentifier("help-and-about")
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
                     Button("Import Project") { importing = true }.accessibilityIdentifier("import-landxml").disabled(model.isImporting)
                 } } }
                 .navigationDestination(for: UUID.self) { id in
@@ -72,6 +80,13 @@ struct ProjectView: View {
             switch result {
             case .success(let url): model.importFile(url)
             case .failure(let error): model.error = error.localizedDescription
+            }
+        }
+        .sheet(isPresented: $showingHelp) {
+            NavigationStack {
+                HelpAboutView().toolbar { ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { showingHelp = false }.accessibilityIdentifier("close-help")
+                } }
             }
         }
         .sheet(item: $replacing) { project in SourceReplacementView(project: project) { result in

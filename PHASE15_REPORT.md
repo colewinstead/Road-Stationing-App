@@ -1,3 +1,5 @@
+> Historical Phase 1.5 snapshot. Current native CRS, foreground GPS, saved projects and MapKit views are implemented; see RoadStationApp/README.md and AppStore/README.md for current release gates. The not-implemented entries below describe the original phase, not the current app.
+
 # Phase 1.5 — RoadStationApp developer harness
 
 RoadStationApp is a native SwiftUI harness for manual inspection of the frozen

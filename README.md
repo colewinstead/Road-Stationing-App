@@ -785,3 +785,7 @@ in project space. Validate known points, axis/units and GPS quality on the physi
 iPhone before claiming map/field accuracy.
 See [PHASE2B_LOCATION_REPORT.md](PHASE2B_LOCATION_REPORT.md) for exact scope and
 verification limits.
+
+## App Store release preparation
+
+Release resources, Help & About, privacy manifest and a Release Files-import smoke test are implemented. See [release checklist](AppStore/README.md) and [privacy/encryption audit](AppStore/PRIVACY-AUDIT.md). Apple enrollment, signed distribution and physical field acceptance remain separate gates.

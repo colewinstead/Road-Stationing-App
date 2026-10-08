@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        FF2400000000000000000007 = {isa = PBXBuildFile; fileRef = FF2400000000000000000008; };
+        FF2400000000000000000005 = {isa = PBXBuildFile; fileRef = FF2400000000000000000006; };
+        FF2400000000000000000003 = {isa = PBXBuildFile; fileRef = FF2400000000000000000004; };
+        FF2400000000000000000001 = {isa = PBXBuildFile; fileRef = FF2400000000000000000002; };
         EE2300000000000000000001 /* FieldMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2300000000000000000002; };
         EE2300000000000000000003 /* FieldMapGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2300000000000000000004; };
         DD2200000000000000000009 = {isa = PBXBuildFile; fileRef = DD220000000000000000000A; };
@@ -55,6 +59,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+        FF2400000000000000000008 = {isa = PBXFileReference; lastKnownFileType = text; path = Acknowledgments.txt; sourceTree = "<group>"; };
+        FF2400000000000000000006 = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+        FF2400000000000000000004 = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+        FF2400000000000000000002 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpAboutView.swift; sourceTree = "<group>"; };
         EE2300000000000000000002 /* FieldMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldMapView.swift; sourceTree = "<group>"; };
         EE2300000000000000000004 /* FieldMapGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CRSAdapter/Tests/RoadStationFieldPositionTests/FieldMapGeometryTests.swift; sourceTree = SOURCE_ROOT; };
         DD220000000000000000000A = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ../Validation/RealORD/CROSSGATES/CROSSGATES.xml; sourceTree = SOURCE_ROOT; };
@@ -125,6 +133,10 @@
 		3A2A88DEEFF3D1D23E496597 /* RoadStationApp */ = {
 			isa = PBXGroup;
 			children = (
+                FF2400000000000000000008,
+                FF2400000000000000000006,
+                FF2400000000000000000004,
+                FF2400000000000000000002,
 				087258D24147E494D097E46B /* AlignmentWorkspace.swift */,
 				9E86D079D7E81F7846792D30 /* EngineeringCanvas.swift */,
 				3C49508C66748391F1697D20 /* EntryTools.swift */,
@@ -285,6 +297,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+                FF2400000000000000000007,
+                FF2400000000000000000005,
+                FF2400000000000000000003,
 				7D3F212ADBAB371F4A526D0A /* tangent-only.xml in Resources */,
 				6BDDCE138579CC7B8102BE8E /* spiral-curve-spiral.xml in Resources */,
 				AA373F5B7A0AD28037A4EE29 /* station-equations.xml in Resources */,
@@ -301,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+                FF2400000000000000000001,
                 BB2000000000000000000001 /* FieldPositionView.swift in Sources */,
                 EE2300000000000000000001 /* FieldMapView.swift in Sources */,
                 CC2100000000000000000001, DD2200000000000000000004,
@@ -397,8 +413,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+                EXCLUDED_SOURCE_FILE_NAMES = "tangent-only.xml spiral-curve-spiral.xml station-equations.xml multiple-alignments.xml sr82_synthetic.xml CROSSGATES.xml CROSSGATES-ord-cases.json";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+                CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7YKM2M2YVP;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = RoadStationApp/Info.plist;
@@ -456,7 +474,8 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+                CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7YKM2M2YVP;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = RoadStationApp/Info.plist;

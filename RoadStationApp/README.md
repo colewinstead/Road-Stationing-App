@@ -306,3 +306,7 @@ report for membership rules, compiled C APIs, performance and full validation.
 python3 tools/Generate-CRS-Catalog.py --check
 swift test --package-path RoadStationApp/CRSAdapter -c release
 ```
+
+## App Store release preparation
+
+Release resources, Help & About, privacy manifest and a Release Files-import smoke test are implemented. See [release checklist](../AppStore/README.md) and [privacy/encryption audit](../AppStore/PRIVACY-AUDIT.md). Apple enrollment, signed distribution and physical field acceptance remain separate gates.

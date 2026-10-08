@@ -3,6 +3,80 @@ import XCTest
 final class RoadStationAppUITests: XCTestCase {
     override func setUpWithError() throws { continueAfterFailure = false }
 
+    @MainActor
+    func testReleaseStoreReadiness() throws {
+        #if DEBUG
+        throw XCTSkip("Run this smoke scenario with configuration Release.")
+        #else
+        executionTimeAllowance = 420
+        let app = XCUIApplication(); app.launch(); app.activate()
+        XCTAssertTrue(app.buttons["help-and-about"].waitForExistence(timeout: 20))
+        XCTAssertFalse(app.staticTexts["Synthetic developer samples"].exists)
+        app.buttons["help-and-about"].tap()
+        XCTAssertTrue(app.staticTexts["app-version"].waitForExistence(timeout: 10))
+        XCTAssertNotNil(app.staticTexts["app-version"].label.range(of: #"^Version 1\.0 \([0-9]+\)$"#, options: .regularExpression))
+        attachment("release-help", app: app)
+        for id in ["help-privacy", "help-support", "help-email", "help-acknowledgments"] {
+            let link = app.descendants(matching: .any)[id].firstMatch
+            for _ in 0..<8 where !link.isHittable { pageUp(app) }
+            XCTAssertTrue(link.isHittable, "Missing Release help link: \(id)")
+        }
+        app.descendants(matching: .any)["help-acknowledgments"].firstMatch.tap()
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "The MIT License")).firstMatch.waitForExistence(timeout: 5))
+        attachment("release-acknowledgments", app: app)
+        app.buttons["close-help"].tap()
+        pickFile("roadstation-example", app: app)
+        revealImportedAlignment("Example alignment", app: app)
+        let confirm = app.buttons["confirm-imported-crs"]
+        for _ in 0..<7 where !confirm.isHittable { app.swipeDown() }
+        confirm.tap()
+        let crs = app.staticTexts["confirmed-crs"]
+        expectation(for: NSPredicate(format: "label CONTAINS %@", "EPSG:6507"), evaluatedWith: crs)
+        waitForExpectations(timeout: 20)
+        attachment("release-crs", app: app)
+        let row = app.buttons["alignment-Example alignment"]
+        for _ in 0..<7 where !row.isHittable { pageUp(app) }
+        row.tap()
+        app.segmentedControls["workspace-tabs"].buttons["Entry"].tap()
+        set("easting-entry", "986377.5959036754", in: app)
+        set("northing-entry", "1453406.9250950934", in: app)
+        app.buttons["calculate-forward"].tap()
+        XCTAssertTrue(app.staticTexts["result-station"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["result-station"].label, "STA 100+50.00")
+        XCTAssertEqual(app.staticTexts["result-offset"].label, "5.000 ft RT")
+        app.segmentedControls["workspace-tabs"].buttons["Inspect"].tap()
+        attachment("release-inspection", app: app)
+        app.navigationBars.buttons.firstMatch.tap()
+        let savedName = "Example roadway \(UUID().uuidString.prefix(8))"
+        let rename = app.buttons["rename-project"]
+        for _ in 0..<10 where !rename.isHittable { pageUp(app) }
+        rename.tap(); set("rename-project-name", savedName, in: app)
+        app.buttons["save-project-name"].tap()
+        XCTAssertTrue(app.navigationBars[savedName].waitForExistence(timeout: 10))
+        app.terminate(); app.launch(); app.activate()
+        let saved = app.buttons["saved-project-\(savedName)"]
+        for _ in 0..<10 where !saved.isHittable { pageUp(app) }
+        XCTAssertTrue(saved.waitForExistence(timeout: 20))
+        attachment("release-projects", app: app); saved.tap()
+        for _ in 0..<7 where !app.staticTexts["confirmed-crs"].isHittable { pageUp(app) }
+        XCTAssertTrue(app.staticTexts["confirmed-crs"].label.contains("EPSG:6507"))
+        for _ in 0..<8 where !app.buttons["project-field-position"].isHittable { app.swipeDown() }
+        app.buttons["project-field-position"].tap()
+        let allowLocation = XCUIApplication(bundleIdentifier: "com.apple.springboard").buttons["Allow While Using App"]
+        if allowLocation.waitForExistence(timeout: 3) { allowLocation.tap() }
+        XCTAssertTrue(app.descendants(matching: .any)["field-map"].waitForExistence(timeout: 20))
+        XCTAssertFalse(app.buttons["inject-location"].exists)
+        XCTAssertFalse(app.textFields["injected-latitude"].exists)
+        attachment("release-field-position", app: app)
+        app.navigationBars.buttons.firstMatch.tap()
+        let delete = app.buttons["delete-project"]
+        for _ in 0..<10 where !delete.isHittable { pageUp(app) }
+        delete.tap(); app.alerts["Delete Project?"].buttons["Delete"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["RoadStation"].waitForExistence(timeout: 15))
+        XCTAssertFalse(saved.exists)
+        #endif
+    }
+
     @MainActor private func makeApp() -> XCUIApplication {
         let app = XCUIApplication()
         app.launchEnvironment["ROADSTATION_TEST_STORAGE"] = UUID().uuidString
@@ -52,7 +126,20 @@ final class RoadStationAppUITests: XCTestCase {
         XCTAssertTrue(field.waitForExistence(timeout: 5)); field.tap()
         if !app.keyboards.firstMatch.waitForExistence(timeout: 3) { field.tap() }
         let previous = field.value as? String ?? ""
-        if !previous.isEmpty, previous != field.placeholderValue { field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: previous.count)) }
+        if !previous.isEmpty, previous != field.placeholderValue {
+            if id != "rename-project-name" {
+                field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: previous.count))
+            } else {
+            // A tap can place the caret inside the existing name.
+            field.press(forDuration: 1.2)
+            let selectAll = app.buttons["Select All"].firstMatch
+            if selectAll.waitForExistence(timeout: 3) { selectAll.tap() }
+            else if app.menuItems["Select All"].exists { app.menuItems["Select All"].tap() }
+            field.typeText(XCUIKeyboardKey.delete.rawValue)
+            let cleared = field.value as? String ?? ""
+            XCTAssertTrue(cleared.isEmpty || cleared == field.placeholderValue, "Could not clear \(id)")
+            }
+        }
         field.typeText(value)
         if app.buttons["Done"].isHittable { app.buttons["Done"].tap() }
     }
@@ -186,12 +273,12 @@ final class RoadStationAppUITests: XCTestCase {
         // Navigate actual picker cells; app titles must never match a folder.
         let file = cell(name)
         for _ in 0..<6 {
-            if file.waitForExistence(timeout: 3) { break }
+            if file.waitForExistence(timeout: 3), file.isHittable { break }
             let folder = cell("RoadStation")
             let local = cell("On My iPhone")
             let back = app.buttons["DOC.navBarButton.backInHistory"]
-            if folder.exists, folder.isHittable { folder.tap() }
-            else if local.exists, local.isHittable { local.tap() }
+            if folder.waitForExistence(timeout: 3), folder.isHittable { folder.tap() }
+            else if local.waitForExistence(timeout: 3), local.isHittable { local.tap() }
             else if back.exists, back.isEnabled { back.tap() }
             else { browse.tap() }
         }

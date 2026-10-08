@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LandXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.landxml.org/schema/LandXML-1.2 http://www.landxml.org/schema/landxml-1.2/LandXML-1.2.xsd" version="1.2" date="2026-07-09" time="21:10:31" xmlns="http://www.landxml.org/schema/LandXML-1.2">
+  <Project name="RoadStation synthetic example" desc="Fictional geometry for demonstration only; not a surveyed roadway." />
+  <Units>
+    <Imperial areaUnit="squareFoot" linearUnit="USSurveyFoot" volumeUnit="cubicYard" temperatureUnit="fahrenheit" pressureUnit="inHG" directionUnit="radians" />
+  </Units>
+  <Application name="Synthetic Test Fixture" version="1.0" manufacturer="Test Data" />
+  <CoordinateSystem name="MDOT-MS83/2011-EF" epsgCode="6507" horizontalDatum="NAD83(2011)" horizontalCoordinateSystemName="MS83/2011-EF" desc="NAD83(2011) / Mississippi East (ftUS)" />
+  <Alignments>
+    <Alignment name="Example alignment" length="17980.010636362913" state="proposed" staStart="10000">
+      <CoordGeom name="Example alignment" state="proposed">
+        <Line dir="0" length="7407.4478297109072">
+          <Start>1453411.9250950934 986327.59590367542 0</Start>
+          <End>1453411.9250950934 993735.04373338632 0</End>
+          <Feature><Property label="style" value="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" /></Feature>
+        </Line>
+        <Curve crvType="arc" rot="cw" radius="2000" length="2356.3679840561858" chord="2222.4251848637268">
+          <Start>1453411.9250950934 993735.04373338632 0</Start>
+          <Center>1451411.9250950934 993735.04373338632 0</Center>
+          <End>1452177.1316695141 995582.86918468389 0</End>
+          <Feature><Property label="style" value="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" /></Feature>
+        </Curve>
+        <Line dir="5.1050013151514335" length="4139.9900157216016">
+          <Start>1452177.1316695143 995582.86918468389 0</Start>
+          <End>1448352.1422099301 997166.84297371714 0</End>
+          <Feature><Property label="style" value="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" /></Feature>
+        </Line>
+        <Curve crvType="arc" rot="ccw" radius="1500" length="1316.2696595382906" chord="1274.4423764748988">
+          <Start>1448352.1422099306 997166.84297371714 0</Start>
+          <Center>1448926.0471407461 998552.7120621904 0</Center>
+          <End>1447493.3401199316 998108.4704696883 0</End>
+          <Feature><Property label="style" value="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" /></Feature>
+        </Curve>
+        <Line dir="5.9825144215102366" length="2759.9351473359261">
+          <Start>1447493.3401199316 998108.47046968807 0</Start>
+          <End>1446675.9547965613 1000744.5894447418 0</End>
+          <Feature><Property label="style" value="Alignment\DESIGN\ALI DESIGN ML (Labels LT)" /></Feature>
+        </Line>
+      </CoordGeom>
+    </Alignment>
+  </Alignments>
+</LandXML>

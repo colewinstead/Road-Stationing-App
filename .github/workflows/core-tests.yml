@@ -36,6 +36,8 @@ jobs:
           Validation/RealORD/CROSSGATES/CROSSGATES.xml
           Validation/RealORD/CROSSGATES/CROSSGATES-ord-cases.json
           validation-output/CROSSGATES
+      - name: Validate public App Store example
+        run: swift run roadstation-validate AppStore/sample.landxml AppStore/sample-cases.json validation-output/app-store/sample
       - uses: actions/upload-artifact@v4
         with:
           name: validation-${{ matrix.os }}
@@ -90,3 +92,10 @@ jobs:
           CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- test
       - name: Test full app UI including saved-project cold start
         run: tools/Test-iOS-Harness.sh "$IOS_SIMULATOR_ID"
+
+      - name: Build unsigned Release for iPhone and check shipped resources
+        run: |
+          xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj -scheme RoadStationApp -configuration Release -destination 'generic/platform=iOS' -derivedDataPath "$RUNNER_TEMP/roadstation-release" CODE_SIGNING_ALLOWED=NO build
+          python3 tools/Check-Release-App.py "$RUNNER_TEMP/roadstation-release/Build/Products/Release-iphoneos/RoadStationApp.app"
+      - name: Test Release store readiness through Files
+        run: tools/Test-iOS-Harness.sh "$IOS_SIMULATOR_ID" Release

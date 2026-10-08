@@ -1,0 +1,32 @@
+[
+  {
+    "id": "public-example-forward",
+    "alignmentName": "Example alignment",
+    "referenceSource": "Analytic first tangent: 50 US survey ft east, 5 US survey ft south; synthetic, not field control",
+    "direction": "forward",
+    "inputCoordinate": {
+      "x": 986377.5959036754,
+      "y": 1453406.9250950934
+    },
+    "expectedStation": 10050,
+    "expectedOffset": -5,
+    "stationTolerance": 1e-06,
+    "offsetTolerance": 1e-06,
+    "coordinateTolerance": 1e-06
+  },
+  {
+    "id": "public-example-inverse",
+    "alignmentName": "Example alignment",
+    "referenceSource": "Analytic first tangent; synthetic, not field control",
+    "direction": "inverse",
+    "inputStation": 10050,
+    "inputOffset": -5,
+    "expectedCoordinate": {
+      "x": 986377.5959036754,
+      "y": 1453406.9250950934
+    },
+    "stationTolerance": 1e-06,
+    "offsetTolerance": 1e-06,
+    "coordinateTolerance": 1e-06
+  }
+]
