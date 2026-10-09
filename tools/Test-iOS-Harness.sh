@@ -22,6 +22,10 @@ xcodebuild -project RoadStationApp/RoadStationApp.xcodeproj -scheme RoadStationA
   -configuration "$configuration" -destination "platform=iOS Simulator,id=$simulator_id" \
   -derivedDataPath "$build_dir" CODE_SIGNING_ALLOWED=NO build
 xcrun simctl install "$simulator_id" "$build_dir/Build/Products/$configuration-iphonesimulator/RoadStationApp.app"
+if [[ "$configuration" == Debug ]]; then
+  # Debug lifecycle tests require authorized foreground location; Release exercises native permission UI.
+  xcrun simctl privacy "$simulator_id" grant location com.colewinstead.RoadStationApp
+fi
 app_data_dir="$(xcrun simctl get_app_container "$simulator_id" com.colewinstead.RoadStationApp data)"
 mkdir -p "$app_data_dir/Documents"
 cp Tests/Fixtures/tangent-only.xml "$app_data_dir/Documents/import-check.landxml"

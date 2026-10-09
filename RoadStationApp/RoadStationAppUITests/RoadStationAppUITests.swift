@@ -68,6 +68,21 @@ final class RoadStationAppUITests: XCTestCase {
         XCTAssertFalse(app.buttons["inject-location"].exists)
         XCTAssertFalse(app.textFields["injected-latitude"].exists)
         attachment("release-field-position", app: app)
+        XCUIDevice.shared.orientation = .landscapeLeft
+        defer { XCUIDevice.shared.orientation = .portrait }
+        expectation(for: NSPredicate { _, _ in app.frame.height > app.frame.width }, evaluatedWith: app)
+        waitForExpectations(timeout: 10)
+        XCTAssertTrue(app.descendants(matching: .any)["field-map"].exists)
+        waitForStableFrame(app.navigationBars.firstMatch)
+        waitForStableFrame(app.descendants(matching: .any)["field-map"])
+        let readout = app.otherElements["field-result-card"]
+        let accuracy = app.staticTexts["live-accuracy"]
+        XCTAssertTrue(readout.frame.contains(accuracy.frame), "GPS accuracy must remain visible when the device turns")
+        attachment("release-portrait-device-turned", app: app)
+        XCUIDevice.shared.orientation = .portrait
+        expectation(for: NSPredicate { _, _ in app.frame.height > app.frame.width }, evaluatedWith: app)
+        waitForExpectations(timeout: 10)
+        waitForStableFrame(app.navigationBars.firstMatch)
         app.navigationBars.buttons.firstMatch.tap()
         let delete = app.buttons["delete-project"]
         for _ in 0..<10 where !delete.isHittable { pageUp(app) }
@@ -112,12 +127,17 @@ final class RoadStationAppUITests: XCTestCase {
         }
         let button = app.buttons["sample-\(name)"]
         for _ in 0..<6 where !fullyVisible(button, in: app) { pageUp(app) }
-        XCTAssertTrue(button.waitForExistence(timeout: 5)); button.tap()
+        XCTAssertTrue(button.waitForExistence(timeout: 5))
+        expectation(for: NSPredicate(format: "enabled == true"), evaluatedWith: button)
+        waitForExpectations(timeout: 20)
+        button.tap()
         let row = app.buttons["alignment-\(alignment)"]
         for _ in 0..<4 where !fullyVisible(row, in: app) { app.swipeDown() }
         for _ in 0..<4 where !fullyVisible(row, in: app) { pageUp(app) }
         XCTAssertTrue(row.waitForExistence(timeout: 10)); row.tap()
         XCTAssertTrue(app.otherElements["engineering-canvas"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.navigationBars[alignment].waitForExistence(timeout: 10))
+        waitForStableFrame(app.navigationBars[alignment])
     }
     @MainActor
     private func set(_ id: String, _ value: String, in app: XCUIApplication) {
@@ -130,14 +150,14 @@ final class RoadStationAppUITests: XCTestCase {
             if id != "rename-project-name" {
                 field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: previous.count))
             } else {
-            // A tap can place the caret inside the existing name.
-            field.press(forDuration: 1.2)
-            let selectAll = app.buttons["Select All"].firstMatch
-            if selectAll.waitForExistence(timeout: 3) { selectAll.tap() }
-            else if app.menuItems["Select All"].exists { app.menuItems["Select All"].tap() }
-            field.typeText(XCUIKeyboardKey.delete.rawValue)
-            let cleared = field.value as? String ?? ""
-            XCTAssertTrue(cleared.isEmpty || cleared == field.placeholderValue, "Could not clear \(id)")
+                // A tap can place the caret inside the existing name.
+                field.press(forDuration: 1.2)
+                let selectAll = app.buttons["Select All"].firstMatch
+                if selectAll.waitForExistence(timeout: 3) { selectAll.tap() }
+                else if app.menuItems["Select All"].exists { app.menuItems["Select All"].tap() }
+                field.typeText(XCUIKeyboardKey.delete.rawValue)
+                let cleared = field.value as? String ?? ""
+                XCTAssertTrue(cleared.isEmpty || cleared == field.placeholderValue, "Could not clear \(id)")
             }
         }
         field.typeText(value)
@@ -283,6 +303,11 @@ final class RoadStationAppUITests: XCTestCase {
             else { browse.tap() }
         }
         XCTAssertTrue(file.waitForExistence(timeout: 10)); file.tap()
+        expectation(for: NSPredicate(format: "exists == false"), evaluatedWith: browse)
+        waitForExpectations(timeout: 30)
+        expectation(for: NSPredicate(format: "enabled == true"), evaluatedWith: importButton)
+        waitForExpectations(timeout: 30)
+        waitForStableFrame(app.navigationBars.firstMatch)
     }
 
     @MainActor
@@ -381,7 +406,10 @@ final class RoadStationAppUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["confirmed-crs"].label.contains("EPSG:6510"))
         attachment("phase2b1-crs-selected", app: app)
         app.buttons["open-crs-picker"].tap()
-        app.buttons["open-manual-epsg"].tap()
+        app.segmentedControls["crs-picker-tabs"].buttons["Search"].tap()
+        let manual = app.buttons["open-manual-epsg"]
+        for _ in 0..<12 where !manual.isHittable { pageUp(app) }
+        XCTAssertTrue(manual.waitForExistence(timeout: 10)); manual.tap()
         set("epsg-entry", "3857", in: app); app.buttons["select-epsg"].tap()
         revealFieldSetup(app)
         expectation(for: NSPredicate(format: "label CONTAINS %@", "EPSG:3857"), evaluatedWith: app.staticTexts["confirmed-crs"])
@@ -427,8 +455,8 @@ final class RoadStationAppUITests: XCTestCase {
         set("injected-accuracy", "4", in: app)
         app.buttons["inject-location"].tap()
         let station = app.staticTexts["live-station"]
-        for _ in 0..<10 where !station.isHittable { app.swipeDown() }
-        XCTAssertTrue(station.waitForExistence(timeout: 10))
+        expectation(for: NSPredicate(format: "label == %@", "STA 100+50.00"), evaluatedWith: station)
+        waitForExpectations(timeout: 20)
         XCTAssertEqual(station.label, "STA 100+50.00")
         XCTAssertTrue(app.staticTexts["live-offset"].label.contains("5.0 ft RT"))
         XCTAssertTrue(app.staticTexts["location-source"].label.contains("DEBUG injected"))
@@ -523,8 +551,13 @@ final class RoadStationAppUITests: XCTestCase {
         XCTAssertEqual(station.frame.minY, expandedStationFrame.minY, accuracy: 1)
         XCTAssertEqual(readout.frame.height, expandedReadoutFrame.height, accuracy: 1)
         // Background stops/clears the synthetic fix. Foreground restarts device location.
-        XCUIDevice.shared.press(.home)
-        XCTAssertTrue(app.wait(for: .runningBackground, timeout: 10))
+        // Activating another app avoids unreliable synthesized Home presses on physical devices.
+        XCUIApplication(bundleIdentifier: "com.apple.Preferences").activate()
+        print("Lifecycle background state: \(app.state.rawValue)")
+        let background = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            app.state == .runningBackground || app.state == .runningBackgroundSuspended
+        }, object: nil)
+        wait(for: [background], timeout: 10)
         app.activate()
         XCTAssertTrue(app.navigationBars["Field Position"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.staticTexts["location-source"].label.contains("DEBUG injected"))
@@ -627,6 +660,8 @@ final class RoadStationAppUITests: XCTestCase {
             }
             return value
         }
+        // A real phone may already have framed its distant GPS fix; start from the fixture.
+        app.buttons["field-camera-actions"].tap(); app.buttons["Fit Alignment"].tap()
         for _ in 0..<10 {
             app.buttons["field-camera-actions"].tap(); app.buttons["Zoom in"].tap()
         }

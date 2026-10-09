@@ -1,6 +1,6 @@
 # RoadStation 1.0 paid release
 
-Launch choices: individual seller using the legal name verified during Apple enrollment, English, United States, US$4.99 paid download, Productivity / Utilities, standard Apple license, manual release. No StoreKit integration is needed for a paid download. Public URLs are https://vericivil.com/roadstation, /roadstation/privacy, /roadstation/support and /roadstation/sample.landxml. Support: support@vericivil.com (forwarding and incoming/reply round-trip verified October 7, 2026).
+Launch choices: individual seller using the legal name verified during Apple enrollment, English, United States, US$4.99 paid download, portrait-only iPhone interface, Productivity / Utilities, standard Apple license, manual release. No StoreKit integration is needed for a paid download. Public URLs are https://vericivil.com/roadstation, /roadstation/privacy, /roadstation/support and /roadstation/sample.landxml. Support: support@vericivil.com (forwarding and incoming/reply round-trip verified October 7, 2026).
 
 ## Release sequence
 
@@ -32,7 +32,7 @@ The Release smoke uses the actual Files picker, confirms EPSG:6507, checks the p
 
 - Physical iPhone: precise, approximate and denied permission; stale fixes; background/re-entry; offline Engineering View; source replacement; saved-project recovery. Record device/iOS/build, steps and observed outcome.
 - Known point: document EPSG, datum, axis order, units/foot type, control provenance and actual coordinates. Separate engine numerical error from observed phone-location error; do not adjust geometry to imagery.
-- iOS 17 and current iOS; small display; landscape; large text; VoiceOver. Record unavailable hardware/runtime checks as pending.
+- iOS 17 and current iOS; small display; portrait retained when the device turns; large text; VoiceOver. Record unavailable hardware/runtime checks as pending.
 - Signed archive, Organizer validation/upload/processing, complete archive privacy report, TestFlight pilot, review approval, support email round-trip and final listing screenshots.
 
 ## Listing draft

@@ -15,6 +15,7 @@ assert info['CFBundleIdentifier'] == 'com.colewinstead.RoadStationApp'
 assert info['CFBundleShortVersionString'] == '1.0'
 assert str(info['CFBundleVersion']).isdigit()
 assert info['ITSAppUsesNonExemptEncryption'] is False
+assert info['UISupportedInterfaceOrientations'] == ['UIInterfaceOrientationPortrait']
 assert (app / 'Assets.car').is_file()
 assert info.get('CFBundleIcons', {}).get('CFBundlePrimaryIcon', {}).get('CFBundleIconName') == 'AppIcon'
 manifest = plistlib.loads((app / 'PrivacyInfo.xcprivacy').read_bytes())
