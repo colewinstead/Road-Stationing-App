@@ -10,6 +10,7 @@ struct FieldSpatialView: View {
     @ObservedObject var session: FieldPositionSession
     var readoutHeight: CGFloat
     @Binding var engineeringView: Bool
+    @Binding var displayedPosition: FieldPositionSnapshot?
     @State private var satellite = true
     @State private var mapError: String?
 
@@ -18,7 +19,7 @@ struct FieldSpatialView: View {
             if let crs = session.confirmedCRS, !engineeringView, mapError == nil {
                 FieldMapView(alignment: alignment, crs: crs, unit: unit, session: session,
                              readoutHeight: readoutHeight, satellite: $satellite,
-                             engineeringView: $engineeringView, mapError: $mapError)
+                             engineeringView: $engineeringView, displayedPosition: $displayedPosition, mapError: $mapError)
                     .id(crs.definition.crs.identifier + unit.rawValue)
             } else {
                 FieldPlanarView(alignment: alignment, unit: unit, session: session, readoutHeight: readoutHeight,
@@ -47,9 +48,11 @@ private struct FieldMapView: View {
     var readoutHeight: CGFloat
     @Binding var satellite: Bool
     @Binding var engineeringView: Bool
+    @Binding var displayedPosition: FieldPositionSnapshot?
     @Binding var mapError: String?
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var drawing: FieldMapDrawing?
     @State private var markers: FieldMapMarkers?
     @State private var markerRequest = UUID()
@@ -65,9 +68,15 @@ private struct FieldMapView: View {
               snapshot.crs == crs, snapshot.unit == unit else { return nil }
         return snapshot
     }
-    private var matchingMarkers: FieldMapMarkers? { markers?.matches(snapshot) == true ? markers : nil }
+    private var matchingMarkers: FieldMapMarkers? {
+        guard let snapshot, let markers, markers.matches(displayedPosition),
+              markers.snapshot.alignmentID == snapshot.alignmentID,
+              markers.snapshot.crs == snapshot.crs, markers.snapshot.unit == snapshot.unit else { return nil }
+        return markers
+    }
     private var isCurrent: Bool {
-        guard snapshot != nil, !session.displayedPositionIsStale else { return false }
+        guard let sample = matchingMarkers?.snapshot.sample, !session.displayedPositionIsStale,
+              session.policy.quality(of: sample, now: Date()) != .stale else { return false }
         switch session.status {
         case .locationReady, .poorAccuracy, .ambiguousLocation, .calculating: return true
         default: return false
@@ -128,11 +137,11 @@ private struct FieldMapView: View {
             }
             .onChange(of: snapshot, initial: true) { _, _ in markerRequest = UUID() }
             .onChange(of: scenePhase) { _, phase in
-                if phase != .active { markers = nil }
+                if phase != .active { markers = nil; displayedPosition = nil }
                 markerRequest = UUID()
             }
             .task(id: markerRequest) {
-                guard scenePhase == .active, let snapshot else { markers = nil; return }
+                guard scenePhase == .active, let snapshot else { markers = nil; displayedPosition = nil; return }
                 do {
                     let transformer = try transformer
                     let task = Task.detached(priority: .userInitiated) {
@@ -140,11 +149,16 @@ private struct FieldMapView: View {
                     }
                     let value = try await withTaskCancellationHandler { try await task.value } onCancel: { task.cancel() }
                     guard !Task.isCancelled, value.matches(self.snapshot), scenePhase == .active else { return }
-                    markers = value
-                    if isCurrent, isFollowing { follow(value, size: geometry.size) }
+                    withAnimation(reduceMotion ? nil : .linear(duration: 0.8)) {
+                        markers = value
+                        displayedPosition = value.snapshot
+                        if isCurrent, isFollowing { follow(value, size: geometry.size) }
+                    }
+                    assert(markers?.matches(displayedPosition) == true)
                 } catch is CancellationError { }
                 catch { if !Task.isCancelled { mapError = error.localizedDescription } }
             }
+            .onDisappear { displayedPosition = nil }
             .onChange(of: readoutHeight) { _, _ in
                 if let markers = matchingMarkers, isFollowing, isCurrent { follow(markers, size: geometry.size) }
             }
@@ -166,40 +180,25 @@ private struct FieldMapView: View {
     }
 
     private var map: some View {
-        Map(position: $camera, bounds: MapCameraBounds(minimumDistance: 1), interactionModes: [.pan, .zoom]) {
-            if let drawing {
-                AlignmentMapLines(drawing: drawing, alignment: alignment)
-            }
-            if let markers = matchingMarkers {
-                MapCircle(center: markers.phone.clLocation, radius: markers.snapshot.sample.horizontalAccuracyMeters)
-                    .foregroundStyle(.blue.opacity(0.12))
-                    .stroke(isCurrent ? .blue : Color(.label), style: .init(lineWidth: 1.5, dash: isCurrent ? [] : [5, 4]))
-                MapPolyline(coordinates: [markers.phone.clLocation, markers.nearest.clLocation])
-                    .stroke(Color(.label), style: .init(lineWidth: 2, dash: [5, 4]))
-                Annotation(isCurrent ? "Phone" : "Last known position", coordinate: markers.phone.clLocation) {
-                    Circle().fill(isCurrent ? Color.blue : Color(.systemBackground))
-                        .frame(width: 14, height: 14)
-                        .overlay(Circle().stroke(isCurrent ? .blue : Color(.label), lineWidth: 2))
-                        .padding(3).background(Color(.systemBackground), in: Circle())
-                        .accessibilityLabel(isCurrent ? markers.snapshot.sample.source.rawValue : "Last known position")
+        MapReader { proxy in
+            Map(position: $camera, bounds: MapCameraBounds(minimumDistance: 1), interactionModes: [.pan, .zoom]) {
+                if let drawing {
+                    AlignmentMapLines(drawing: drawing, alignment: alignment)
                 }
-                Annotation(markers.snapshot.result.nearestLocationIsAmbiguous ? "Representative" : "Nearest",
-                           coordinate: markers.nearest.clLocation) {
-                    Image(systemName: markers.snapshot.result.nearestLocationIsAmbiguous ? "diamond" : "diamond.fill")
-                        .foregroundStyle(Color(.label)).padding(3).background(Color(.systemBackground), in: Circle())
-                }
-                Annotation("Forward", coordinate: markers.nearest.clLocation, anchor: .bottom) {
-                    Image(systemName: "arrow.up").font(.title2.bold())
-                        .rotationEffect(.radians(forwardAngle(markers)))
-                        .foregroundStyle(Color(.label)).padding(6)
-                        .background(Color(.systemBackground), in: Circle()).padding(.bottom, 16)
-                        .accessibilityLabel("Forward alignment direction determines left and right")
-                }.annotationTitles(.hidden)
             }
+            .mapStyle(satellite ? .imagery(elevation: .flat) : .standard(elevation: .flat, pointsOfInterest: .excludingAll))
+            .mapControls { MapScaleView() }
+            .overlay {
+                if let markers = matchingMarkers {
+                    FieldPositionMapOverlay(phone: markers.phone.clLocation, nearest: markers.nearest.clLocation,
+                        forward: markers.forward.clLocation, accuracy: markers.snapshot.sample.horizontalAccuracyMeters,
+                        proxy: proxy, current: isCurrent, ambiguous: markers.snapshot.result.nearestLocationIsAmbiguous,
+                        source: markers.snapshot.sample.source.rawValue)
+                        .animation(reduceMotion ? nil : .linear(duration: 0.8), value: markers.snapshot)
+                }
+            }
+            .accessibilityIdentifier("field-map")
         }
-        .mapStyle(satellite ? .imagery(elevation: .flat) : .standard(elevation: .flat, pointsOfInterest: .excludingAll))
-        .mapControls { MapScaleView() }
-        .accessibilityIdentifier("field-map")
     }
 
     private func controls(size: CGSize) -> some View {
@@ -241,11 +240,6 @@ private struct FieldMapView: View {
             .shadow(color: .black.opacity(0.12), radius: 8, y: 3).padding(12)
     }
 
-    private func forwardAngle(_ markers: FieldMapMarkers) -> Double {
-        guard let a = try? FieldMapGeometry.mapPoint(markers.nearest),
-              let b = try? FieldMapGeometry.mapPoint(markers.forward) else { return 0 }
-        return atan2(b.x - a.x, b.y - a.y)
-    }
     private func fittedRect(_ points: [GeographicCoordinate], size: CGSize, viewport: MKMapSize? = nil) -> MKMapRect {
         var rect = points.reduce(MKMapRect.null) { $0.union(MKMapRect(origin: MKMapPoint($1.clLocation), size: .init(width: 0, height: 0))) }
         let center = MKMapPoint(x: rect.midX, y: rect.midY)
@@ -306,10 +300,85 @@ private struct FieldMapView: View {
     }
     private var spatialSummary: String {
         let drawingStatus = drawing == nil ? "Preparing alignment overlay." : "Alignment overlay ready."
-        guard let snapshot else { return "\(alignment.name). \(drawingStatus) Waiting for a usable field position. North up.\(mapScaleSummary)" }
+        guard let snapshot = matchingMarkers?.snapshot ?? snapshot else { return "\(alignment.name). \(drawingStatus) Waiting for a usable field position. North up.\(mapScaleSummary)" }
         let markerStatus = matchingMarkers == nil ? "Preparing position markers." :
             (snapshot.result.nearestLocationIsAmbiguous ? "Representative nearest point; ambiguous." : "Nearest point shown.")
         return "\(snapshot.alignmentName). \(drawingStatus) \(isCurrent ? snapshot.sample.source.rawValue : "Last known position"). Station \(snapshot.result.formattedStation), \(numeric(abs(snapshot.result.signedOffset), decimals: 1)) \(unit.symbol) \(sideLabel(snapshot.result.side)). Accuracy \(numeric(snapshot.accuracyInProjectUnits, decimals: 1)) \(unit.symbol). \(markerStatus) North up.\(mapScaleSummary)"
+    }
+}
+
+// Animate geographic display coordinates, never the engineering calculation inputs.
+private struct FieldPositionMapOverlay: View, Animatable {
+    var phone: CLLocationCoordinate2D
+    var nearest: CLLocationCoordinate2D
+    var forward: CLLocationCoordinate2D
+    var accuracy: Double
+    let proxy: MapProxy
+    let current: Bool
+    let ambiguous: Bool
+    let source: String
+
+    typealias Pair = AnimatablePair<Double, Double>
+    typealias Quad = AnimatablePair<Pair, Pair>
+    nonisolated var animatableData: AnimatablePair<Quad, AnimatablePair<Pair, Double>> {
+        get {
+            .init(.init(.init(phone.latitude, phone.longitude), .init(nearest.latitude, nearest.longitude)),
+                  .init(.init(forward.latitude, forward.longitude), accuracy))
+        }
+        set {
+            phone = .init(latitude: newValue.first.first.first, longitude: newValue.first.first.second)
+            nearest = .init(latitude: newValue.first.second.first, longitude: newValue.first.second.second)
+            forward = .init(latitude: newValue.second.first.first, longitude: newValue.second.first.second)
+            accuracy = newValue.second.second
+        }
+    }
+
+    var body: some View {
+        GeometryReader { _ in
+            if let p = proxy.convert(phone, to: .local),
+               let n = proxy.convert(nearest, to: .local),
+               let f = proxy.convert(forward, to: .local) {
+                ZStack(alignment: .topLeading) {
+                    let edge = MKMapPoint(phone)
+                    let radiusCoordinate = MKMapPoint(x: edge.x + accuracy / MKMetersPerMapPointAtLatitude(phone.latitude), y: edge.y).coordinate
+                    if let r = proxy.convert(radiusCoordinate, to: .local) {
+                        let radius = hypot(r.x - p.x, r.y - p.y)
+                        Circle().fill(.blue.opacity(0.12))
+                            .overlay(Circle().stroke(current ? .blue : Color(.label),
+                                style: .init(lineWidth: 1.5, dash: current ? [] : [5, 4])))
+                            .frame(width: radius * 2, height: radius * 2).position(p)
+                            .accessibilityHidden(true)
+                    }
+                    Path { path in path.move(to: p); path.addLine(to: n) }
+                        .stroke(Color(.label), style: .init(lineWidth: 2, dash: [5, 4]))
+                        .accessibilityHidden(true)
+                    Circle().fill(current ? Color.blue : Color(.systemBackground))
+                        .frame(width: 14, height: 14)
+                        .overlay(Circle().stroke(current ? .blue : Color(.label), lineWidth: 2))
+                        .padding(3).background(Color(.systemBackground), in: Circle()).position(p)
+                        .accessibilityLabel(current ? source : "Last known position")
+                    Text(current ? "Phone" : "Last known position")
+                        .font(.caption).padding(.horizontal, 4).padding(.vertical, 2)
+                        .background(Color(.systemBackground).opacity(0.9), in: RoundedRectangle(cornerRadius: 4))
+                        .position(x: p.x, y: p.y + 25).accessibilityHidden(true)
+                    Image(systemName: ambiguous ? "diamond" : "diamond.fill")
+                        .foregroundStyle(Color(.label)).padding(3)
+                        .background(Color(.systemBackground), in: Circle()).position(n)
+                        .accessibilityLabel(ambiguous ? "Representative nearest point; ambiguous" : "Nearest point")
+                    Text(ambiguous ? "Representative" : "Nearest")
+                        .font(.caption).padding(.horizontal, 4).padding(.vertical, 2)
+                        .background(Color(.systemBackground).opacity(0.9), in: RoundedRectangle(cornerRadius: 4))
+                        .position(x: n.x, y: n.y + 25).accessibilityHidden(true)
+                    Image(systemName: "arrow.up").font(.title2.bold())
+                        .rotationEffect(.radians(atan2(f.x - n.x, n.y - f.y)))
+                        .foregroundStyle(Color(.label)).padding(6)
+                        .background(Color(.systemBackground), in: Circle())
+                        .position(x: n.x, y: n.y - 36)
+                        .accessibilityLabel("Forward alignment direction determines left and right")
+                }
+            }
+        }
+        .allowsHitTesting(false)
     }
 }
 

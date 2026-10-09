@@ -61,6 +61,7 @@ struct FieldPositionView: View {
     @State private var catalog: CRSCatalog?
     @State private var readoutHeight: CGFloat = 240
     @State private var engineeringView = false
+    @State private var mappedPosition: FieldPositionSnapshot?
     #if DEBUG
     @State private var showInjection = false
     @State private var latitude = ""
@@ -69,7 +70,16 @@ struct FieldPositionView: View {
     @State private var injectionError: String?
     @FocusState private var editingInjection: Bool
     #endif
-    private var position: FieldPositionSnapshot? { session.fieldPosition }
+    private var position: FieldPositionSnapshot? {
+        guard let latest = session.fieldPosition else { return nil }
+        // Keep the readout paired with the visible markers during map projection.
+        if !engineeringView, let mappedPosition,
+           mappedPosition.alignmentID == latest.alignmentID,
+           mappedPosition.crs == latest.crs, mappedPosition.unit == latest.unit {
+            return mappedPosition
+        }
+        return latest
+    }
     private var displayedSample: LocationSample? { position?.sample ?? session.sample }
     private var displayedUnit: ProjectUnit? { position?.unit ?? session.project?.unit }
     private var freshnessDeadline: Date? {
@@ -86,7 +96,7 @@ struct FieldPositionView: View {
                 ZStack(alignment: .topLeading) {
                     if let alignment = session.alignment, let unit = session.project?.unit {
                         FieldSpatialView(alignment: alignment, unit: unit, session: session, readoutHeight: visibleReadoutHeight,
-                                         engineeringView: $engineeringView)
+                                         engineeringView: $engineeringView, displayedPosition: $mappedPosition)
                             .id(alignment.id)
                     } else {
                         ContentUnavailableView("Select an alignment", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
@@ -167,13 +177,17 @@ struct FieldPositionView: View {
         VStack(alignment: .leading, spacing: 6) {
             if let result = position?.result {
                 Text("STA \(result.formattedStation)").font(.largeTitle.bold()).accessibilityIdentifier("live-station")
+                    .contentTransition(.numericText(value: result.displayedStation))
+                    .animation(reduceMotion ? nil : .easeInOut(duration: 0.8), value: result.displayedStation)
                 Text("\(numeric(abs(result.signedOffset), decimals: 1)) \(displayedUnit?.symbol ?? "units") \(sideLabel(result.side))")
                     .font(.title2.bold()).accessibilityIdentifier("live-offset")
+                    .contentTransition(.numericText(value: abs(result.signedOffset)))
+                    .animation(reduceMotion ? nil : .easeInOut(duration: 0.8), value: result.signedOffset)
             } else {
                 Text("STA —").font(.largeTitle.bold())
                 Text("Offset —").font(.title2.bold())
             }
-            Text(session.accuracyInProjectUnits().map {
+            Text((position?.accuracyInProjectUnits ?? session.accuracyInProjectUnits()).map {
                 "GPS Accuracy: ±\(numeric($0, decimals: 1)) \(displayedUnit?.symbol ?? "units")"
             } ?? "GPS Accuracy: waiting for a valid fix")
                 .font(.subheadline.weight(.semibold)).accessibilityIdentifier("live-accuracy")
@@ -182,13 +196,12 @@ struct FieldPositionView: View {
                     .font(.footnote.weight(.semibold)).accessibilityIdentifier("location-source")
                     .accessibilityValue(session.isRunning ? "active" : "inactive")
                 Spacer(minLength: 4)
-                ProgressView().frame(width: 18, height: 18).opacity(session.isCalculating ? 1 : 0)
+                ProgressView().frame(width: 18, height: 18).opacity(position == nil && session.isCalculating ? 1 : 0)
                     .accessibilityLabel("Updating field position").accessibilityIdentifier("field-calculation-activity")
-                    .accessibilityHidden(!session.isCalculating)
+                    .accessibilityHidden(position != nil || !session.isCalculating)
             }.fixedSize(horizontal: false, vertical: true)
         }
         .fixedSize(horizontal: false, vertical: true).monospacedDigit()
-        .transaction { $0.animation = nil; $0.disablesAnimations = true }
     }
 
     private var bottomPanel: some View {
@@ -293,7 +306,7 @@ struct FieldPositionView: View {
             case .locationFailure, .transformationFailure, .stationingFailure: messages.append("Position unavailable — review details")
             default: messages.append(session.status.message)
             }
-        } else if session.displayedPositionIsStale {
+        } else if session.displayedPositionIsStale || displayedSample.map({ session.policy.quality(of: $0, now: now) == .stale }) == true {
             messages.append("Stale — last known position")
         } else {
             switch session.status {
